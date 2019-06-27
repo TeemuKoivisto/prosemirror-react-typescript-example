@@ -2,13 +2,14 @@ import * as React from 'react'
 import ReactDOM from 'react-dom'
 import { Node } from 'prosemirror-model'
 
+// Copied from here https://gist.github.com/esmevane/7326b19e20a5670954b51ea8618d096d
 // Here we have the (too simple) React component which
 // we'll be rendering content into.
 //
-class Underlined extends React.Component<any, any> {
+class Underlined extends React.Component<{}, {}> {
   public hole: React.RefObject<HTMLParagraphElement>
 
-  constructor(props: any) {
+  constructor(props: {}) {
     super(props)
     this.hole = React.createRef()
   }
@@ -66,6 +67,10 @@ export class Underline {
     // We will be moving this node around as we need to.
     //
     this.contentDOM = document.createElement('span')
+
+    // Just example classes to help see the structure in the DOM
+    this.dom.classList.add('node__dom')
+    this.contentDOM.classList.add('node__content-dom')
 
     // Better way of doing this would be portals https://reactjs.org/docs/portals.html
     ReactDOM.render(
