@@ -1,13 +1,14 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
 import { Node } from 'prosemirror-model'
+import { EditorView, NodeView, Decoration } from 'prosemirror-view'
 
 // Copied from here https://gist.github.com/esmevane/7326b19e20a5670954b51ea8618d096d
 // Here we have the (too simple) React component which
 // we'll be rendering content into.
 //
 class Underlined extends React.Component<{}, {}> {
-  public hole: React.RefObject<HTMLParagraphElement>
+  hole: React.RefObject<HTMLParagraphElement>
 
   constructor(props: {}) {
     super(props)
@@ -17,13 +18,13 @@ class Underlined extends React.Component<{}, {}> {
   // this function, which appends a given node to
   // a ref HTMLElement, if present.
   //
-  public append(node: HTMLElement) {
+  append(node: HTMLElement) {
     if (this.hole) {
       this.hole.current!.appendChild(node)
     }
   }
 
-  public render() {
+  render() {
     // Just really wanted to prove I could get React AND
     // styled-component abilities at the same time.
     //
@@ -42,12 +43,24 @@ class Underlined extends React.Component<{}, {}> {
 // This class is our actual interactor for ProseMirror itself.
 // It glues DOM rendering, React, and ProseMirror nodes together.
 //
-export class Underline {
-  public dom: HTMLElement
-  public contentDOM: HTMLElement
-  public ref: React.RefObject<any>
+export class Underline implements NodeView {
+  dom: HTMLElement
+  contentDOM: HTMLElement
+  ref: React.RefObject<any>
 
-  constructor(public node: Node) {
+  node: Node
+  view: EditorView
+  getPos: () => number
+  decorations: Decoration[]
+  attrs: { [key: string]: string | number}
+
+  constructor(node: Node, view: EditorView, getPos: () => number, decorations: Decoration[]) {
+    this.attrs = node.attrs
+    this.node = node
+    this.view = view
+    this.getPos = getPos
+    this.decorations = decorations
+
     // We'll use this to access our Underlined component's 
     // instance methods.
     //
@@ -80,7 +93,7 @@ export class Underline {
     )
   }
 
-  public update(node: Node) {
+  update(node: Node) {
     return true
   }
 

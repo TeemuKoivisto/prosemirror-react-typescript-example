@@ -3,12 +3,11 @@ import applyDevTools from 'prosemirror-dev-tools'
 
 import { EditorState } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
-import { Node, Schema } from 'prosemirror-model'
 
 import { schema } from './schema'
 import { plugins } from './plugins'
 
-import { Underline } from './nodeviews/Underline'
+import { nodeViews } from './nodeviews'
 
 export class Editor extends React.Component<{}, {}> {
   editorState: EditorState
@@ -25,9 +24,7 @@ export class Editor extends React.Component<{}, {}> {
   createEditorView = (element: HTMLDivElement | null) => {
     if (element != null) {
       this.editorView = new EditorView(element, {
-        nodeViews: {
-          underline: (node: Node) => new Underline(node)
-        },
+        nodeViews,
         state: this.editorState,
       })
       applyDevTools(this.editorView)
