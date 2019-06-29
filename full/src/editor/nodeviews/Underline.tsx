@@ -1,5 +1,6 @@
 import * as React from 'react'
 import ReactDOM from 'react-dom'
+import styled from 'styled-components'
 import { Node } from 'prosemirror-model'
 import { EditorView, NodeView, Decoration } from 'prosemirror-view'
 
@@ -28,15 +29,15 @@ class Underlined extends React.Component<{}, {}> {
     // Just really wanted to prove I could get React AND
     // styled-component abilities at the same time.
     //
-    // const UnderlinedText: any = styled.p`
-    //   text-decoration: underline;
-    // `
+    const UnderlinedText: any = styled.p`
+      text-decoration: underline;
+    `
 
     // The styled components version is basically just a wrapper to do SCSS styling.
     // Questionable if it's even needed for such simple styling and because you can't clearly see the 
     // DOM structure from the code (hence making `& > ${Component}` selectors quite unintuitive) 
-    // return <UnderlinedText ref={this.hole} />
-    return <p ref={this.hole} style={{textDecoration: 'underline'}}></p>
+    return <UnderlinedText ref={this.hole} />
+    // return <p ref={this.hole} style={{textDecoration: 'underline'}}></p>
   }
 }
 
