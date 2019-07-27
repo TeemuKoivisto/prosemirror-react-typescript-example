@@ -1,10 +1,10 @@
-# ProseMirror + React + TypeScript example editor
+# [ProseMirror + React + TypeScript example editor](https://github.com/TeemuKoivisto/prosemirror-react-typescript-example)
 
 Just the basic boilerplate needed to get going with this combo.
 
 To get started go to the folder and start the app eg:
 ```bash
-cd minimal
+cd full
 yarn
 yarn start
 ```
