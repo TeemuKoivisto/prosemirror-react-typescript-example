@@ -1,8 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import * as React from 'react'
+import { render } from 'react-dom'
 
-import { Editor } from './editor/Editor'
+import { Routes } from './routes'
 
 import './index.css'
 
-ReactDOM.render(<Editor />, document.getElementById('root'))
+render(
+  <Routes />,
+  document.getElementById('root')
+)
