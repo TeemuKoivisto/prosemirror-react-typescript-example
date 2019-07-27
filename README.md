@@ -1,4 +1,4 @@
-# [ProseMirror + React + TypeScript example editor](https://github.com/TeemuKoivisto/prosemirror-react-typescript-example)
+# [ProseMirror + React + TypeScript example editor](https://teemukoivisto.github.io/prosemirror-react-typescript-example/)
 
 Just the basic boilerplate needed to get going with this combo.
 
