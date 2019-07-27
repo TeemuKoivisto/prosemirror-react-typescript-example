@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd full \
-  rm -r ../static || true && \
+rm -r ./static || true && \
+  cd full \
   npm run build && \
   mv ./build/** ../
