@@ -1,6 +1,7 @@
 {
   "name": "full-prosemirror-react-typescript-example",
   "version": "0.1.0",
+  "homepage": "https://teemukoivisto.github.io/prosemirror-react-typescript-example/",
   "dependencies": {
     "@types/jest": "24.0.15",
     "@types/node": "12.0.10",
@@ -12,6 +13,8 @@
     "@types/prosemirror-view": "^1.3.2",
     "@types/react": "16.8.22",
     "@types/react-dom": "16.8.4",
+    "@types/react-router": "^5.0.3",
+    "@types/react-router-dom": "^4.3.4",
     "@types/styled-components": "^4.1.16",
     "prosemirror-commands": "^1.0.8",
     "prosemirror-dev-tools": "^2.1.1",
@@ -22,6 +25,8 @@
     "prosemirror-view": "^1.9.10",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "styled-components": "^4.3.2",
     "tslint": "^5.18.0",
