@@ -1,13 +1,8 @@
-import { Node } from 'prosemirror-model'
-import { EditorView, Decoration } from 'prosemirror-view'
+import { Underline, IUnderlineAttrs } from './Underline'
 
-import { Underline } from './Underline'
+import { ReactNodeView } from './ReactNodeView'
+import { PortalProvider } from '../utils/PortalProvider'
 
-export const nodeViews = {
-  underline: (
-    node: Node,
-    view: EditorView,
-    getPos: () => number,
-    decorations: Decoration[]
-  ) => new Underline(node, view, getPos, decorations),
-}
+export const nodeViews = (portalProvider: PortalProvider) => ({
+  underline: ReactNodeView.fromComponent<IUnderlineAttrs>(Underline, portalProvider),
+})
