@@ -10,6 +10,8 @@ import { plugins } from './plugins'
 import { nodeViews } from './nodeviews'
 
 export class Editor extends React.Component<{}, {}> {
+  editorRef: React.RefObject<HTMLDivElement>
+
   editorState: EditorState
   editorView?: EditorView
 
@@ -19,6 +21,7 @@ export class Editor extends React.Component<{}, {}> {
       schema,
       plugins: plugins(),
     })
+    this.editorRef = React.createRef()
   }
 
   createEditorView = (element: HTMLDivElement | null) => {
@@ -29,6 +32,11 @@ export class Editor extends React.Component<{}, {}> {
       })
       applyDevTools(this.editorView)
     }
+  }
+
+  componentDidMount() {
+    this.createEditorView(this.editorRef.current)
+    this.forceUpdate()
   }
 
   componentWillUnmount() {
@@ -42,6 +50,6 @@ export class Editor extends React.Component<{}, {}> {
   }
 
   render() {
-    return <div id="editor" ref={ref => { this.createEditorView(ref) }} />
+    return <div id="editor" ref={this.editorRef} />
   }
 }

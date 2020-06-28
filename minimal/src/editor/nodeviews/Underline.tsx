@@ -51,11 +51,11 @@ export class Underline implements NodeView {
   // All the available parameters that are passed to the NodeView
   node: Node
   view: EditorView
-  getPos: () => number
+  getPos: (() => number) | boolean
   decorations: Decoration[]
   attrs: { [key: string]: string | number}
 
-  constructor(node: Node, view: EditorView, getPos: () => number, decorations: Decoration[]) {
+  constructor(node: Node, view: EditorView, getPos: (() => number) | boolean, decorations: Decoration[]) {
     this.attrs = node.attrs
     this.node = node
     this.view = view

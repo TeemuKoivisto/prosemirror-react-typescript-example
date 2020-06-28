@@ -7,7 +7,7 @@ export const nodeViews = {
   underline: (
     node: Node,
     view: EditorView,
-    getPos: () => number,
+    getPos: (() => number) | boolean,
     decorations: Decoration[]
   ) => new Underline(node, view, getPos, decorations),
 }
