@@ -1,4 +1,4 @@
-# Minimal editor example
+# Minimal editor example (generated using CRA at 29.6.2020)
 
 This example was mostly copied and modified from here https://gist.github.com/esmevane/7326b19e20a5670954b51ea8618d096d
 
