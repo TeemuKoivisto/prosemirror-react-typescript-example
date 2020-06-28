@@ -13,7 +13,7 @@ export class ReactNodeView<T> implements NodeView {
   // All the available parameters that are passed to the NodeView
   node: Node
   view: EditorView
-  getPos: () => number
+  getPos: (() => number) | boolean
   decorations: Decoration[]
   attrs: T
   // attrs: { [key: string]: string | number}
@@ -24,7 +24,7 @@ export class ReactNodeView<T> implements NodeView {
   constructor(
     node: Node,
     view: EditorView,
-    getPos: () => number,
+    getPos: (() => number) | boolean,
     decorations: Decoration[],
     portalProvider: PortalProvider,
     reactComponent: React.ComponentType<any>,
@@ -108,7 +108,7 @@ export class ReactNodeView<T> implements NodeView {
     return (
       node: Node,
       view: EditorView,
-      getPos: () => number,
+      getPos: (() => number) | boolean,
       decorations: Decoration[]
       ) =>
       new ReactNodeView<T>(
