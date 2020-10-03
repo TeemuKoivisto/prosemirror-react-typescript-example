@@ -2,7 +2,7 @@
 
 This is the minimal editor as its own npm library.
 
-## How to install (with example app)
+## How to install (with Example App)
 
 1. Install dependencies: `yarn`
 2. Link the library to the local npm modules: `yarn link`
