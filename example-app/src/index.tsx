@@ -1,6 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import * as React from 'react'
+import { render } from 'react-dom'
 
-import { Editor } from 'minimal-deployable'
+import { Routes } from './routes'
 
-ReactDOM.render(<Editor />, document.getElementById('root'))
+render(
+  <Routes />,
+  document.getElementById('root')
+)

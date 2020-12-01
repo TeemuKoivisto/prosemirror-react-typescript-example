@@ -2,12 +2,12 @@
 
 This is the minimal editor as its own npm library.
 
-## How to install (with Example App)
+## How to install
 
 1. Install dependencies: `yarn`
 2. Link the library to the local npm modules: `yarn link`
 3. Build it: `yarn build` (or `yarn watch`)
-4. Go to Example App: `cd ../example-app`
+4. Go to example-app: `cd ../example-app`
 5. Install dependencies: `yarn`
 6. Link the local library: `yarn link minimal-deployable`
 7. Run the app: `yarn start`

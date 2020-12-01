@@ -1,8 +1,8 @@
 # Example app
 
-This is an example app to show how to link a local editor library to a React app.
+This is an example app to show how to use the editor libraries in a React app.
 
-See the instructions in minimal-deployable to run this.
+See the instructions in the root README.md how to run this.
 
 ## Commands
 
