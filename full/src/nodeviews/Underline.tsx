@@ -22,6 +22,7 @@ export class Underline extends React.Component<IProps, {}> {
   }
 
   render() {
+    // return <p ref={this.hole} style={{textDecoration: 'underline'}}></p>
     const { attrs } = this.props
     return (
       <UnderlinedText
@@ -32,8 +33,6 @@ export class Underline extends React.Component<IProps, {}> {
   }
 }
 
-// The StyledComponent requires some typing I can't be bothered to add to recognize
-// the 'ref' prop.
-const UnderlinedText: any = styled.p`
+const UnderlinedText = styled.p`
   text-decoration: underline;
 `

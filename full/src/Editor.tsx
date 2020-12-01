@@ -1,6 +1,5 @@
 import * as React from 'react'
 import applyDevTools from 'prosemirror-dev-tools'
-import styled from 'styled-components'
 
 import { EditorState } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
@@ -10,6 +9,8 @@ import { plugins } from './plugins'
 import { PortalProvider } from './utils/PortalProvider'
 
 import { nodeViews } from './nodeviews'
+
+import './Editor.scss'
 
 export class Editor extends React.Component<{}, {}> {
   editorRef: React.RefObject<any>
@@ -34,7 +35,7 @@ export class Editor extends React.Component<{}, {}> {
         nodeViews: nodeViews(this.portalProvider),
         state: this.editorState,
       })
-      applyDevTools(this.editorView)
+      applyDevTools(this.editorView!)
     }
   }
 
@@ -55,20 +56,7 @@ export class Editor extends React.Component<{}, {}> {
 
   render() {
     return (
-      <Container>
-        <div id="editor" ref={this.editorRef} />
-      </Container>
+      <div id="full-editor" ref={this.editorRef} />
     )
   }
 }
-
-const Container = styled.div`
-  border: 1px solid black;
-  #editor > .ProseMirror {
-    min-height: 140px;
-    overflow-wrap: break-word;
-    outline: none;
-    padding: 10px;
-    white-space: pre-wrap;
-  }
-`

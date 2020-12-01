@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Node } from 'prosemirror-model'
+import { Node as PMNode } from 'prosemirror-model'
 import { EditorView, NodeView, Decoration } from 'prosemirror-view'
 
 import { PortalProvider } from '../utils/PortalProvider'
@@ -11,21 +11,21 @@ export class ReactNodeView<T> implements NodeView {
   ref: React.RefObject<any>
 
   // All the available parameters that are passed to the NodeView
-  node: Node
+  node: PMNode
   view: EditorView
   getPos: (() => number) | boolean
-  decorations: Decoration[]
+  decorations: Decoration<{ [key: string]: any }>[]
   attrs: T
-  // attrs: { [key: string]: string | number}
+  // attrs: { [key: string]: any }
 
   portalProvider: PortalProvider
   reactComponent: React.ComponentType<any>
 
   constructor(
-    node: Node,
+    node: PMNode,
     view: EditorView,
     getPos: (() => number) | boolean,
-    decorations: Decoration[],
+    decorations: Decoration<{ [key: string]: any }>[],
     portalProvider: PortalProvider,
     reactComponent: React.ComponentType<any>,
   ) {
@@ -69,21 +69,7 @@ export class ReactNodeView<T> implements NodeView {
     )
   }
 
-  update(
-    node: Node,
-    decorations: Decoration[],
-    validUpdate: (currentNode: Node, newNode: Node) => boolean = () => true,
-  ) {
-    // While quite uncommon, the update must be checked for consistency.
-    // @see https://github.com/ProseMirror/prosemirror/issues/648
-    // The check by default returns true, and in Atlassian editor-core only 'mediaSingle' plugin
-    // uses it for checking 'this.getNodeMediaId'
-    const isValidUpdate =
-      this.node.type === node.type && validUpdate(this.node, node)
-
-    if (!isValidUpdate) {
-      return false
-    }
+  update(node: PMNode, decorations: Decoration<{ [key: string]: any }>[]) {
     // If the markup has changed, update the React component.
     // TODO only updates attrs, what about type or marks?
     // Or well basically just marks, the previous check will return false if type has changed.
@@ -106,10 +92,10 @@ export class ReactNodeView<T> implements NodeView {
     portalProvider: PortalProvider,
   ) {
     return (
-      node: Node,
+      node: PMNode,
       view: EditorView,
       getPos: (() => number) | boolean,
-      decorations: Decoration[]
+      decorations: Decoration<{ [key: string]: any }>[]
       ) =>
       new ReactNodeView<T>(
         node,

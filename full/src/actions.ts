@@ -1,11 +1,10 @@
-import { EditorState, NodeSelection, TextSelection, Transaction
-} from 'prosemirror-state'
+import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemirror-state'
 import { canSplit } from 'prosemirror-transform'
 import { Fragment } from 'prosemirror-model'
 
 import { schema } from './schema'
 
-export function splitBlock(state: EditorState, dispatch: (tr: Transaction) => void) {
+export function splitBlock(state: EditorState, dispatch?: (tr: Transaction) => void) {
   const {$from, $to} = state.selection
   if (state.selection instanceof NodeSelection && state.selection.node.isBlock) {
     if (!$from.parentOffset || !canSplit(state.doc, $from.pos)) return false
@@ -39,7 +38,7 @@ export function splitBlock(state: EditorState, dispatch: (tr: Transaction) => vo
   return true
 }
 
-export function createParagraphNear(state: EditorState, dispatch: (tr: Transaction) => void) {
+export function createParagraphNear(state: EditorState, dispatch?: (tr: Transaction) => void) {
   let {$from, $to} = state.selection
   if ($from.parent.inlineContent || $to.parent.inlineContent) return false
   const type = $from.parent.contentMatchAt($to.indexAfter()).defaultType
@@ -55,11 +54,11 @@ export function createParagraphNear(state: EditorState, dispatch: (tr: Transacti
   return true
 }
 
-export function createNewUnderline(state: EditorState, dispatch: (tr: Transaction) => void) {
+export function createNewUnderline(state: EditorState, dispatch?: (tr: Transaction) => void) {
   const {$from, $to} = state.selection
   const empty = schema.nodes.underline.createAndFill()
   const endOfBlock = $from.end()
-  if (empty) {
+  if (empty && dispatch) {
     const tr = state.tr.insert(endOfBlock + 1, empty)
     dispatch(tr)
   }

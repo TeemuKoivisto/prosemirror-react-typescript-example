@@ -7,6 +7,8 @@
       "esnext"
     ],
     "allowJs": true,
+    "declaration": true,
+    "declarationDir": "./dist",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
