@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-cd full \
+cd example-app \
   yarn deploy
