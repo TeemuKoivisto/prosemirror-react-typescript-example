@@ -1,26 +1,23 @@
 {
   "files": {
-    "main.css": "/prosemirror-react-typescript-example/static/css/main.d498bfb3.chunk.css",
-    "main.js": "/prosemirror-react-typescript-example/static/js/main.35c9f991.chunk.js",
-    "main.js.map": "/prosemirror-react-typescript-example/static/js/main.35c9f991.chunk.js.map",
-    "runtime-main.js": "/prosemirror-react-typescript-example/static/js/runtime-main.4cd67ffd.js",
-    "runtime-main.js.map": "/prosemirror-react-typescript-example/static/js/runtime-main.4cd67ffd.js.map",
-    "static/js/2.47455aa6.chunk.js": "/prosemirror-react-typescript-example/static/js/2.47455aa6.chunk.js",
-    "static/js/2.47455aa6.chunk.js.map": "/prosemirror-react-typescript-example/static/js/2.47455aa6.chunk.js.map",
-    "static/js/3.cae20a09.chunk.js": "/prosemirror-react-typescript-example/static/js/3.cae20a09.chunk.js",
-    "static/js/3.cae20a09.chunk.js.map": "/prosemirror-react-typescript-example/static/js/3.cae20a09.chunk.js.map",
-    "static/js/4.0e2234ea.chunk.js": "/prosemirror-react-typescript-example/static/js/4.0e2234ea.chunk.js",
-    "static/js/4.0e2234ea.chunk.js.map": "/prosemirror-react-typescript-example/static/js/4.0e2234ea.chunk.js.map",
+    "main.js": "/prosemirror-react-typescript-example/static/js/main.55f1dbdd.chunk.js",
+    "main.js.map": "/prosemirror-react-typescript-example/static/js/main.55f1dbdd.chunk.js.map",
+    "runtime-main.js": "/prosemirror-react-typescript-example/static/js/runtime-main.c0adbf22.js",
+    "runtime-main.js.map": "/prosemirror-react-typescript-example/static/js/runtime-main.c0adbf22.js.map",
+    "static/js/2.5d5f2d7b.chunk.js": "/prosemirror-react-typescript-example/static/js/2.5d5f2d7b.chunk.js",
+    "static/js/2.5d5f2d7b.chunk.js.map": "/prosemirror-react-typescript-example/static/js/2.5d5f2d7b.chunk.js.map",
+    "static/js/3.3c1044d3.chunk.js": "/prosemirror-react-typescript-example/static/js/3.3c1044d3.chunk.js",
+    "static/js/3.3c1044d3.chunk.js.map": "/prosemirror-react-typescript-example/static/js/3.3c1044d3.chunk.js.map",
+    "static/js/4.a4332343.chunk.js": "/prosemirror-react-typescript-example/static/js/4.a4332343.chunk.js",
+    "static/js/4.a4332343.chunk.js.map": "/prosemirror-react-typescript-example/static/js/4.a4332343.chunk.js.map",
     "index.html": "/prosemirror-react-typescript-example/index.html",
-    "precache-manifest.b652da2b5d42f8404d5db513543d79e3.js": "/prosemirror-react-typescript-example/precache-manifest.b652da2b5d42f8404d5db513543d79e3.js",
+    "precache-manifest.60a9a3b01089eae734c636a229d606b3.js": "/prosemirror-react-typescript-example/precache-manifest.60a9a3b01089eae734c636a229d606b3.js",
     "service-worker.js": "/prosemirror-react-typescript-example/service-worker.js",
-    "static/css/main.d498bfb3.chunk.css.map": "/prosemirror-react-typescript-example/static/css/main.d498bfb3.chunk.css.map",
-    "static/js/2.47455aa6.chunk.js.LICENSE.txt": "/prosemirror-react-typescript-example/static/js/2.47455aa6.chunk.js.LICENSE.txt"
+    "static/js/2.5d5f2d7b.chunk.js.LICENSE.txt": "/prosemirror-react-typescript-example/static/js/2.5d5f2d7b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.4cd67ffd.js",
-    "static/js/2.47455aa6.chunk.js",
-    "static/css/main.d498bfb3.chunk.css",
-    "static/js/main.35c9f991.chunk.js"
+    "static/js/runtime-main.c0adbf22.js",
+    "static/js/2.5d5f2d7b.chunk.js",
+    "static/js/main.55f1dbdd.chunk.js"
   ]
 }
