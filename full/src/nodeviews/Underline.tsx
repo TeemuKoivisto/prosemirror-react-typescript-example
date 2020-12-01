@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 export interface IUnderlineAttrs {
@@ -8,29 +8,22 @@ interface IProps {
   attrs: IUnderlineAttrs
   contentDOM: HTMLElement
 }
+
 // Modified from https://gist.github.com/esmevane/7326b19e20a5670954b51ea8618d096d
-export class Underline extends React.Component<IProps, {}> {
-  hole: React.RefObject<HTMLParagraphElement>
-
-  constructor(props: IProps) {
-    super(props)
-    this.hole = React.createRef()
-  }
-
-  componentDidMount() {
-    this.hole.current!.appendChild(this.props.contentDOM)
-  }
-
-  render() {
-    // return <p ref={this.hole} style={{textDecoration: 'underline'}}></p>
-    const { attrs } = this.props
-    return (
-      <UnderlinedText
-        ref={this.hole}
-        spellCheck={attrs.spellcheck}
-      />
-    )
-  }
+export function Underline(props: IProps) {
+  const { attrs, contentDOM } = props
+  const ref = useRef<HTMLParagraphElement>(null)
+  // You _have_ to use layoutEffect, otherwise the contentDOM is not appended when a new Underline node & nodeview
+  // is created with eg Ctrl+n
+  useLayoutEffect(() => {
+    if (ref.current) ref.current.appendChild(contentDOM)
+  }, [])
+  return (
+    <UnderlinedText
+      ref={ref}
+      spellCheck={attrs.spellcheck}
+    />
+  )
 }
 
 const UnderlinedText = styled.p`
