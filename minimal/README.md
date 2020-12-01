@@ -1,10 +1,17 @@
-# Minimal editor example (generated using CRA at 29.6.2020)
+# Minimal Deployable
 
-This example was mostly copied and modified from here https://gist.github.com/esmevane/7326b19e20a5670954b51ea8618d096d
+This is the minimal editor as its own npm library.
 
-Its goal is to provide the minimal required boilerplate to bootstrap a project with ProseMirror, React and TypeScript. It probably won't be something you'd want to directly, but something you want to look at to see how everything works together. The `full` editor example should have the rest of the boilerplate needed to build a real, robust editor.
+## How to install
+
+1. Install dependencies: `yarn`
+2. Link the library to the local npm modules: `yarn link`
+3. Build it: `yarn build` (or `yarn watch`)
+4. Go to example-app: `cd ../example-app`
+5. Install dependencies: `yarn`
+6. Link the local library: `yarn link minimal-deployable`
+7. Run the app: `yarn start`
 
 ## Commands
 
 Can be found in `package.json`. Use `yarn <cmd>` or `npm run <cmd>` or sometimes `npm <cmd>` works too.
-

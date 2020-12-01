@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { Editor } from 'minimal-deployable'
+import { Editor } from 'minimal'
 
 import { PageHeader } from '../components/PageHeader'
 

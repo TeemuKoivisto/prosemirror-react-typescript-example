@@ -7,8 +7,6 @@
       "esnext"
     ],
     "allowJs": true,
-    "declaration": true,
-    "declarationDir": "./dist",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -22,7 +20,6 @@
     "jsx": "react"
   },
   "include": [
-    "src/**/*"
-  ],
-  "exclude": ["node_modules"]
+    "src"
+  ]
 }
