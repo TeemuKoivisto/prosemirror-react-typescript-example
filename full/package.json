@@ -21,16 +21,14 @@
     "@types/prosemirror-model": "^1.11.1",
     "@types/prosemirror-state": "^1.2.5",
     "@types/prosemirror-view": "^1.16.1",
+    "@types/pubsub-js": "^1.8.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.4",
     "node-sass": "^5.0.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
     "rollup": "^2.34.0",
     "rollup-plugin-postcss": "^3.1.8",
     "rollup-plugin-typescript2": "^0.29.0",
-    "styled-components": "^5.2.0",
     "typescript": "^4.1.2"
   },
   "peerDependencies": {
@@ -46,6 +44,7 @@
     "prosemirror-model": "^1.12.0",
     "prosemirror-state": "^1.3.3",
     "prosemirror-transform": "^1.2.8",
-    "prosemirror-view": "^1.16.3"
+    "prosemirror-view": "^1.16.3",
+    "pubsub-js": "^1.9.1"
   }
 }
