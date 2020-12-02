@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-cd example-app \
-  yarn deploy
+cd example-app && yarn deploy
