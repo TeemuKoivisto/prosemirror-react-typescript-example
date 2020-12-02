@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6ccf4e31c1d3f6a89b07ea234ce29806",
+    "revision": "45fcb239dd76cc3d4289b5a9bcbaeca6",
     "url": "/prosemirror-react-typescript-example/index.html"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/prosemirror-react-typescript-example/static/js/4.a4332343.chunk.js"
   },
   {
-    "revision": "3e30142278500e993ded",
-    "url": "/prosemirror-react-typescript-example/static/js/main.55f1dbdd.chunk.js"
+    "revision": "bb87897fa670057349c2",
+    "url": "/prosemirror-react-typescript-example/static/js/main.2c6bea09.chunk.js"
   },
   {
     "revision": "fdc340d8747b2bb02fd9",
