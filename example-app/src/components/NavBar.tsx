@@ -13,8 +13,8 @@ export function NavBar(props: IProps) {
   return (
     <Container className={className}>
       <Nav>
-        <Link to="/" className="frontpage">Full</Link>
-        <Link to="/minimal">Minimal</Link>
+        <Link to="/" exact activeClassName="current">Full</Link>
+        <Link to="/minimal" activeClassName="current">Minimal</Link>
       </Nav>
     </Container>
   )
@@ -40,7 +40,7 @@ const Link = styled(NavLink)`
   &:hover {
     text-decoration: underline;
   }
-  &.frontpage {
+  &.current {
     font-weight: 600;
   }
 `

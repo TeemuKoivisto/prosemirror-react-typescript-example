@@ -14,7 +14,7 @@ export function PageHeader(props: IProps) {
         <h1><a href="https://teemukoivisto.github.io/prosemirror-react-typescript-example/">
           ProseMirror React Typescript Example</a></h1>
         <p>Demo application to show how to combine ProseMirror with React</p>
-        <p><a href="https://teemukoivisto.github.io/prosemirror-react-typescript-example/">Github repo</a></p>
+        <p><a href="https://github.com/TeemuKoivisto/prosemirror-react-typescript-example">Github repo</a></p>
       </header>
       <div>
         <ul>
