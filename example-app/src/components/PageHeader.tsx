@@ -19,6 +19,7 @@ export function PageHeader(props: IProps) {
       <div>
         <ul>
           <li><b>Ctrl + n</b>: New underline paragraph</li>
+          <li><b>Ctrl + b</b>: New blockquote</li>
           <li><b>Ctrl + p</b>: New normal paragraph (not working)</li>
           <li><b>Ctrl + s</b>: Split current block</li>
         </ul>
