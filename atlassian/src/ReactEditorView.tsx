@@ -58,15 +58,6 @@ export class ReactEditorView extends React.Component<EditorViewProps, {}> {
     })
   }
 
-  // componentDidMount() {
-  //   this.createEditorView(this.editorRef.current)
-  //   this.forceUpdate()
-  // }
-
-  // shouldComponentUpdate() {
-  //   return false
-  // }
-
   componentDidMount() {
     // Transaction dispatching is already enabled by default prior to
     // mounting, but we reset it here, just in case the editor view
