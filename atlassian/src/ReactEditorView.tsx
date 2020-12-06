@@ -33,18 +33,7 @@ export interface EditorViewProps {
     eventDispatcher: EventDispatcher;
   }) => JSX.Element
 }
-// interface IState {
-//   editorState: EditorState
-//   editorView?: EditorView
-//   eventDispatcher: EventDispatcher
-// }
 
-/**
- * The editor React component which is a class instead of a function component
- * since the exhaustive-deps linting rule drives me nuts as it requires adding everything
- * to the useEffect dependencies. Even adding values that should never change and if they did,
- * there should be an error instead of rerunning the useEffect hook.
- */
 export class ReactEditorView extends React.Component<EditorViewProps, {}> {
 
   config!: EditorConfig;

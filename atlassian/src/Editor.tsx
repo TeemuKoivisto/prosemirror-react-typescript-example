@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { ReactEditorView } from './ReactEditorView'
 import { EditorActions } from './EditorActions'
 import { EditorContext } from './EditorContext'
-import { PortalProvider } from './react-portals/PortalProvider'
-import { PortalRenderer } from './react-portals/PortalRenderer'
+import { PortalProvider, PortalRenderer } from './react-portals'
 
 import { FullPage } from './editor-appearance/FullPage'
 
@@ -30,24 +29,20 @@ export interface EditorProps {
   performanceTracking?: boolean;
 }
 
-// An interesting feature of which I'm not completely sure what is its purpose
+// An interesting feature whose purpose I'm not completely sure what is
 // https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-common/src/extensions/
 // extensionProvider: any
+
+const components = {
+  'full-page': FullPage,
+}
 
 export function Editor(props: EditorProps) {
   const {
     appearance = 'full-page',
   } = props
   const [editorActions] = useState<EditorActions>(new EditorActions())
-  // const Component = useMemo(() => {
-  //   if (appearance === 'full-page') {
-  //     return FullPage
-  //   }
-  //   return null
-  // }, [appearance])
-  // useEffect(() => {
-
-  // }, [])
+  const Component = useMemo(() => components[appearance], [appearance])
 
   return (
     <EditorContext editorActions={editorActions}>
@@ -62,7 +57,7 @@ export function Editor(props: EditorProps) {
               eventDispatcher,
               config,
             }) => (
-              <FullPage
+              <Component
                 appearance={appearance}
                 editorActions={editorActions}
                 editorDOMElement={editor}
@@ -82,77 +77,3 @@ export function Editor(props: EditorProps) {
     </EditorContext>
   )
 }
-
-// export class Editor extends React.Component<EditorProps> {
-//   static defaultProps: EditorProps = {
-//     appearance: 'full-page',
-//   }
-
-//   // An interesting feature of which I'm not completely sure what is its purpose
-//   // https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-common/src/extensions/
-//   // extensionProvider: any
-
-//   private editorActions: EditorActions
-
-//   constructor(props: EditorProps, context: { editorActions?: EditorActions }) {
-//     super(props)
-//     this.editorActions = (context || {}).editorActions || new EditorActions();
-//   }
-
-//   render() {
-//     const Component = getUiComponent(this.props.appearance!)
-//     return (
-//       <EditorContext editorActions={this.editorActions}>
-//         <PortalProvider render={portalProviderAPI => (
-//           <>
-//             <ReactEditorView
-//               render={({
-//                 editor,
-//                 view,
-//                 eventDispatcher,
-//                 config,
-//               }) => (
-//                 <Component
-//                 appearance={this.props.appearance!}
-//                 editorActions={this.editorActions}
-//                 // editorDOMElement={editor}
-//                 editorView={view}
-//                 eventDispatcher={eventDispatcher}
-//                 primaryToolbarComponents={
-//                   config.primaryToolbarComponents
-//                 }
-//               />)}
-//             />
-//             <PortalRenderer
-//               portalProviderAPI={portalProviderAPI}
-//             />
-//           </>
-//         )}>
-//         </PortalProvider>
-//       </EditorContext>
-//     )
-//   }
-// }
-
-// function Editor(props: EditorProps) {
-//   const plugins = usePresetContext();
-
-//   return (
-//     <IntlProvider locale="en">
-//       <PortalProvider
-//         onAnalyticsEvent={props.onAnalyticsEvent}
-//         render={portalProviderAPI => (
-//           <>
-//             <EditorInternal
-//               {...props}
-//               plugins={plugins.length ? plugins : props.plugins}
-//               portalProviderAPI={portalProviderAPI}
-//               onAnalyticsEvent={props.onAnalyticsEvent}
-//             />
-//             <PortalRenderer portalProviderAPI={portalProviderAPI} />
-//           </>
-//         )}
-//       />
-//     </IntlProvider>
-//   );
-// }
