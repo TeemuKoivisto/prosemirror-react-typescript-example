@@ -64,3 +64,15 @@ export function createNewUnderline(state: EditorState, dispatch?: (tr: Transacti
   }
   return false
 }
+
+export function createNewBlockQuote(state: EditorState, dispatch?: (tr: Transaction) => void) {
+  const {$from, $to} = state.selection
+  const blockquote = state.schema.nodes.blockquote;
+  const empty = blockquote.createAndFill()
+  const endOfBlock = $from.end()
+  if (empty && dispatch) {
+    const tr = state.tr.insert(endOfBlock + 1, empty)
+    dispatch(tr)
+  }
+  return false
+}

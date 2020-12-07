@@ -23,6 +23,16 @@ export const schema = new Schema({
       parseDOM: [{ tag: 'p' }],
       toDOM(node) { return ['p', node.attrs, 0] }
     },
+    blockquote: {
+      content: 'paragraph+',
+      group: 'block',
+      defining: true,
+      selectable: false,
+      parseDOM: [{ tag: 'blockquote' }],
+      toDOM() {
+        return ['blockquote', 0];
+      },
+    },
     text: {
       group: 'inline'
     },

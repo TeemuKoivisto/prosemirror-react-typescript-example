@@ -12,7 +12,6 @@ import { nodeViews } from './nodeviews'
 import { EditorProps } from './Editor'
 
 interface IProps {
-  // children: React.ReactChildren
   editorProps: EditorProps
   EditorLayoutComponent: (props: any) => JSX.Element
 }

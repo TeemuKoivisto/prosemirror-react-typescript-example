@@ -1,112 +1,218 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Node as PMNode } from 'prosemirror-model'
-import { EditorView, NodeView, Decoration } from 'prosemirror-view'
+import React from 'react';
+import { NodeView, EditorView, Decoration } from 'prosemirror-view';
+import { Node as PMNode } from 'prosemirror-model';
 
-import { PortalProvider } from '../react-portals'
+import { PortalProvider } from '../react-portals';
+import { EventDispatcher, createDispatch } from '../utils/event-dispatcher';
 
-// Modified from https://bitbucket.org/atlassian/atlaskit-mk-2/src/0fcae893b790443a30f7dadae00638d6e4238b2f/packages/editor/editor-core/src/nodeviews/ReactNodeView.tsx?at=master
-export class ReactNodeView<T> implements NodeView {
-  dom: HTMLElement
-  contentDOM: HTMLElement
-  ref: React.RefObject<any>
+export interface ReactNodeProps {
+  selected: boolean;
+}
 
-  // All the available parameters that are passed to the NodeView
-  node: PMNode
-  view: EditorView
-  getPos: (() => number) | boolean
-  decorations: Decoration<{ [key: string]: any }>[]
-  attrs: T
-  // attrs: { [key: string]: any }
+export type ProsemirrorGetPosHandler = () => number;
+export type getPosHandler = getPosHandlerNode | boolean;
+export type getPosHandlerNode = () => number;
+export type ReactComponentProps = { [key: string]: unknown };
+export type ForwardRef = (node: HTMLElement | null) => void;
+export type shouldUpdate = (nextNode: PMNode) => boolean;
 
-  portalProvider: PortalProvider
-  reactComponent: React.ComponentType<any>
+export class ReactNodeView<P = ReactComponentProps> implements NodeView {
+  private domRef?: HTMLElement;
+  private contentDOMWrapper?: Node;
+  private reactComponent?: React.ComponentType<any>;
+  private portalProvider: PortalProvider;
+  private hasContext: boolean;
+  private _viewShouldUpdate?: shouldUpdate;
+
+  reactComponentProps: P;
+
+  view: EditorView;
+  getPos: getPosHandler;
+  contentDOM: Node | undefined;
+  node: PMNode;
 
   constructor(
     node: PMNode,
     view: EditorView,
-    getPos: (() => number) | boolean,
-    decorations: Decoration<{ [key: string]: any }>[],
-    portalProvider: PortalProvider,
-    reactComponent: React.ComponentType<any>,
+    getPos: getPosHandler,
+    portalProviderAPI: PortalProvider,
+    reactComponentProps?: P,
+    reactComponent?: React.ComponentType<any>,
+    hasContext: boolean = false,
+    viewShouldUpdate?: shouldUpdate,
   ) {
-    this.attrs = node.attrs as T
-    this.node = node
-    this.view = view
-    this.getPos = getPos
-    this.decorations = decorations
-
-    this.portalProvider = portalProvider
-    this.reactComponent = reactComponent
-
-    this.ref = React.createRef()
-
-    // Here, we'll provide a container to render React into.
-    // Coincidentally, this is where ProseMirror will put its
-    // generated contentDOM.  React will throw out that content
-    // once rendered, and at the same time we'll append it into
-    // the component tree, like a fancy shell game.  This isn't
-    // obvious to the user, but would it be more obvious on an
-    // expensive render?
-    //
-    this.dom = document.createElement('span')
-
-    // Finally, we provide an element to render content into.
-    // We will be moving this node around as we need to.
-    //
-    this.contentDOM = document.createElement('span')
-
-    // Just example classes to help see the structure in the DOM
-    this.dom.classList.add('node__dom')
-    this.contentDOM.classList.add('node__content-dom')
-
-    this.renderReactComponent()
+    this.node = node;
+    this.view = view;
+    this.getPos = getPos;
+    this.portalProvider = portalProviderAPI;
+    this.reactComponentProps = reactComponentProps || ({} as P);
+    this.reactComponent = reactComponent;
+    this.hasContext = hasContext;
+    this._viewShouldUpdate = viewShouldUpdate;
   }
 
-  renderReactComponent() {
-    ReactDOM.render(<this.reactComponent attrs={this.attrs} contentDOM={this.contentDOM}/>, this.dom)
-    // this.portalProvider.render(
-    //   <this.reactComponent ref={this.ref} attrs={this.attrs} contentDOM={this.contentDOM}/>,
-    //   this.dom
-    // )
-  }
+  /**
+   * This method exists to move initialization logic out of the constructor,
+   * so object can be initialized properly before calling render first time.
+   *
+   * Example:
+   * Instance properties get added to an object only after super call in
+   * constructor, which leads to some methods being undefined during the
+   * first render.
+   */
+  init() {
+    this.domRef = this.createDomRef();
+    this.setDomAttrs(this.node, this.domRef);
 
-  update(node: PMNode, decorations: Decoration<{ [key: string]: any }>[]) {
-    // If the markup has changed, update the React component.
-    // TODO only updates attrs, what about type or marks?
-    // Or well basically just marks, the previous check will return false if type has changed.
-    if (this.ref && !this.node.sameMarkup(node)) {
-      this.attrs = node.attrs as T
-      this.renderReactComponent()
+    const { dom: contentDOMWrapper, contentDOM } = this.getContentDOM() || {
+      dom: undefined,
+      contentDOM: undefined,
+    };
+
+    if (this.domRef && contentDOMWrapper) {
+      this.domRef.appendChild(contentDOMWrapper);
+      this.contentDOM = contentDOM ? contentDOM : contentDOMWrapper;
+      this.contentDOMWrapper = contentDOMWrapper || contentDOM;
     }
-    this.node = node
-    this.decorations = decorations
 
-    return true
+    // @see ED-3790
+    // something gets messed up during mutation processing inside of a
+    // nodeView if DOM structure has nested plain "div"s, it doesn't see the
+    // difference between them and it kills the nodeView
+    this.domRef.classList.add(`${this.node.type.name}-nodeview-content-wrap`);
+
+    this.renderReactComponent(
+      this.render(this.reactComponentProps, this.handleRef)
+    );
+
+    return this;
+  }
+
+  private renderReactComponent(
+    component: React.ReactElement<any> | null,
+  ) {
+    if (!this.domRef || !component) {
+      return;
+    }
+
+    this.portalProvider.render(component, this.domRef!);
+  }
+
+  createDomRef(): HTMLElement {
+    return this.node.isInline
+      ? document.createElement('span')
+      : document.createElement('div');
+  }
+
+  getContentDOM():
+    | { dom: Node; contentDOM?: Node | null | undefined }
+    | undefined {
+    return undefined;
+  }
+
+  handleRef = (node: HTMLElement | null) => this._handleRef(node);
+
+  private _handleRef(node: HTMLElement | null) {
+    const contentDOM = this.contentDOMWrapper || this.contentDOM;
+
+    // move the contentDOM node inside the inner reference after rendering
+    if (node && contentDOM && !node.contains(contentDOM)) {
+      node.appendChild(contentDOM);
+    }
+  }
+
+  render(props: P, forwardRef?: ForwardRef): React.ReactElement<any> | null {
+    return this.reactComponent ? (
+      <this.reactComponent
+        view={this.view}
+        getPos={this.getPos}
+        node={this.node}
+        forwardRef={forwardRef}
+        {...props}
+      />
+    ) : null;
+  }
+
+  update(
+    node: PMNode,
+    _decorations: Array<Decoration>,
+    validUpdate: (currentNode: PMNode, newNode: PMNode) => boolean = () => true,
+  ) {
+    // @see https://github.com/ProseMirror/prosemirror/issues/648
+    const isValidUpdate =
+      this.node.type === node.type && validUpdate(this.node, node);
+
+    if (!isValidUpdate) {
+      return false;
+    }
+
+    if (this.domRef && !this.node.sameMarkup(node)) {
+      this.setDomAttrs(node, this.domRef);
+    }
+
+    // View should not process a re-render if this is false.
+    // We dont want to destroy the view, so we return true.
+    if (!this.viewShouldUpdate(node)) {
+      this.node = node;
+      return true;
+    }
+
+    this.node = node;
+    this.renderReactComponent(
+      this.render(this.reactComponentProps, this.handleRef)
+    );
+
+    return true;
+  }
+
+  viewShouldUpdate(nextNode: PMNode): boolean {
+    if (this._viewShouldUpdate) {
+      return this._viewShouldUpdate(nextNode);
+    }
+
+    return true;
+  }
+
+  /**
+   * Copies the attributes from a ProseMirror Node to a DOM node.
+   * @param node The Prosemirror Node from which to source the attributes
+   */
+  setDomAttrs(node: PMNode, element: HTMLElement) {
+    Object.keys(node.attrs || {}).forEach(attr => {
+      element.setAttribute(attr, node.attrs[attr]);
+    });
+  }
+
+  get dom() {
+    return this.domRef;
   }
 
   destroy() {
-    ReactDOM.unmountComponentAtNode(this.dom)
-    this.portalProvider.remove(this.dom)
+    if (!this.domRef) {
+      return;
+    }
+
+    this.portalProvider.remove(this.domRef);
+    this.domRef = undefined;
+    this.contentDOM = undefined;
   }
 
-  static fromComponent<T>(
+  static fromComponent(
     component: React.ComponentType<any>,
-    portalProvider: PortalProvider,
+    portalProviderAPI: PortalProvider,
+    props?: ReactComponentProps,
+    viewShouldUpdate?: (nextNode: PMNode) => boolean,
   ) {
-    return (
-      node: PMNode,
-      view: EditorView,
-      getPos: (() => number) | boolean,
-      decorations: Decoration<{ [key: string]: any }>[]
-      ) =>
-      new ReactNodeView<T>(
+    return (node: PMNode, view: EditorView, getPos: getPosHandler) =>
+      new ReactNodeView(
         node,
         view,
         getPos,
-        decorations,
-        portalProvider,
+        portalProviderAPI,
+        props,
         component,
-      )
+        false,
+        viewShouldUpdate,
+      ).init();
   }
 }

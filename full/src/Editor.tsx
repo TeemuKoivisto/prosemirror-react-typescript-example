@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { ReactEditorView } from './ReactEditorView'
 import { EditorContext } from './core/EditorContext'
@@ -26,10 +26,13 @@ export function Editor(props: EditorProps) {
   return (
     <EditorContext.Provider value={{
       editorActions: new EditorActions(),
-      portalProvider: new PortalProvider()
+      portalProvider: new PortalProvider(),
     }}>
-      <ReactEditorView editorProps={props} EditorLayoutComponent={Component} />
-      <PortalRenderer/>
+        <ReactEditorView
+          editorProps={props}
+          EditorLayoutComponent={Component}
+        />
+        <PortalRenderer />
     </EditorContext.Provider>
   )
 }
