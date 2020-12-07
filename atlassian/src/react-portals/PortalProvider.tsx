@@ -7,13 +7,6 @@ export type PortalProviderProps = {
   ) => React.ReactChild | JSX.Element | null;
 };
 
-export type Portals = Map<HTMLElement, React.ReactChild>;
-
-export type PortalRendererState = {
-  portals: Portals;
-};
-
-
 export class PortalProvider extends React.Component<PortalProviderProps> {
   static displayName = 'PortalProvider';
 
