@@ -1,10 +1,13 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 import PubSub from 'pubsub-js'
 
-export const PORTALS_EVENT_KEY = 'portals-update'
+export const PORTALS_UPDATE = 'portals-update'
+export const PORTALS_DELETE = 'portals-delete'
 
 type MountedPortal = {
-  component: React.ReactElement | null
+  id: Symbol
+  portal: React.ReactPortal
 }
 export type Portals = Map<HTMLElement, MountedPortal>
 
@@ -16,14 +19,19 @@ export class PortalProvider {
     component: React.ReactElement,
     container: HTMLElement,
   ) {
-    // console.log('create portal')
-    const u = this.portals.set(container, { component: component })
-    PubSub.publish(PORTALS_EVENT_KEY, u)
+    // Do _not_ update portals incase the element has already been rendered with createPortal
+    if (this.portals.has(container)) {
+      return
+    }
+    const portal = createPortal(component, container)
+    const obj = { id: Symbol('portal-id'), portal }
+    this.portals.set(container, obj)
+    PubSub.publish(PORTALS_UPDATE, obj)
   }
 
   remove(container: HTMLElement) {
+    const obj = this.portals.get(container)
     this.portals.delete(container)
-    // console.log('delete portal', this.portals)
-    PubSub.publish(PORTALS_EVENT_KEY, this.portals)
+    PubSub.publish(PORTALS_UPDATE, obj)
   }
 }

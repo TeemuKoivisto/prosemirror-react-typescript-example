@@ -1,34 +1,41 @@
-import React, { useEffect, useReducer, useState } from 'react'
-import { createPortal } from 'react-dom'
+import React, { useEffect, useReducer } from 'react'
 import PubSub from 'pubsub-js'
 
-import { PORTALS_EVENT_KEY } from './PortalProvider'
+import { PORTALS_UPDATE, PORTALS_DELETE } from './PortalProvider'
 
 type MountedPortal = {
-  component: React.ReactElement
+  id: Symbol
+  portal: React.ReactPortal
 }
-type Portals = Map<HTMLElement, MountedPortal>
+
+const portals = new Map()
 
 export function PortalRenderer() {
   const [_ignored, forceUpdate] = useReducer(x => x + 1, 0)
-  const [portals, setPortals] = useState<Map<HTMLElement, MountedPortal>>(new Map())
 
   useEffect(() => {
-    const token = PubSub.subscribe(PORTALS_EVENT_KEY, onPortalsUpdate)
+    const token = PubSub.subscribe(PORTALS_UPDATE, onPortalsUpdate)
+    const token2 = PubSub.subscribe(PORTALS_DELETE, onPortalsUpdate)
     return () => {
       PubSub.unsubscribe(token)
+      PubSub.unsubscribe(token2)
     }
   }, [])
-  const onPortalsUpdate = (msg: string, data: Portals) => {
-    setPortals(data)
+
+  const onPortalsUpdate = (msg: string, data: MountedPortal) => {
+    if (msg === PORTALS_UPDATE) {
+      portals.set(data.id, data)
+    } else {
+      portals.delete(data.id)
+    }
     forceUpdate()
-    // console.log('update portals', data)
   }
+
   return (
     <>
-    {Array.from(portals.entries()).map(([dom, values]) =>
-      createPortal(values.component, dom),
-    )}
+      {Array.from(portals.entries()).map(([id, values]) =>
+        values.portal
+      )}
     </>
   )
 }
