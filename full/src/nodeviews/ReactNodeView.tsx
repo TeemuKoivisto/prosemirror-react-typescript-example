@@ -3,7 +3,6 @@ import { NodeView, EditorView, Decoration } from 'prosemirror-view';
 import { Node as PMNode } from 'prosemirror-model';
 
 import { PortalProvider } from '../react-portals';
-import { EventDispatcher, createDispatch } from '../utils/event-dispatcher';
 
 export interface ReactNodeProps {
   selected: boolean;
@@ -21,7 +20,6 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
   private contentDOMWrapper?: Node;
   private reactComponent?: React.ComponentType<any>;
   private portalProvider: PortalProvider;
-  private hasContext: boolean;
   private _viewShouldUpdate?: shouldUpdate;
 
   reactComponentProps: P;
@@ -38,7 +36,6 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     portalProviderAPI: PortalProvider,
     reactComponentProps?: P,
     reactComponent?: React.ComponentType<any>,
-    hasContext: boolean = false,
     viewShouldUpdate?: shouldUpdate,
   ) {
     this.node = node;
@@ -47,7 +44,6 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     this.portalProvider = portalProviderAPI;
     this.reactComponentProps = reactComponentProps || ({} as P);
     this.reactComponent = reactComponent;
-    this.hasContext = hasContext;
     this._viewShouldUpdate = viewShouldUpdate;
   }
 
@@ -199,7 +195,7 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
 
   static fromComponent(
     component: React.ComponentType<any>,
-    portalProviderAPI: PortalProvider,
+    portalProvider: PortalProvider,
     props?: ReactComponentProps,
     viewShouldUpdate?: (nextNode: PMNode) => boolean,
   ) {
@@ -208,10 +204,9 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
         node,
         view,
         getPos,
-        portalProviderAPI,
+        portalProvider,
         props,
         component,
-        false,
         viewShouldUpdate,
       ).init();
   }

@@ -6,8 +6,8 @@ import { PortalProvider } from '../react-portals'
 
 // Modified from https://bitbucket.org/atlassian/atlaskit-mk-2/src/0fcae893b790443a30f7dadae00638d6e4238b2f/packages/editor/editor-core/src/nodeviews/ReactNodeView.tsx?at=master
 export class OldReactNodeView<T> implements NodeView {
-  dom: HTMLElement
-  contentDOM: HTMLElement
+  dom?: HTMLElement
+  contentDOM?: HTMLElement
   ref: React.RefObject<any>
 
   // All the available parameters that are passed to the NodeView
@@ -65,7 +65,7 @@ export class OldReactNodeView<T> implements NodeView {
   renderReactComponent() {
     this.portalProvider.render(
       <this.reactComponent attrs={this.attrs} contentDOM={this.contentDOM}/>,
-      this.dom
+      this.dom!
     )
   }
 
@@ -84,7 +84,9 @@ export class OldReactNodeView<T> implements NodeView {
   }
 
   destroy() {
-    this.portalProvider.remove(this.dom)
+    this.portalProvider.remove(this.dom!)
+    this.dom = undefined
+    this.contentDOM = undefined
   }
 
   static fromComponent<T>(

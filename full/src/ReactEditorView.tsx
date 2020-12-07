@@ -42,8 +42,6 @@ export function ReactEditorView(props: IProps) {
   }
 
   function createEditorView(element: HTMLDivElement, state: EditorState) {
-    // Creates the editor-view from this.editorState. If an editor has been mounted
-    // previously, this will contain the previous state of the editor.
     const view = new EditorView({
       mount: element
     }, {
@@ -56,11 +54,7 @@ export function ReactEditorView(props: IProps) {
 
   return (
     <EditorLayoutComponent>
-      <div
-        className={"editor"}
-        key="ProseMirror"
-        ref={editorViewRef}
-      />
+      <div ref={editorViewRef}/>
     </EditorLayoutComponent>
   )
 }

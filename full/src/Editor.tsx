@@ -28,11 +28,11 @@ export function Editor(props: EditorProps) {
       editorActions: new EditorActions(),
       portalProvider: new PortalProvider(),
     }}>
-        <ReactEditorView
-          editorProps={props}
-          EditorLayoutComponent={Component}
-        />
-        <PortalRenderer />
+      <ReactEditorView
+        editorProps={props}
+        EditorLayoutComponent={Component}
+      />
+      <PortalRenderer/>
     </EditorContext.Provider>
   )
 }

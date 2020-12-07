@@ -5,7 +5,8 @@ import { keymap } from 'prosemirror-keymap'
 import { baseKeymap } from 'prosemirror-commands'
 
 import {
-  createNewUnderline,createNewBlockQuote, createParagraphNear, splitBlock
+  createNewUnderline, createNewBlockQuote, createNewPmBlockQuote,
+  createParagraphNear, splitBlock
 } from './actions'
 
 export const plugins = () => {
@@ -16,7 +17,7 @@ export const plugins = () => {
   plugins.push(keymap({
     'Ctrl-n': createNewUnderline,
     'Ctrl-b': createNewBlockQuote,
-    'Ctrl-p': createParagraphNear,
+    'Ctrl-p': createNewPmBlockQuote,
     'Ctrl-s': splitBlock,
   }))
 

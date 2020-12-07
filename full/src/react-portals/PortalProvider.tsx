@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react'
 import PubSub from 'pubsub-js'
+
+export const PORTALS_EVENT_KEY = 'portals-update'
 
 type MountedPortal = {
   component: React.ReactElement | null
 }
 export type Portals = Map<HTMLElement, MountedPortal>
-
-export const PORTALS_EVENT_KEY = 'portals-update'
 
 export class PortalProvider {
 

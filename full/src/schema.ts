@@ -33,6 +33,19 @@ export const schema = new Schema({
         return ['blockquote', 0];
       },
     },
+    pmblockquote: {
+      content: 'paragraph+',
+      group: 'block',
+      defining: true,
+      selectable: false,
+      attrs: {
+        class: { default: 'pm-blockquote' },
+      },
+      parseDOM: [{ tag: 'blockquote' }],
+      toDOM(node) {
+        return ['blockquote', node.attrs, 0];
+      },
+    },
     text: {
       group: 'inline'
     },
