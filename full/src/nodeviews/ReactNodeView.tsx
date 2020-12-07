@@ -1,8 +1,9 @@
-import * as React from 'react'
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { Node as PMNode } from 'prosemirror-model'
 import { EditorView, NodeView, Decoration } from 'prosemirror-view'
 
-import { PortalProvider } from '../utils/PortalProvider'
+import { PortalProvider } from '../react-portals'
 
 // Modified from https://bitbucket.org/atlassian/atlaskit-mk-2/src/0fcae893b790443a30f7dadae00638d6e4238b2f/packages/editor/editor-core/src/nodeviews/ReactNodeView.tsx?at=master
 export class ReactNodeView<T> implements NodeView {
@@ -63,10 +64,11 @@ export class ReactNodeView<T> implements NodeView {
   }
 
   renderReactComponent() {
-    this.portalProvider.render(
-      <this.reactComponent ref={this.ref} attrs={this.attrs} contentDOM={this.contentDOM}/>,
-      this.dom
-    )
+    ReactDOM.render(<this.reactComponent attrs={this.attrs} contentDOM={this.contentDOM}/>, this.dom)
+    // this.portalProvider.render(
+    //   <this.reactComponent ref={this.ref} attrs={this.attrs} contentDOM={this.contentDOM}/>,
+    //   this.dom
+    // )
   }
 
   update(node: PMNode, decorations: Decoration<{ [key: string]: any }>[]) {
@@ -84,6 +86,7 @@ export class ReactNodeView<T> implements NodeView {
   }
 
   destroy() {
+    ReactDOM.unmountComponentAtNode(this.dom)
     this.portalProvider.remove(this.dom)
   }
 

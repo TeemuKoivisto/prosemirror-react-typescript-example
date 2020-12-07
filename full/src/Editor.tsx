@@ -1,62 +1,35 @@
-import * as React from 'react'
-import applyDevTools from 'prosemirror-dev-tools'
+import React, { createContext, useMemo, useState } from 'react'
 
-import { EditorState } from 'prosemirror-state'
-import { EditorView } from 'prosemirror-view'
+import { ReactEditorView } from './ReactEditorView'
+import { EditorContext } from './core/EditorContext'
+import { EditorActions } from './core/EditorActions'
+import { PortalProvider, PortalRenderer } from './react-portals'
 
-import { schema } from './schema'
-import { plugins } from './plugins'
-import { PortalProvider } from './utils/PortalProvider'
+import { FullPage } from './ui/FullPage'
 
-import { nodeViews } from './nodeviews'
+import { EditorAppearance } from './types/editor-ui'
 
-import './Editor.scss'
+export interface EditorProps {
+  appearance?: EditorAppearance
+}
 
-export class Editor extends React.Component<{}, {}> {
-  editorRef: React.RefObject<any>
+const components = {
+  'full-page': FullPage,
+}
 
-  editorState: EditorState
-  editorView?: EditorView
-  portalProvider: PortalProvider
+export function Editor(props: EditorProps) {
+  const {
+    appearance = 'full-page',
+  } = props
+  const Component = useMemo(() => components[appearance], [appearance])
 
-  constructor(props: {}) {
-    super(props)
-    this.editorState = EditorState.create({
-      schema,
-      plugins: plugins(),
-    })
-    this.editorRef = React.createRef()
-    this.portalProvider = new PortalProvider()
-  }
-
-  createEditorView(element: HTMLDivElement | null) {
-    if (element !== null) {
-      this.editorView = new EditorView(element, {
-        nodeViews: nodeViews(this.portalProvider),
-        state: this.editorState,
-      })
-      applyDevTools(this.editorView!)
-    }
-  }
-
-  componentDidMount() {
-    this.createEditorView(this.editorRef.current)
-    this.forceUpdate()
-  }
-
-  componentWillUnmount() {
-    if (this.editorView) {
-      this.editorView.destroy()
-    }
-  }
-
-  shouldComponentUpdate() {
-    return false
-  }
-
-  render() {
-    return (
-      <div id="full-editor" ref={this.editorRef} />
-    )
-  }
+  return (
+    <EditorContext.Provider value={{
+      editorActions: new EditorActions(),
+      portalProvider: new PortalProvider()
+    }}>
+      <ReactEditorView editorProps={props} EditorLayoutComponent={Component} />
+      <PortalRenderer/>
+    </EditorContext.Provider>
+  )
 }
