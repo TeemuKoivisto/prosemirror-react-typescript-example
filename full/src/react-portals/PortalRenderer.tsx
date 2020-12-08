@@ -4,11 +4,11 @@ import PubSub from 'pubsub-js'
 import { PORTALS_UPDATE, PORTALS_DELETE } from './PortalProvider'
 
 type MountedPortal = {
-  id: Symbol
+  container: HTMLElement
   portal: React.ReactPortal
 }
 
-const portals = new Map()
+const portals: Map<HTMLElement, React.ReactPortal> = new Map()
 
 export function PortalRenderer() {
   const [_ignored, forceUpdate] = useReducer(x => x + 1, 0)
@@ -24,17 +24,17 @@ export function PortalRenderer() {
 
   const onPortalsUpdate = (msg: string, data: MountedPortal) => {
     if (msg === PORTALS_UPDATE) {
-      portals.set(data.id, data)
+      portals.set(data.container, data.portal)
     } else {
-      portals.delete(data.id)
+      portals.delete(data.container)
     }
     forceUpdate()
   }
 
   return (
     <>
-      {Array.from(portals.entries()).map(([id, values]) =>
-        values.portal
+      {Array.from(portals.entries()).map(([dom, portal]) =>
+        portal
       )}
     </>
   )

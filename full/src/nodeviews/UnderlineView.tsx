@@ -3,17 +3,17 @@ import { NodeView, EditorView } from 'prosemirror-view'
 import { Node as PMNode } from 'prosemirror-model'
 
 import { PortalProvider } from '../react-portals'
-import { ReactNodeView, ForwardRef, getPosHandler } from './ReactNodeView'
+import { ReactNodeView, ForwardRef } from './ReactNodeView'
 
 export interface IProps {
 }
 
 export class UnderlineView extends ReactNodeView<IProps> {
-  getContentDOM() {
-    const dom = document.createElement('div')
-    dom.classList.add(`${this.node.type.name}-dom-wrapper`);
+  createContentDOM() {
+    const wrapper = document.createElement('div')
+    wrapper.classList.add(`${this.node.type.name}__content-dom-wrapper`)
     return {
-      dom
+      wrapper
     }
   }
 
@@ -27,7 +27,7 @@ export class UnderlineView extends ReactNodeView<IProps> {
 export function underlineNodeView(
   portalProvider: PortalProvider,
 ) {
-  return (node: PMNode, view: EditorView, getPos: getPosHandler): NodeView =>
+  return (node: PMNode, view: EditorView, getPos: (() => number) | boolean): NodeView =>
     new UnderlineView(
       node,
       view,

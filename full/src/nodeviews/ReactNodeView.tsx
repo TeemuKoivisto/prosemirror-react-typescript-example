@@ -1,50 +1,47 @@
-import React from 'react';
-import { NodeView, EditorView, Decoration } from 'prosemirror-view';
-import { Node as PMNode } from 'prosemirror-model';
+import React from 'react'
+import { NodeView, EditorView, Decoration } from 'prosemirror-view'
+import { Node as PMNode } from 'prosemirror-model'
 
-import { PortalProvider } from '../react-portals';
+import { PortalProvider } from '../react-portals'
 
-export interface ReactNodeProps {
-  selected: boolean;
-}
-
-export type ProsemirrorGetPosHandler = () => number;
-export type getPosHandler = getPosHandlerNode | boolean;
-export type getPosHandlerNode = () => number;
-export type ReactComponentProps = { [key: string]: unknown };
-export type ForwardRef = (node: HTMLElement | null) => void;
-export type shouldUpdate = (nextNode: PMNode) => boolean;
+export type ReactComponentProps = { [key: string]: unknown }
+export type ForwardRef = (node: HTMLElement | null) => void
+export type shouldUpdate = (nextNode: PMNode) => boolean
 
 export class ReactNodeView<P = ReactComponentProps> implements NodeView {
-  private domRef?: HTMLElement;
-  private contentDOMWrapper?: Node;
-  private reactComponent?: React.ComponentType<any>;
-  private portalProvider: PortalProvider;
-  private _viewShouldUpdate?: shouldUpdate;
+  private domRef?: HTMLElement
+  private contentDOMWrapper?: Node
+  private reactComponent?: React.ComponentType<any>
+  private portalProvider: PortalProvider
+  private _viewShouldUpdate?: shouldUpdate
 
-  reactComponentProps: P;
+  reactComponentProps: P
 
-  view: EditorView;
-  getPos: getPosHandler;
-  contentDOM: Node | undefined;
-  node: PMNode;
+  view: EditorView
+  getPos: (() => number) | boolean
+  contentDOM: Node | undefined
+  node: PMNode
 
   constructor(
     node: PMNode,
     view: EditorView,
-    getPos: getPosHandler,
-    portalProviderAPI: PortalProvider,
+    getPos: (() => number) | boolean,
+    portalProvider: PortalProvider,
     reactComponentProps?: P,
     reactComponent?: React.ComponentType<any>,
     viewShouldUpdate?: shouldUpdate,
   ) {
-    this.node = node;
-    this.view = view;
-    this.getPos = getPos;
-    this.portalProvider = portalProviderAPI;
-    this.reactComponentProps = reactComponentProps || ({} as P);
-    this.reactComponent = reactComponent;
-    this._viewShouldUpdate = viewShouldUpdate;
+    this.node = node
+    this.view = view
+    this.getPos = getPos
+    this.portalProvider = portalProvider
+    this.reactComponentProps = reactComponentProps || ({} as P)
+    this.reactComponent = reactComponent
+    this._viewShouldUpdate = viewShouldUpdate
+  }
+
+  get dom() {
+    return this.domRef
   }
 
   /**
@@ -57,63 +54,61 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
    * first render.
    */
   init() {
-    this.domRef = this.createDomRef();
-    this.setDomAttrs(this.node, this.domRef);
-
-    const { dom: contentDOMWrapper, contentDOM } = this.getContentDOM() || {
-      dom: undefined,
-      contentDOM: undefined,
-    };
-
-    if (this.domRef && contentDOMWrapper) {
-      this.domRef.appendChild(contentDOMWrapper);
-      this.contentDOM = contentDOM ? contentDOM : contentDOMWrapper;
-      this.contentDOMWrapper = contentDOMWrapper || contentDOM;
-    }
+    // Here, we'll provide a container to render React into.
+    // Coincidentally, this is where ProseMirror will put its
+    // generated contentDOM.  React will throw out that content
+    // once rendered, and at the same time we'll append it into
+    // the component tree, like a fancy shell game.  This isn't
+    // obvious to the user, but would it be more obvious on an
+    // expensive render?
+    //
+    this.domRef = this.createDOM()
+    this.setDomAttrs(this.node, this.domRef)
 
     // @see ED-3790
     // something gets messed up during mutation processing inside of a
     // nodeView if DOM structure has nested plain "div"s, it doesn't see the
     // difference between them and it kills the nodeView
-    this.domRef.classList.add(`${this.node.type.name}-nodeview-content-wrap`);
+    this.domRef.classList.add(`${this.node.type.name}__nodeview-dom`)
 
-    this.renderReactComponent(
-      this.render(this.reactComponentProps, this.handleRef)
-    );
+    // Finally, we provide an element to render content into.
+    // We will be moving this node around as we need to.
+    const { wrapper: contentDOMWrapper, contentDOM } = this.createContentDOM() ?? {}
 
-    return this;
-  }
-
-  private renderReactComponent(
-    component: React.ReactElement<any> | null,
-  ) {
-    if (!this.domRef || !component) {
-      return;
+    if (contentDOMWrapper) {
+      this.domRef.appendChild(contentDOMWrapper)
+      this.contentDOM = contentDOM ?? contentDOMWrapper
+      this.contentDOMWrapper = contentDOMWrapper
     }
 
-    this.portalProvider.render(component, this.domRef!);
+    this.renderReactComponent(this.render(this.reactComponentProps, this.handleRef))
+
+    return this
   }
 
-  createDomRef(): HTMLElement {
-    return this.node.isInline
-      ? document.createElement('span')
-      : document.createElement('div');
+  private renderReactComponent(component: React.ReactElement<any> | null) {
+    if (!this.domRef || !component) {
+      return
+    }
+    this.portalProvider.render(component, this.domRef!)
   }
 
-  getContentDOM():
-    | { dom: Node; contentDOM?: Node | null | undefined }
-    | undefined {
-    return undefined;
+  createDOM(): HTMLElement {
+    return this.node.isInline ? document.createElement('span') : document.createElement('div')
   }
 
-  handleRef = (node: HTMLElement | null) => this._handleRef(node);
+  createContentDOM(): { wrapper: Node, contentDOM?: Node | null } | undefined {
+    return undefined
+  }
+
+  handleRef = (node: HTMLElement | null) => this._handleRef(node)
 
   private _handleRef(node: HTMLElement | null) {
-    const contentDOM = this.contentDOMWrapper || this.contentDOM;
+    const contentDOM = this.contentDOMWrapper || this.contentDOM
 
     // move the contentDOM node inside the inner reference after rendering
     if (node && contentDOM && !node.contains(contentDOM)) {
-      node.appendChild(contentDOM);
+      node.appendChild(contentDOM)
     }
   }
 
@@ -126,47 +121,33 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
         forwardRef={forwardRef}
         {...props}
       />
-    ) : null;
+    ) : null
   }
 
-  update(
-    node: PMNode,
-    _decorations: Array<Decoration>,
-    validUpdate: (currentNode: PMNode, newNode: PMNode) => boolean = () => true,
-  ) {
-    // @see https://github.com/ProseMirror/prosemirror/issues/648
-    const isValidUpdate =
-      this.node.type === node.type && validUpdate(this.node, node);
-
-    if (!isValidUpdate) {
-      return false;
-    }
-
+  update(node: PMNode, _decorations: Decoration[]) {
     if (this.domRef && !this.node.sameMarkup(node)) {
-      this.setDomAttrs(node, this.domRef);
+      this.setDomAttrs(node, this.domRef)
     }
 
+    this.node = node
     // View should not process a re-render if this is false.
     // We dont want to destroy the view, so we return true.
     if (!this.viewShouldUpdate(node)) {
-      this.node = node;
-      return true;
+      return true
     }
 
-    this.node = node;
     this.renderReactComponent(
       this.render(this.reactComponentProps, this.handleRef)
-    );
+    )
 
-    return true;
+    return true
   }
 
   viewShouldUpdate(nextNode: PMNode): boolean {
     if (this._viewShouldUpdate) {
-      return this._viewShouldUpdate(nextNode);
+      return this._viewShouldUpdate(nextNode)
     }
-
-    return true;
+    return true
   }
 
   /**
@@ -175,22 +156,17 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
    */
   setDomAttrs(node: PMNode, element: HTMLElement) {
     Object.keys(node.attrs || {}).forEach(attr => {
-      element.setAttribute(attr, node.attrs[attr]);
-    });
-  }
-
-  get dom() {
-    return this.domRef;
+      element.setAttribute(attr, node.attrs[attr])
+    })
   }
 
   destroy() {
     if (!this.domRef) {
-      return;
+      return
     }
-
-    this.portalProvider.remove(this.domRef);
-    this.domRef = undefined;
-    this.contentDOM = undefined;
+    this.portalProvider.remove(this.domRef)
+    this.domRef = undefined
+    this.contentDOM = undefined
   }
 
   static fromComponent(
@@ -199,7 +175,7 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     props?: ReactComponentProps,
     viewShouldUpdate?: (nextNode: PMNode) => boolean,
   ) {
-    return (node: PMNode, view: EditorView, getPos: getPosHandler) =>
+    return (node: PMNode, view: EditorView, getPos: (() => number) | boolean) =>
       new ReactNodeView(
         node,
         view,
@@ -208,6 +184,6 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
         props,
         component,
         viewShouldUpdate,
-      ).init();
+      ).init()
   }
 }

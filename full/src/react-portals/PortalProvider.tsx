@@ -5,15 +5,9 @@ import PubSub from 'pubsub-js'
 export const PORTALS_UPDATE = 'portals-update'
 export const PORTALS_DELETE = 'portals-delete'
 
-type MountedPortal = {
-  id: Symbol
-  portal: React.ReactPortal
-}
-export type Portals = Map<HTMLElement, MountedPortal>
-
 export class PortalProvider {
 
-  portals: Map<HTMLElement, MountedPortal> = new Map()
+  portals: Map<HTMLElement, React.ReactPortal> = new Map()
 
   render(
     component: React.ReactElement,
@@ -24,14 +18,13 @@ export class PortalProvider {
       return
     }
     const portal = createPortal(component, container)
-    const obj = { id: Symbol('portal-id'), portal }
-    this.portals.set(container, obj)
-    PubSub.publish(PORTALS_UPDATE, obj)
+    this.portals.set(container, portal)
+    PubSub.publish(PORTALS_UPDATE, { portal, container })
   }
 
   remove(container: HTMLElement) {
-    const obj = this.portals.get(container)
+    const portal = this.portals.get(container)
     this.portals.delete(container)
-    PubSub.publish(PORTALS_UPDATE, obj)
+    PubSub.publish(PORTALS_DELETE, { portal, container })
   }
 }
