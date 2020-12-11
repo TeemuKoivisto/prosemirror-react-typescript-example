@@ -22,6 +22,7 @@ export function PageHeader(props: IProps) {
           <li><b>Ctrl + b</b>: New blockquote</li>
           <li><b>Ctrl + p</b>: New ProseMirror-managed blockquote</li>
           <li><b>Ctrl + s</b>: Split current block</li>
+          <li><b>/</b>: Quick insert (Atlassian editor only)</li>
         </ul>
         { children }
       </div>

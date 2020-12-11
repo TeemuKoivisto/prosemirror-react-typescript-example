@@ -2,7 +2,7 @@
 
 Just the basic boilerplate needed to get going with this combo.
 
-Originally the editors and the React example app were served together, but since that is only acceptable for toy apps the editors are now run and compiled as individual libraries which the example-app imports.
+Originally the editors were served together with the React example app, but since that is only acceptable for toy apps the editors are now run and compiled as individual libraries which the example-app imports.
 
 ## How to install
 
@@ -33,7 +33,7 @@ The `minimal` editor should contain the absolute minimum required.
 
 The `full` editor should, at one point, contain all the extra functionality that would make the experience of developing such editor somewhat painless. Although there definitely will be some pain.
 
-The `atlassian` editor is a direct derivation of this editor https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/ to showcase how a real industrial-grade PM editor is implemented.
+The `atlassian` editor is a direct derivation of this editor https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/ to showcase how a real industrial-grade PM editor is implemented. Although I have to say, some parts of the code are not perhaps up to the latest React software engineering standards.
 
 Contributions or comments would be appreciated.
 
