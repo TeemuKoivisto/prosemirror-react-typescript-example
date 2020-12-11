@@ -1,27 +1,28 @@
 {
   "files": {
-    "main.js": "/prosemirror-react-typescript-example/static/js/main.ec292594.chunk.js",
-    "main.js.map": "/prosemirror-react-typescript-example/static/js/main.ec292594.chunk.js.map",
-    "runtime-main.js": "/prosemirror-react-typescript-example/static/js/runtime-main.f402f769.js",
-    "runtime-main.js.map": "/prosemirror-react-typescript-example/static/js/runtime-main.f402f769.js.map",
-    "static/js/2.9bd619e1.chunk.js": "/prosemirror-react-typescript-example/static/js/2.9bd619e1.chunk.js",
-    "static/js/2.9bd619e1.chunk.js.map": "/prosemirror-react-typescript-example/static/js/2.9bd619e1.chunk.js.map",
-    "static/js/3.c919fd55.chunk.js": "/prosemirror-react-typescript-example/static/js/3.c919fd55.chunk.js",
-    "static/js/3.c919fd55.chunk.js.map": "/prosemirror-react-typescript-example/static/js/3.c919fd55.chunk.js.map",
-    "static/js/4.7875a538.chunk.js": "/prosemirror-react-typescript-example/static/js/4.7875a538.chunk.js",
-    "static/js/4.7875a538.chunk.js.map": "/prosemirror-react-typescript-example/static/js/4.7875a538.chunk.js.map",
-    "static/js/5.9327f95b.chunk.js": "/prosemirror-react-typescript-example/static/js/5.9327f95b.chunk.js",
-    "static/js/5.9327f95b.chunk.js.map": "/prosemirror-react-typescript-example/static/js/5.9327f95b.chunk.js.map",
-    "static/js/6.3dc4d337.chunk.js": "/prosemirror-react-typescript-example/static/js/6.3dc4d337.chunk.js",
-    "static/js/6.3dc4d337.chunk.js.map": "/prosemirror-react-typescript-example/static/js/6.3dc4d337.chunk.js.map",
+    "main.js": "/prosemirror-react-typescript-example/static/js/main.a7f77b72.chunk.js",
+    "main.js.map": "/prosemirror-react-typescript-example/static/js/main.a7f77b72.chunk.js.map",
+    "runtime-main.js": "/prosemirror-react-typescript-example/static/js/runtime-main.e73b6dc6.js",
+    "runtime-main.js.map": "/prosemirror-react-typescript-example/static/js/runtime-main.e73b6dc6.js.map",
+    "static/js/2.7af5560b.chunk.js": "/prosemirror-react-typescript-example/static/js/2.7af5560b.chunk.js",
+    "static/js/2.7af5560b.chunk.js.map": "/prosemirror-react-typescript-example/static/js/2.7af5560b.chunk.js.map",
+    "static/js/3.91cea3d8.chunk.js": "/prosemirror-react-typescript-example/static/js/3.91cea3d8.chunk.js",
+    "static/js/3.91cea3d8.chunk.js.map": "/prosemirror-react-typescript-example/static/js/3.91cea3d8.chunk.js.map",
+    "static/js/4.69989af1.chunk.js": "/prosemirror-react-typescript-example/static/js/4.69989af1.chunk.js",
+    "static/js/4.69989af1.chunk.js.map": "/prosemirror-react-typescript-example/static/js/4.69989af1.chunk.js.map",
+    "static/js/5.ba21b185.chunk.js": "/prosemirror-react-typescript-example/static/js/5.ba21b185.chunk.js",
+    "static/js/5.ba21b185.chunk.js.map": "/prosemirror-react-typescript-example/static/js/5.ba21b185.chunk.js.map",
+    "static/js/6.6c94f9be.chunk.js": "/prosemirror-react-typescript-example/static/js/6.6c94f9be.chunk.js",
+    "static/js/6.6c94f9be.chunk.js.map": "/prosemirror-react-typescript-example/static/js/6.6c94f9be.chunk.js.map",
     "index.html": "/prosemirror-react-typescript-example/index.html",
-    "precache-manifest.68783ecaa26b8a8b7408319be1eac762.js": "/prosemirror-react-typescript-example/precache-manifest.68783ecaa26b8a8b7408319be1eac762.js",
+    "precache-manifest.c138163c209dc5cf2feb5aab56ea9a56.js": "/prosemirror-react-typescript-example/precache-manifest.c138163c209dc5cf2feb5aab56ea9a56.js",
     "service-worker.js": "/prosemirror-react-typescript-example/service-worker.js",
-    "static/js/2.9bd619e1.chunk.js.LICENSE.txt": "/prosemirror-react-typescript-example/static/js/2.9bd619e1.chunk.js.LICENSE.txt"
+    "static/js/2.7af5560b.chunk.js.LICENSE.txt": "/prosemirror-react-typescript-example/static/js/2.7af5560b.chunk.js.LICENSE.txt",
+    "static/js/main.a7f77b72.chunk.js.LICENSE.txt": "/prosemirror-react-typescript-example/static/js/main.a7f77b72.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.f402f769.js",
-    "static/js/2.9bd619e1.chunk.js",
-    "static/js/main.ec292594.chunk.js"
+    "static/js/runtime-main.e73b6dc6.js",
+    "static/js/2.7af5560b.chunk.js",
+    "static/js/main.a7f77b72.chunk.js"
   ]
 }
