@@ -2,7 +2,9 @@ import { EditorProps } from '../Editor';
 import { EditorPlugin } from '../types';
 import {
   basePlugin,
-  blockQuotePlugin
+  blockQuotePlugin,
+  quickInsertPlugin,
+  typeAheadPlugin,
 } from '../plugins'
 
 import { Preset } from './preset'
@@ -19,6 +21,10 @@ export function createPluginsList(
   preset.add(basePlugin)
 
   preset.add(blockQuotePlugin);
+
+  preset.add(quickInsertPlugin)
+
+  preset.add(typeAheadPlugin);
 
   return preset.getEditorPlugins();
 }

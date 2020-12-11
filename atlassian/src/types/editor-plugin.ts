@@ -2,8 +2,15 @@ import { ToolbarUIComponentFactory } from './editor-ui';
 import { PMPlugin } from './pm-plugin';
 import { MarkConfig, NodeConfig } from './pm-config';
 
+import { QuickInsertHandler } from '../plugins/quick-insert/types';
+import { TypeAheadHandler } from '../plugins/type-ahead/types';
+
+import { UIComponentFactory } from './editor-ui'
+
 export type PluginsOptions = {
   [pluginName: string]: any;
+  quickInsert?: QuickInsertHandler;
+  typeAhead?: TypeAheadHandler;
 };
 
 export interface EditorPlugin {
@@ -35,7 +42,7 @@ export interface EditorPlugin {
   /**
    * Optional UI-component that lives inside the actual content-area (like mention-picker, floating toolbar for links, etc.)
    */
-  // contentComponent?: UIComponentFactory;
+  contentComponent?: UIComponentFactory;
 
   /**
    * Optional UI-component that will be added to the toolbar at the top of the editor (doesn't exist in the compact-editor).

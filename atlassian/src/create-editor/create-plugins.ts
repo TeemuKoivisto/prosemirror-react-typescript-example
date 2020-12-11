@@ -46,7 +46,6 @@ export function processPluginsList(plugins: EditorPlugin[]): EditorConfig {
 
     return acc;
   }, {});
-
   /**
    * Process plugins
    */
@@ -68,9 +67,9 @@ export function processPluginsList(plugins: EditorPlugin[]): EditorConfig {
         acc.marks.push(...plugin.marks());
       }
 
-      // if (plugin.contentComponent) {
-      //   acc.contentComponents.push(plugin.contentComponent);
-      // }
+      if (plugin.contentComponent) {
+        acc.contentComponents.push(plugin.contentComponent);
+      }
 
       if (plugin.primaryToolbarComponent) {
         acc.primaryToolbarComponents.push(plugin.primaryToolbarComponent);
@@ -86,6 +85,7 @@ export function processPluginsList(plugins: EditorPlugin[]): EditorConfig {
       nodes: [],
       marks: [],
       pmPlugins: [],
+      contentComponents: [],
       primaryToolbarComponents: [],
     },
   );

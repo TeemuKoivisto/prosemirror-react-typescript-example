@@ -1,7 +1,14 @@
+import React from 'react'
+import { EditorState } from 'prosemirror-state'
+
 import { blockquote } from '../../schema/nodes'
 import { blockQuotePluginFactory } from './pm-plugins/main';
 // import { getToolbarConfig } from './toolbar';
 import { keymapPlugin } from './pm-plugins/keymap'
+import * as keymaps from '../../keymaps';
+
+import { QuickInsertActionInsert } from '../../provider-factory/quick-insert-provider'
+import IconQuote from '../quick-insert/assets/code';
 
 import { EditorPlugin, PMPluginFactory } from '../../types';
 
@@ -39,28 +46,25 @@ export const blockQuotePlugin = (options: BlockQuoteOptions = {}): EditorPlugin 
   },
 
   pluginsOptions: {
-    // quickInsert: ({ formatMessage }) => [
-    //   {
-        // id: 'blockquote',
-        // title: formatMessage(messages.blockquote),
-        // description: formatMessage(messages.codeblockDescription),
-        // keywords: ['code block'],
-        // priority: 700,
-        // keyshortcut: '```',
-        // icon: () => <IconCode label={formatMessage(messages.blockquote)} />,
-        // action(insert, state) {
-        //   const schema = state.schema;
-        //   const tr = insert(schema.nodes.blockquote.createChecked());
-        //   return addAnalytics(state, tr, {
-        //     action: ACTION.INSERTED,
-        //     actionSubject: ACTION_SUBJECT.DOCUMENT,
-        //     actionSubjectId: ACTION_SUBJECT_ID.CODE_BLOCK,
-        //     attributes: { inputMethod: INPUT_METHOD.QUICK_INSERT },
-        //     eventType: EVENT_TYPE.TRACK,
-        //   });
-        // },
-    //   },
-    // ],
+    quickInsert: [
+      {
+        id: 'blockquote',
+        title: 'Quote',
+        description: 'Quote some text',
+        priority: 1300,
+        keyshortcut: keymaps.tooltip(keymaps.toggleBlockQuote),
+        icon: () => <IconQuote label={'Quote'} />,
+        action(insert: QuickInsertActionInsert, state: EditorState<any>) {
+          const tr = insert(
+            state.schema.nodes.blockquote.createChecked(
+              {},
+              state.schema.nodes.paragraph.createChecked(),
+            ),
+          );
+          return tr
+        },
+      },
+    ],
     // floatingToolbar: getToolbarConfig(options.allowCopyToClipboard),
   },
 });

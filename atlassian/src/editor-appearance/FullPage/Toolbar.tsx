@@ -8,10 +8,10 @@ import styled from 'styled-components'
 //   MdFormatListNumbered, MdTextFormat, MdSpaceBar
 // } from 'react-icons/md'
 
-import { EditorActions } from '../EditorActions'
-import { EventDispatcher } from '../utils/event-dispatcher'
+import { EditorActions } from '../../EditorActions'
+import { EventDispatcher } from '../../utils/event-dispatcher'
 
-import { EditorAppearance, ToolbarUIComponentFactory } from '../types'
+import { EditorAppearance, ToolbarUIComponentFactory } from '../../types'
 
 interface IProps {
   className?: string
@@ -27,8 +27,8 @@ export function Toolbar(props: IProps) {
   // Iterate over primaryToolbarComponents here
   return (
     <Container>
-      <MarksRow>
-      </MarksRow>
+      <TopRow>
+      </TopRow>
     </Container>
   )
 }
@@ -42,9 +42,7 @@ const Container = styled.div`
     margin: 0 0 5px 0;
   }
 `
-const MarksRow = styled.div`
+const TopRow = styled.div`
   display: flex;
 `
-const MiddleRow = styled.div`
-  display: flex;
-`
+

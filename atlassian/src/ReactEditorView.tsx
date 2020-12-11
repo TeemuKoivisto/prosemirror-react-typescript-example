@@ -7,6 +7,7 @@ import { Node as PMNode } from 'prosemirror-model';
 
 import { PortalProviderAPI } from './react-portals'
 import { EventDispatcher, createDispatch, Dispatch } from './utils/event-dispatcher'
+import { ProviderFactory } from './provider-factory/ProviderFactory'
 import { startMeasure, stopMeasure } from './performance/measure'
 import {
   findChangedNodesFromTransaction,
@@ -25,6 +26,7 @@ import { EditorConfig, EditorPlugin } from './types'
 
 export interface EditorViewProps {
   editorProps: EditorProps;
+  providerFactory: ProviderFactory;
   portalProviderAPI: PortalProviderAPI;
   render?: (props: {
     editor: JSX.Element;
@@ -32,6 +34,18 @@ export interface EditorViewProps {
     config: EditorConfig;
     eventDispatcher: EventDispatcher;
   }) => JSX.Element
+  onEditorCreated: (instance: {
+    view: EditorView;
+    config: EditorConfig;
+    eventDispatcher: EventDispatcher;
+    // transformer?: Transformer<string>;
+  }) => void;
+  onEditorDestroyed: (instance: {
+    view: EditorView;
+    config: EditorConfig;
+    eventDispatcher: EventDispatcher;
+    // transformer?: Transformer<string>;
+  }) => void;
 }
 
 export class ReactEditorView extends React.Component<EditorViewProps, {}> {
@@ -135,6 +149,7 @@ export class ReactEditorView extends React.Component<EditorViewProps, {}> {
       dispatch: this.dispatch,
       editorConfig: this.config,
       eventDispatcher: this.eventDispatcher,
+      providerFactory: options.props.providerFactory,
       portalProviderAPI: this.props.portalProviderAPI,
     });
 
@@ -185,6 +200,7 @@ export class ReactEditorView extends React.Component<EditorViewProps, {}> {
       dispatch: this.dispatch,
       editorConfig: this.config,
       eventDispatcher: this.eventDispatcher,
+      providerFactory: props.providerFactory,
       portalProviderAPI: props.portalProviderAPI,
     });
 
@@ -269,6 +285,12 @@ export class ReactEditorView extends React.Component<EditorViewProps, {}> {
     if (!this.editorView && node) {
       this.createEditorView(node);
       const view = this.editorView!;
+      this.props.onEditorCreated({
+        view,
+        config: this.config,
+        eventDispatcher: this.eventDispatcher,
+        // transformer: this.contentTransformer,
+      });
 
       if (
         this.props.editorProps.shouldFocus
@@ -282,11 +304,11 @@ export class ReactEditorView extends React.Component<EditorViewProps, {}> {
       // When the appearance is changed, React will call handleEditorViewRef with node === null
       // to destroy the old EditorView, before calling this method again with node === div to
       // create the new EditorView
-      // this.props.onEditorDestroyed({
-      //   view: this.editorView,
-      //   config: this.config,
-      //   eventDispatcher: this.eventDispatcher,
-      // });
+      this.props.onEditorDestroyed({
+        view: this.editorView,
+        config: this.config,
+        eventDispatcher: this.eventDispatcher,
+      });
       this.editorView.destroy(); // Destroys the dom node & all node views
       this.editorView = undefined;
     }

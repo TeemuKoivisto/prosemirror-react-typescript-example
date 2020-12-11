@@ -6,11 +6,13 @@ import { Schema } from 'prosemirror-model';
 import { EditorConfig } from './editor-config';
 import { Dispatch, EventDispatcher } from '../utils/event-dispatcher';
 import { PortalProviderAPI } from '../react-portals/PortalProviderAPI';
+import { ProviderFactory } from '../provider-factory'
 
 export type PMPluginFactoryParams = {
   schema: Schema;
   dispatch: Dispatch;
   eventDispatcher: EventDispatcher;
+  providerFactory: ProviderFactory;
   portalProviderAPI: PortalProviderAPI;
 };
 

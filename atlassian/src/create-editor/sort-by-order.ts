@@ -1,7 +1,9 @@
 const ranks = {
   plugins: [
     'underline',
-    'blockquote'
+    'blockquote',
+    'quickInsert',
+    'typeAhead',
   ],
   nodes: [
     'doc',
