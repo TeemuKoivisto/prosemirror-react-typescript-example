@@ -74,7 +74,6 @@ export function quickInsertProviderFactory(): QuickInsertProvider {
   };
 }
 
-
 const quickInsertItems: QuickInsertItem[] = [
     {
       title: 'Minimum width extension',

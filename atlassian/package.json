@@ -40,7 +40,6 @@
   },
   "dependencies": {
     "@atlaskit/icon": "^21.1.4",
-    "@atlaskit/item": "^12.0.4",
     "fuse.js": "^6.4.3",
     "prosemirror-commands": "^1.1.4",
     "prosemirror-dev-tools": "^3.0.2",

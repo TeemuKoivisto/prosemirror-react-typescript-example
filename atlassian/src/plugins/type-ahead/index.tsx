@@ -66,7 +66,6 @@ export const typeAheadPlugin = (): EditorPlugin => ({
 
           const { queryMarkPos } = typeAhead;
           let domRef = null;
-          // debugger
           if (queryMarkPos !== null) {
             // temporary fix to avoid page crash until it is fixed properly
             try {

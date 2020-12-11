@@ -139,13 +139,13 @@ export const DN20A = 'rgba(13, 20, 36, 0.95)';
 export const DN10A = 'rgba(13, 20, 36, 0.97)';
 
 // Themed colors
-// export const background = themed({ light: N0, dark: DN30 });
-// export const backgroundActive = themed({ light: B50, dark: B75 });
-// export const backgroundHover = themed({ light: N30, dark: DN70 });
-// export const backgroundOnLayer = themed({ light: N0, dark: DN50 });
+export const background = N0 //themed({ light: N0, dark: DN30 });
+export const backgroundActive = B50 //themed({ light: B50, dark: B75 });
+export const backgroundHover = N30 //themed({ light: N30, dark: DN70 });
+export const backgroundOnLayer = N0 // themed({ light: N0, dark: DN50 });
 export const text = N900 // themed({ light: N900, dark: DN600 });
-// export const textHover = themed({ light: N800, dark: DN600 });
-// export const textActive = themed({ light: B400, dark: B400 });
+export const textHover = N800 //themed({ light: N800, dark: DN600 });
+export const textActive = B400//themed({ light: B400, dark: B400 });
 // export const subtleText = themed({ light: N200, dark: DN300 });
 // export const placeholderText = themed({ light: N100, dark: DN200 });
 // export const heading = themed({ light: N800, dark: DN600 });

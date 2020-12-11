@@ -2,8 +2,7 @@ import React from 'react';
 
 import styled, { ThemeProvider } from 'styled-components';
 
-import Item, { ItemGroup, itemThemeNamespace } from '@atlaskit/item';
-// import { themed } from '@atlaskit/theme/components';
+import Item, { ItemGroup, itemThemeNamespace } from '../../../elements/Item';
 import { borderRadius } from '../../../theme/constants';
 import * as colors from '../../../theme/colors';
 
@@ -122,7 +121,6 @@ export function TypeAheadItemsList({
   if (!Array.isArray(items)) {
     return null;
   }
-
   return (
     <ThemeProvider theme={itemTheme}>
       <ItemGroup>
@@ -149,11 +147,14 @@ export type TypeAheadItemComponentProps = {
   setCurrentIndex: (index: number) => void;
 };
 
-export class TypeAheadItemComponent extends React.Component<
-  TypeAheadItemComponentProps,
-  { ref: HTMLElement | null }
-> {
-  state = { ref: null };
+export class TypeAheadItemComponent extends React.Component<TypeAheadItemComponentProps> {
+  
+  ref: React.RefObject<any>
+
+  constructor(props: TypeAheadItemComponentProps) {
+    super(props)
+    this.ref = React.createRef()
+  }
 
   shouldComponentUpdate(nextProps: TypeAheadItemComponentProps) {
     return this.isSelected(this.props) !== this.isSelected(nextProps);
@@ -173,15 +174,15 @@ export class TypeAheadItemComponent extends React.Component<
     }
   };
 
-  handleRef = (ref: HTMLElement | null) => {
-    let hasRef = (ref: any): ref is { ref: HTMLElement } => ref && ref.ref;
-    this.setState({ ref: hasRef(ref) ? ref.ref : ref });
+  handleRef = (ref: Item | null) => {
+    // For some reason, this works quite well without this..
+    // let hasRef = (ref: any): ref is { ref: HTMLElement } => ref && ref.ref;
+    // this.setState({ ref: hasRef(ref) ? ref.ref : ref });
   };
 
   componentDidUpdate() {
-    const ref = this.state.ref;
-    if (this.props.index === this.props.currentIndex && ref) {
-      scrollIntoViewIfNeeded(ref);
+    if (this.props.index === this.props.currentIndex && this.ref && this.ref.current) {
+      scrollIntoViewIfNeeded(this.ref.current);
     }
   }
 
@@ -190,7 +191,7 @@ export class TypeAheadItemComponent extends React.Component<
     return item.render ? (
       <div
         onMouseMove={this.setCurrentIndex}
-        ref={this.handleRef}
+        // ref={this.handleRef}
         style={hidden}
       >
         <item.render

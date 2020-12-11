@@ -11,17 +11,6 @@
     tslib "^2.0.0"
     uuid "^3.1.0"
 
-"@atlaskit/item@^12.0.4":
-  version "12.0.4"
-  resolved "https://registry.yarnpkg.com/@atlaskit/item/-/item-12.0.4.tgz#99e3f937d25f3981c5b03aff772d42f01b07d760"
-  integrity sha512-fZY/87nmugsoBIEKZErpJX6ZqRDHdgQdRoe7LNdD2BfVBZGTANvLc2IuRTtlGA1TqQPGjXnrD7wSCeaeufSWxg==
-  dependencies:
-    "@atlaskit/theme" "^11.0.0"
-    "@babel/runtime" "^7.0.0"
-    prop-types "^15.5.10"
-    react-addons-text-content "^0.0.4"
-    uuid "^3.1.0"
-
 "@atlaskit/theme@^11.0.0":
   version "11.0.2"
   resolved "https://registry.yarnpkg.com/@atlaskit/theme/-/theme-11.0.2.tgz#e657763905853e23ad385ae84e5bd49c2571863e"
@@ -2774,11 +2763,6 @@ raf-schd@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/raf-schd/-/raf-schd-4.0.2.tgz#bd44c708188f2e84c810bf55fcea9231bcaed8a0"
   integrity sha512-VhlMZmGy6A6hrkJWHLNTGl5gtgMUm+xfGza6wbwnE914yeQ5Ybm18vgM734RZhMgfw4tacUrWseGZlpUrrakEQ==
-
-react-addons-text-content@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/react-addons-text-content/-/react-addons-text-content-0.0.4.tgz#d2e259fdc951d1d8906c08902002108dce8792e5"
-  integrity sha1-0uJZ/clR0diQbAiQIAIQjc6HkuU=
 
 react-base16-styling@^0.5.1:
   version "0.5.3"

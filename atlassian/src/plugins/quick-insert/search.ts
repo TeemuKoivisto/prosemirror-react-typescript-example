@@ -58,8 +58,7 @@ export function find(query: string, items: QuickInsertItem[]) {
           (b.priority || Number.POSITIVE_INFINITY),
       );
   }
-
-  return fuse.search(query) as unknown as QuickInsertItem[] 
+  return fuse.search(query).map(s => s.item)
 }
 
 export const searchQuickInsertItems = (
