@@ -21,7 +21,6 @@
     "@types/prosemirror-model": "^1.11.1",
     "@types/prosemirror-state": "^1.2.5",
     "@types/prosemirror-view": "^1.16.1",
-    "@types/pubsub-js": "^1.8.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-icons": "^3.0.0",
@@ -44,8 +43,9 @@
     "prosemirror-keymap": "^1.1.4",
     "prosemirror-model": "^1.12.0",
     "prosemirror-state": "^1.3.3",
+    "prosemirror-tables": "^1.1.1",
     "prosemirror-transform": "^1.2.8",
-    "prosemirror-view": "^1.16.3",
-    "pubsub-js": "^1.9.1"
+    "prosemirror-utils": "^0.9.6",
+    "prosemirror-view": "^1.16.3"
   }
 }

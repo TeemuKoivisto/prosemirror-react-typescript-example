@@ -2,8 +2,6 @@ import { EditorState, NodeSelection, TextSelection, Transaction } from 'prosemir
 import { canSplit } from 'prosemirror-transform'
 import { Fragment } from 'prosemirror-model'
 
-import { schema } from './schema'
-
 export function splitBlock(state: EditorState, dispatch?: (tr: Transaction) => void) {
   const {$from, $to} = state.selection
   if (state.selection instanceof NodeSelection && state.selection.node.isBlock) {
@@ -52,39 +50,4 @@ export function createParagraphNear(state: EditorState, dispatch?: (tr: Transact
     dispatch(tr.scrollIntoView())
   }
   return true
-}
-
-export function createNewUnderline(state: EditorState, dispatch?: (tr: Transaction) => void) {
-  const {$from, $to} = state.selection
-  const empty = schema.nodes.underline.createAndFill()
-  const endOfBlock = $from.end()
-  if (empty && dispatch) {
-    const tr = state.tr.insert(endOfBlock + 1, empty)
-    dispatch(tr)
-  }
-  return false
-}
-
-export function createNewBlockQuote(state: EditorState, dispatch?: (tr: Transaction) => void) {
-  const {$from, $to} = state.selection
-  const blockquote = state.schema.nodes.blockquote;
-  const empty = blockquote.createAndFill()
-  const endOfBlock = $from.end()
-  if (empty && dispatch) {
-    const tr = state.tr.insert(endOfBlock + 1, empty)
-    dispatch(tr)
-  }
-  return false
-}
-
-export function createNewPmBlockQuote(state: EditorState, dispatch?: (tr: Transaction) => void) {
-  const {$from, $to} = state.selection
-  const blockquote = state.schema.nodes.pmblockquote;
-  const empty = blockquote.createAndFill()
-  const endOfBlock = $from.end()
-  if (empty && dispatch) {
-    const tr = state.tr.insert(endOfBlock + 1, empty)
-    dispatch(tr)
-  }
-  return false
 }

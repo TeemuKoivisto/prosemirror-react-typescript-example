@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from 'react'
 
 import { ReactEditorView } from './ReactEditorView'
-import { EditorContext } from './core/EditorContext'
-import { EditorActions } from './core/EditorActions'
-import { PortalProvider, PortalRenderer } from './react-portals'
+import { EditorContext, EditorActions, EditorPlugins } from './core'
+import { PortalProvider, PortalRenderer } from './react/portals'
 
 import { FullPage } from './ui/FullPage'
 
@@ -27,6 +26,7 @@ export function Editor(props: EditorProps) {
     <EditorContext.Provider value={{
       editorActions: new EditorActions(),
       portalProvider: new PortalProvider(),
+      editorPlugins: new EditorPlugins(),
     }}>
       <ReactEditorView
         editorProps={props}

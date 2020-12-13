@@ -1,14 +1,17 @@
 import React, { createContext, useContext } from 'react'
 
 import { EditorActions } from './EditorActions'
-import { PortalProvider } from '../react-portals/PortalProvider'
+import { EditorPlugins } from './EditorPlugins'
+import { PortalProvider } from '../react/portals/PortalProvider'
 
 export const EditorContext = createContext<{
-  editorActions: EditorActions
   portalProvider: PortalProvider
+  editorActions: EditorActions
+  editorPlugins: EditorPlugins
 }>({
+  portalProvider: new PortalProvider(),
   editorActions: new EditorActions(),
-  portalProvider: new PortalProvider()
+  editorPlugins: new EditorPlugins(),
 })
 
 export const useEditorContext = () => useContext(EditorContext)

@@ -13,6 +13,8 @@ import { useEditorContext } from '../core/EditorContext'
 
 import { MarkButton } from './MarkButton'
 
+// import { EditorAppearance, ToolbarUIComponentFactory } from '../types'
+
 interface IProps {
   className?: string
 }
@@ -24,6 +26,7 @@ interface IProps {
 // }
 
 export function Toolbar(props: IProps) {
+  // Iterate over primaryToolbarComponents here
   const { editorActions } = useEditorContext()
 
   function handleToggleMark(markSchema: MarkType) {
@@ -37,6 +40,7 @@ export function Toolbar(props: IProps) {
   function toggleItalics() {
     handleToggleMark(editorActions.editorView.state.schema.marks.em)
   }
+  console.log('render')
   return (
     <Container>
       <TopRow>
