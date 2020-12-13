@@ -2,23 +2,23 @@
 
 Just the basic boilerplate needed to get going with this combo.
 
-Originally the editors were served together with the React example app, but since that is only acceptable for toy apps the editors are now run and compiled as individual libraries which the example-app imports.
+Originally the editors were served together with the React example-app, but since that is only acceptable for toy apps the editors are now run and compiled as individual libraries which the example-app imports.
 
 ## How to install
 
-To run the example-app you should run separately for each `atlassian`, `full` and `minimal` editors:
+To run the example-app locally you should for each `atlassian`, `full` and `minimal` editor execute:
 
 1. Install their dependencies: `cd full && yarn`
 2. Link the library as local npm module: `yarn link`
 3. Build the editor `yarn build` or start the compiler `yarn watch`
 
-Afterwards, in another terminal execute:
+After having compiled and linked the editors, execute:
 
 1. `cd example-app && yarn`
-2. `yarn link full && yarn link minimal`
+2. `yarn link atlassian && link full && yarn link minimal`
 3. `yarn start`
 
-React app should open at http://localhost:3000 that imports both editors. Any changes should automatically be loaded. To export types/methods/whatever from the editors for the example-app you should add the import to the `index.ts` eg:
+The react app should open at http://localhost:3000 with the example editors. Any changes to the editors should automatically reload the page. To export types/methods/whatever from the editors for the example-app you should add the import to the `index.ts` eg:
 
 ```ts
 export { Editor } from './Editor'
@@ -27,7 +27,7 @@ export { createNewUnderline } from ./actions
 
 ## Design
 
-The aim of this project is to showcase how to bootstrap a PM-React-TS editor with the minimum boilerplate.
+The aim of this project is to showcase how to bootstrap a PM-React-TS editor with the minimum boilerplate to build a PM-based rich-text editor in a sound and robust manner.
 
 The `minimal` editor should contain the absolute minimum required.
 
