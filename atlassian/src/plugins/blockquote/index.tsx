@@ -2,13 +2,14 @@ import React from 'react'
 import { EditorState } from 'prosemirror-state'
 
 import { blockquote } from '../../schema/nodes'
-import { blockQuotePluginFactory } from './pm-plugins/main';
+import { blockQuotePluginFactory, blockquotePluginKey } from './pm-plugins/main';
 // import { getToolbarConfig } from './toolbar';
 import { keymapPlugin } from './pm-plugins/keymap'
 import * as keymaps from '../../keymaps';
 
 import { QuickInsertActionInsert } from '../../provider-factory/quick-insert-provider'
 import IconQuote from '../quick-insert/assets/code';
+import WithPluginState from '../../ui/hocs/WithPluginState';
 
 import { EditorPlugin, PMPluginFactory } from '../../types';
 
@@ -27,13 +28,13 @@ export const blockQuotePlugin = (options: BlockQuoteOptions = {}): EditorPlugin 
       {
         name: 'blockquote',
         plugin: ({
+          dispatch,
           // providerFactory,
-          // dispatch,
           portalProviderAPI,
           eventDispatcher,
         }) =>
           blockQuotePluginFactory(
-            // dispatch,
+            dispatch,
             // providerFactory,
             portalProviderAPI,
             eventDispatcher,
@@ -44,6 +45,40 @@ export const blockQuotePlugin = (options: BlockQuoteOptions = {}): EditorPlugin 
     ]
     return plugins
   },
+
+  // primaryToolbarComponent({
+  //   editorView,
+  //   popupsMountPoint,
+  //   popupsBoundariesElement,
+  //   popupsScrollableElement,
+  //   toolbarSize,
+  //   disabled,
+  //   isToolbarReducedSpacing,
+  //   eventDispatcher,
+  // }) {
+  //   return (
+  //     <WithPluginState
+  //       editorView={editorView}
+  //       eventDispatcher={eventDispatcher}
+  //       plugins={{
+  //         pluginState: blockquotePluginKey,
+  //       }}
+  //       render={({ pluginState }) => {
+  //         return (
+  //           <ToolbarBlockType
+  //             isDisabled={disabled}
+  //             isReducedSpacing={isToolbarReducedSpacing}
+  //             setBlockType={boundSetBlockType}
+  //             pluginState={pluginState}
+  //             popupsMountPoint={popupsMountPoint}
+  //             popupsBoundariesElement={popupsBoundariesElement}
+  //             popupsScrollableElement={popupsScrollableElement}
+  //           />
+  //         );
+  //       }}
+  //     />
+  //   );
+  // },
 
   pluginsOptions: {
     quickInsert: [

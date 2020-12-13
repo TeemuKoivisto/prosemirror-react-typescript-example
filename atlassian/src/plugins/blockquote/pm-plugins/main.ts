@@ -1,21 +1,23 @@
-import { EditorState, Plugin, NodeSelection } from 'prosemirror-state';
+import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
 
 import { blockQuoteNodeView } from '../nodeviews/BlockQuoteView';
 import { CommandDispatch } from '../../../types';
-import { pluginKey } from './plugin-factory';
-// import { findCodeBlock } from '../utils';
+import { findBlockQuote } from '../pm-utils/findBlockQuote';
 
 import { PortalProviderAPI } from '../../../react-portals'
 import { EventDispatcher, Dispatch } from '../../../utils/event-dispatcher';
 
 import { BlockQuoteOptions } from '../'
 
-export type BlockQuoteState = {
-  count: number
+export interface BlockQuoteState {
+  blockQuoteActive: boolean
+  // blockQuoteDisabled: boolean
 };
 
+export const blockquotePluginKey = new PluginKey('blockQuotePlugin')
+
 export const getPluginState = (state: EditorState): BlockQuoteState =>
-  pluginKey.getState(state);
+  blockquotePluginKey.getState(state);
 
 export const setPluginState = (stateProps: Object) => (
   state: EditorState,
@@ -23,7 +25,7 @@ export const setPluginState = (stateProps: Object) => (
 ): boolean => {
   const pluginState = getPluginState(state);
   dispatch(
-    state.tr.setMeta(pluginKey, {
+    state.tr.setMeta(blockquotePluginKey, {
       ...pluginState,
       ...stateProps,
     }),
@@ -31,10 +33,10 @@ export const setPluginState = (stateProps: Object) => (
   return true;
 };
 
-export type CodeBlockStateSubscriber = (state: BlockQuoteState) => any;
+// export type CodeBlockStateSubscriber = (state: BlockQuoteState) => any;
 
 export function blockQuotePluginFactory(
-  // dispatch: Dispatch,
+  dispatch: Dispatch,
   // providerFactory: ProviderFactory,
   portalProviderAPI: PortalProviderAPI,
   eventDispatcher: EventDispatcher,
@@ -44,7 +46,8 @@ export function blockQuotePluginFactory(
     state: {
       init(_, state): BlockQuoteState {
         return {
-          count: 0
+          blockQuoteActive: false,
+          // blockQuoteDisabled: false,
         };
       },
       apply(
@@ -54,28 +57,29 @@ export function blockQuotePluginFactory(
         newState,
       ): BlockQuoteState {
         if (tr.docChanged || tr.selectionSet) {
-          const { selection } = newState;
+          const blockQuoteActive = !!findBlockQuote(newState, newState.selection)
+          // const blockQuoteDisabled = !(
+          //   blockQuoteActive ||
+          //   isWrappingPossible(newState.schema.blockquote, newState)
+          // )
 
-          // const node = findCodeBlock(newState, selection);
-          const newPluginState: BlockQuoteState = {
-            ...pluginState,
-            count: pluginState.count + 1,
-          };
-          return newPluginState;
+          if (
+            blockQuoteActive !== pluginState.blockQuoteActive
+          ) {
+            const nextPluginState = {
+              ...pluginState,
+              blockQuoteActive,
+              // blockQuoteDisabled,
+            };
+            dispatch(blockquotePluginKey, nextPluginState);
+            return nextPluginState;
+          }
         }
-
-        // const meta = tr.getMeta(pluginKey);
-        // if (meta && meta.type === ACTIONS.SET_COPIED_TO_CLIPBOARD) {
-        //   return {
-        //     ...pluginState,
-        //     contentCopied: meta.data,
-        //   };
-        // }
 
         return pluginState;
       },
     },
-    key: pluginKey,
+    key: blockquotePluginKey,
     props: {
       nodeViews: {
         blockquote: blockQuoteNodeView(portalProviderAPI, eventDispatcher, options),
