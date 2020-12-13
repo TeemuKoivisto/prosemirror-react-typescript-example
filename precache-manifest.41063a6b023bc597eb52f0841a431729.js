@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a87db445a866b228b501e2a8080de6bc",
+    "revision": "5268528acda92f8dae31c9b16dc0dc99",
     "url": "/prosemirror-react-typescript-example/index.html"
   },
   {
@@ -28,12 +28,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/prosemirror-react-typescript-example/static/js/6.e4a735c9.chunk.js"
   },
   {
-    "revision": "5cfcd8254d6c0ef36f77",
-    "url": "/prosemirror-react-typescript-example/static/js/main.df8cfcee.chunk.js"
+    "revision": "2609ab65cba04dfe66d8",
+    "url": "/prosemirror-react-typescript-example/static/js/main.80f70c83.chunk.js"
   },
   {
     "revision": "783f14fa45b10e088e68f98251448010",
-    "url": "/prosemirror-react-typescript-example/static/js/main.df8cfcee.chunk.js.LICENSE.txt"
+    "url": "/prosemirror-react-typescript-example/static/js/main.80f70c83.chunk.js.LICENSE.txt"
   },
   {
     "revision": "8c311664d8973eae457a",

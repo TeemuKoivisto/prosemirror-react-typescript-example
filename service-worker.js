@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/prosemirror-react-typescript-example/precache-manifest.1d4dc0665a2490a5215c81d2ad315608.js"
+  "/prosemirror-react-typescript-example/precache-manifest.41063a6b023bc597eb52f0841a431729.js"
 );
 
 self.addEventListener('message', (event) => {
