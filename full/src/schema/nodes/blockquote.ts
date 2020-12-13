@@ -22,3 +22,17 @@ export const blockquote: NodeSpec = {
     return ['blockquote', 0];
   },
 }
+
+export const pmBlockquote: NodeSpec = {
+  content: 'paragraph+',
+  group: 'block',
+  defining: true,
+  selectable: false,
+  attrs: {
+    class: { default: 'pm-blockquote' },
+  },
+  parseDOM: [{ tag: 'blockquote' }],
+  toDOM(node) {
+    return ['blockquote', node.attrs, 0];
+  },
+}

@@ -27,7 +27,6 @@ export function PortalRenderer() {
     portals.delete(data.container)
     forceUpdate()
   }
-  console.log('render')
 
   return (
     <>

@@ -4,11 +4,11 @@ import { history } from 'prosemirror-history'
 import { keymap } from 'prosemirror-keymap'
 import { baseKeymap } from 'prosemirror-commands'
 
-import { doc, paragraph, text } from '../../schema/nodes'
+import { doc, pmBlockquote, paragraph, text } from '../../schema/nodes'
 import { em, strong } from '../../schema/marks'
 
 import {
-  createParagraphNear, splitBlock
+  createNewPmBlockQuote, splitBlock
 } from './commands/general'
 
 import { EditorPlugin, PMPluginFactory } from '../../core/types';
@@ -27,7 +27,7 @@ export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
       {
         name: 'otherKeyMap',
         plugin: () => keymap({
-          'Ctrl-p': createParagraphNear,
+          'Ctrl-p': createNewPmBlockQuote,
           'Ctrl-s': splitBlock,
         })
       },
@@ -39,6 +39,7 @@ export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
     return [
       { name: 'doc', node: doc },
       { name: 'paragraph', node: paragraph },
+      { name: 'pmBlockquote', node: pmBlockquote },
       { name: 'text', node: text },
     ];
   },

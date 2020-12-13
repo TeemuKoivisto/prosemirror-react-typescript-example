@@ -36,18 +36,14 @@ export function splitBlock(state: EditorState, dispatch?: (tr: Transaction) => v
   return true
 }
 
-export function createParagraphNear(state: EditorState, dispatch?: (tr: Transaction) => void) {
-  let {$from, $to} = state.selection
-  if ($from.parent.inlineContent || $to.parent.inlineContent) return false
-  const type = $from.parent.contentMatchAt($to.indexAfter()).defaultType
-  if (!type || !type.isTextblock) return false
-  const empty = type.createAndFill()
-  debugger
-  if (dispatch && empty) {
-    const side = (!$from.parentOffset && $to.index() < $to.parent.childCount ? $from : $to).pos
-    const tr = state.tr.insert(side, empty)
-    tr.setSelection(TextSelection.create(tr.doc, side + 1))
-    dispatch(tr.scrollIntoView())
+export function createNewPmBlockQuote(state: EditorState, dispatch?: (tr: Transaction) => void) {
+  const {$from, $to} = state.selection
+  const blockquote = state.schema.nodes.pmBlockquote;
+  const empty = blockquote.createAndFill()
+  const endOfBlock = $from.end()
+  if (empty && dispatch) {
+    const tr = state.tr.insert(endOfBlock + 1, empty)
+    dispatch(tr)
   }
-  return true
+  return false
 }

@@ -32,7 +32,6 @@ export function ReactEditorView(props: IProps) {
       const view = createEditorView(editorViewDOM, editorProps)
       setEditorView(view)
       editorActions.init(view)
-      console.log(state)
     }
   }, [])
 
@@ -47,8 +46,7 @@ export function ReactEditorView(props: IProps) {
       portalProvider: portalProvider,
       editorPlugins: editorPlugins,
     })
-    console.log(plugins)
-    // debugger
+
     return EditorState.create({
       schema,
       plugins,

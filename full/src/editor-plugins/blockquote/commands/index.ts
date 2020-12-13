@@ -4,7 +4,6 @@ export const createNewBlockQuote = (): Command => (
   state,
   dispatch,
 ): boolean => {
-  console.log('togggle blockquote')
   const {$from, $to} = state.selection
   const blockquote = state.schema.nodes.blockquote;
   const empty = blockquote.createAndFill()

@@ -1,6 +1,6 @@
 export { doc } from './doc';
 export type { DocNode } from './doc';
-export { blockquote } from './blockquote';
+export { blockquote, pmBlockquote } from './blockquote';
 export type { BlockQuoteDefinition } from './blockquote';
 export { paragraph } from './paragraph';
 export type {

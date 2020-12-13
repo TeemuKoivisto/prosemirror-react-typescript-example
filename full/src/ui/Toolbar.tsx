@@ -40,7 +40,6 @@ export function Toolbar(props: IProps) {
   function toggleItalics() {
     handleToggleMark(editorActions.editorView.state.schema.marks.em)
   }
-  console.log('render')
   return (
     <Container>
       <TopRow>

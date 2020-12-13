@@ -14,6 +14,7 @@ const ranks = {
     'listItem',
     'heading',
     'blockquote',
+    'pmBlockquote',
     'codeBlock',
   ],
   marks: [
