@@ -49,5 +49,32 @@ export const schema = new Schema({
     text: {
       group: 'inline'
     },
+  },
+  marks: {
+    em: {
+      parseDOM: [{ tag: 'i' }, { tag: 'em' }, { style: 'font-style=italic' }],
+      toDOM() { return ['em', 0] }
+    },
+    strong: {
+      parseDOM: [
+        { tag: 'strong' },
+        // This works around a Google Docs misbehavior where
+        // pasted content will be inexplicably wrapped in `<b>`
+        // tags with a font-weight normal.
+        { tag: 'b', getAttrs(node: string | Node) {
+          if (node instanceof HTMLElement) {
+            return node.style.fontWeight !== 'normal' && null
+          }
+          return null
+        } },
+        { style: 'font-weight', getAttrs(value) {
+          if (typeof value === 'string') {
+            return /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null 
+          }
+          return null
+        } },
+      ],
+      toDOM() { return ['strong', 0] }
+    },
   }
 })

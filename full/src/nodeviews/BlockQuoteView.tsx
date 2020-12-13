@@ -19,7 +19,7 @@ export class BlockQuoteView extends ReactNodeView<IProps> {
     }
   }
 
-  render(_props: {}, forwardRef: ForwardRef) {
+  render(_props: IProps, forwardRef: ForwardRef) {
     return (
       <BlockQuote ref={forwardRef}/>
     )

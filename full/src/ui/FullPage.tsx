@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-// import { EditorView } from 'prosemirror-view'
+
+import { Toolbar } from './Toolbar'
 
 interface IProps {
   className?: string
@@ -11,6 +12,7 @@ export function FullPage(props: IProps) {
   const { className, children } = props
   return (
     <Container className={className}>
+      <Toolbar />
       <ContentArea>
         {children}
       </ContentArea>
