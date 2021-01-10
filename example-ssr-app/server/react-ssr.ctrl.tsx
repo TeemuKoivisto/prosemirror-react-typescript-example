@@ -6,13 +6,16 @@ import { ServerStyleSheet } from 'styled-components'
 
 import { ServerRoutes } from '../client/routes'
 
-const sheet = new ServerStyleSheet()
-
 export const ssrReactApp = async (req: Request<{}>, res: Response, next: NextFunction) => {
+
+  let sheet
+
   try {
+    sheet = new ServerStyleSheet()
+
     const app = renderToString(sheet.collectStyles(<ServerRoutes url={req.url}/>))    
 
-    const state = { mounted: true }
+    const initialState = { ssr: true }
 
     const html = `
       <!DOCTYPE html>
@@ -26,7 +29,7 @@ export const ssrReactApp = async (req: Request<{}>, res: Response, next: NextFun
           <noscript>You need to enable JavaScript to run this app.</noscript>
           <div id="root">${app}</div>
           <script>
-            window.__PRELOADED_STATE__ = ${JSON.stringify(state)}
+            window.__PRELOADED_STATE__ = ${JSON.stringify(initialState)}
           </script>
           <script type="text/javascript" src="/bundle.js"></script>
           ${sheet.getStyleTags()}
@@ -38,6 +41,6 @@ export const ssrReactApp = async (req: Request<{}>, res: Response, next: NextFun
   } catch (err) {
     next(err)
   } finally {
-    sheet.seal()
+    sheet && sheet.seal()
   }
 }

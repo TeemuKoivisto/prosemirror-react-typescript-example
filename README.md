@@ -4,6 +4,8 @@ Just the basic boilerplate needed to get going with this combo.
 
 Originally the editors were served together with the React example-app, but since that is only acceptable for toy apps the editors are now run and compiled as individual libraries which the example-app imports.
 
+I also added a SSR example since I was dabbling with Next.js and wondered how well rich-text editors and SSR go together. Not without friction, I must say.
+
 ## How to install
 
 To run the example-app locally you should for each `atlassian`, `full` and `minimal` editor execute:
