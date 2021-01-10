@@ -16,6 +16,7 @@ export function NavBar(props: IProps) {
         <Link to="/" exact activeClassName="current">Full</Link>
         <Link to="/minimal" activeClassName="current">Minimal</Link>
         <Link to="/atlassian" activeClassName="current">Atlassian</Link>
+        <Link to="/raw" activeClassName="current">Raw (no client-side hydration)</Link>
       </Nav>
     </Container>
   )

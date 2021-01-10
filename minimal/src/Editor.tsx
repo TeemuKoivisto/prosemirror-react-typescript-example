@@ -50,6 +50,6 @@ export class Editor extends React.Component<{}, {}> {
   }
 
   render() {
-    return <div id="editor" ref={this.editorRef} />
+    return <div id="minimal-editor" ref={this.editorRef} />
   }
 }
