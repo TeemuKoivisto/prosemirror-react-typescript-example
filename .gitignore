@@ -29,3 +29,8 @@ tmp/
 # example ssr app
 server-dist/
 client-dist/
+
+# example nextjs app
+.next/
+out/
+.vercel
