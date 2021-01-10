@@ -6,6 +6,8 @@ Originally the editors were served together with the React example-app, but sinc
 
 I also added a SSR example since I was dabbling with Next.js and wondered how well rich-text editors and SSR go together. Not without friction, I must say.
 
+And in addition to that I added a Next.js version which works somewhat better, but I'm still annoyed at the empty second white frame when rendering the page using SSR. Also the bundle size is getting out of hand even if you run the app outside of the development build.
+
 ## How to install
 
 To run the example-app locally you should for each `atlassian`, `full` and `minimal` editor execute:

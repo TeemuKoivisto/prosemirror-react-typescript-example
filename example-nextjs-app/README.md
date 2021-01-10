@@ -13,5 +13,5 @@ Similar to `example-ssr-app`, you need to build the other editors first and then
 ## Commands
 
 - `yarn dev` starts the development server
-- `yarn build` _tries_ to build the app but which fails
+- `yarn build` _tries_ to build the app but which fails. You can comment out the `<Editor />` from the `atlassian.tsx` to build it without the Atlassian editor. 
 - `yarn next` the production command for running the app
