@@ -4,7 +4,6 @@ import { ssrService } from './ssr.service'
 
 export const ssrReactApp = async (req: Request<{}>, res: Response, next: NextFunction) => {
   try {
-
     const html = ssrService.render(req.url)
 
     res.send(html)
@@ -16,7 +15,6 @@ export const ssrReactApp = async (req: Request<{}>, res: Response, next: NextFun
 
 export const ssrRawHtml  = async (req: Request<{}>, res: Response, next: NextFunction) => {
   try {
-
     const html = ssrService.render('/', false)
 
     res.send(html)

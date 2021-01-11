@@ -1,6 +1,6 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { DirectEditorProps, EditorView } from 'prosemirror-view'
-import { EditorState, Selection, Transaction } from 'prosemirror-state';
+import { EditorState, Selection, Transaction } from 'prosemirror-state'
 import applyDevTools from 'prosemirror-dev-tools'
 
 import { useEditorContext } from './core/EditorContext'
@@ -23,7 +23,7 @@ export function ReactEditorView(props: IProps) {
   const [editorState, setEditorState] = useState<EditorState>()
   const [editorView, setEditorView] = useState<EditorView>()
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const state = createEditorState()
     setEditorState(state)
     const editorViewDOM = editorViewRef.current
