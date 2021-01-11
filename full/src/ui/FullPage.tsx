@@ -5,7 +5,7 @@ import { Toolbar } from './Toolbar'
 
 interface IProps {
   className?: string
-  children: React.ReactChildren
+  children: React.ReactNode
 }
 
 export function FullPage(props: IProps) {

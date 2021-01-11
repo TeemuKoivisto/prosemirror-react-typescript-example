@@ -9,6 +9,8 @@ import { createDefaultEditorPlugins } from './create-defaults'
 import { createSchema } from './core/create/create-schema'
 import { createPMPlugins, processPluginsList } from './core/create/create-plugins'
 
+import useSsrLayoutEffect from './react/hooks/useSsrLayoutEffect'
+
 import { EditorProps } from './Editor'
 
 interface IProps {
@@ -23,7 +25,7 @@ export function ReactEditorView(props: IProps) {
   const [editorState, setEditorState] = useState<EditorState>()
   const [editorView, setEditorView] = useState<EditorView>()
 
-  useEffect(() => {
+  useSsrLayoutEffect(() => {
     const state = createEditorState()
     setEditorState(state)
     const editorViewDOM = editorViewRef.current
