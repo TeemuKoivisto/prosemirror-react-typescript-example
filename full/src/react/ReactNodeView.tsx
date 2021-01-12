@@ -86,11 +86,16 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     // Finally, we provide an element to render content into.
     // We will be moving this node around as we need to.
     const { wrapper: contentDOMWrapper, contentDOM } = this.createContentDOM() ?? {}
-
+    
+    // I am really not sure what is the purpose of the contentDOMWrapper...
+    // Having only contentDOM to which the contents are appended seem enough in most cases
+    // Yet there might some edge-case I'm not aware that requires an additional div to wrap
+    // the contentDOM with.
+    this.contentDOM = contentDOM ?? contentDOMWrapper
+    this.contentDOMWrapper = contentDOMWrapper
+    
     if (contentDOMWrapper) {
       this.dom.appendChild(contentDOMWrapper)
-      this.contentDOM = contentDOM ?? contentDOMWrapper
-      this.contentDOMWrapper = contentDOMWrapper || contentDOM
     }
 
     this.renderReactComponent(this.render(this.reactComponentProps, this.handleRef))
