@@ -4,7 +4,7 @@ import { history } from 'prosemirror-history'
 import { keymap } from 'prosemirror-keymap'
 import { baseKeymap } from 'prosemirror-commands'
 
-import { createNewUnderline } from './actions'
+import { createNewBlockQuote, createNewPmBlockQuote } from './actions'
 
 export const plugins = () => {
   const plugins: Plugin[] = []
@@ -12,7 +12,8 @@ export const plugins = () => {
   plugins.push(history())
   plugins.push(keymap(baseKeymap))
   plugins.push(keymap({
-    'Ctrl-Alt-u': createNewUnderline,
+    'Ctrl-Alt-b': createNewBlockQuote,
+    'Ctrl-Alt-p': createNewPmBlockQuote,
   }))
 
   return plugins

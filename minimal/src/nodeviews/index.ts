@@ -1,13 +1,13 @@
 import { Node } from 'prosemirror-model'
 import { EditorView, Decoration } from 'prosemirror-view'
 
-import { Underline } from './Underline'
+import { BlockQuoteView } from './BlockQuoteView'
 
 export const nodeViews = {
-  underline: (
+  blockquote: (
     node: Node,
     view: EditorView,
     getPos: (() => number) | boolean,
     decorations: Decoration[]
-  ) => new Underline(node, view, getPos, decorations),
+  ) => new BlockQuoteView(node, view, getPos, decorations),
 }
