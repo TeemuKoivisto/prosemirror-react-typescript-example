@@ -27,8 +27,8 @@ export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
       {
         name: 'otherKeyMap',
         plugin: () => keymap({
-          'Ctrl-p': createNewPmBlockQuote,
-          'Ctrl-s': splitBlock,
+          'Ctrl-Alt-p': createNewPmBlockQuote,
+          'Ctrl-Alt-s': splitBlock,
         })
       },
     ]

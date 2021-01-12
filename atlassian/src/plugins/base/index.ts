@@ -26,8 +26,8 @@ export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
       {
         name: 'otherKeyMap',
         plugin: () => keymap({
-          'Ctrl-p': createParagraphNear,
-          'Ctrl-s': splitBlock,
+          'Ctrl-Alt-p': createParagraphNear,
+          'Ctrl-Alt-s': splitBlock,
         })
       },
     ]

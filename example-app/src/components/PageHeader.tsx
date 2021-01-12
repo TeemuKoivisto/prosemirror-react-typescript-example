@@ -18,10 +18,10 @@ export function PageHeader(props: IProps) {
       </header>
       <div>
         <ul>
-          <li><b>Ctrl + n</b>: New underline paragraph</li>
-          <li><b>Ctrl + b</b>: New blockquote</li>
-          <li><b>Ctrl + p</b>: New ProseMirror-managed blockquote</li>
-          <li><b>Ctrl + s</b>: Split current block</li>
+          <li><b>Ctrl + alt + b</b>: New blockquote</li>
+          <li><b>Ctrl + alt + p</b>: New ProseMirror-managed blockquote</li>
+          <li><b>Ctrl + alt + u</b>: New underline paragraph</li>
+          <li><b>Ctrl + alt + s</b>: Split current block</li>
           <li><b>/</b>: Quick insert (Atlassian editor only)</li>
         </ul>
         { children }

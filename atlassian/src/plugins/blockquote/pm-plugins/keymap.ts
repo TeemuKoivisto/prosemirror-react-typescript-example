@@ -4,13 +4,13 @@ import { bindKeymapWithCommand, toggleBlockQuote } from '../../../keymaps';
 import { createNewBlockQuote } from '../commands'
 
 export function keymapPlugin(): Plugin {
-  const list = {};
+  const keymapObj = {};
 
   bindKeymapWithCommand(
     toggleBlockQuote.common!,
     createNewBlockQuote(),
-    list,
+    keymapObj,
   );
 
-  return keymap(list);
+  return keymap(keymapObj);
 }

@@ -12,7 +12,7 @@ export const plugins = () => {
   plugins.push(history())
   plugins.push(keymap(baseKeymap))
   plugins.push(keymap({
-    'Ctrl-n': createNewUnderline,
+    'Ctrl-Alt-u': createNewUnderline,
   }))
 
   return plugins
