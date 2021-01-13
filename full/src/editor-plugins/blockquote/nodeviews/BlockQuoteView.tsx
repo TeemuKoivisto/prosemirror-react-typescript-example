@@ -8,7 +8,7 @@ import { ReactNodeView, ForwardRef } from '../../../react/ReactNodeView'
 import { BlockQuote } from '../ui/BlockQuote'
 
 import { BlockQuoteOptions } from '../'
-import { EditorPlugins } from '../../../core'
+import { PluginsProvider } from '../../../core'
 
 export interface IProps {
   options?: BlockQuoteOptions;
@@ -32,7 +32,7 @@ export class BlockQuoteView extends ReactNodeView<IProps> {
 
 export function blockQuoteNodeView(
   portalProvider: PortalProvider,
-  editorPlugins: EditorPlugins,
+  pluginsProvider: PluginsProvider,
   options?: BlockQuoteOptions,
 ) {
   return (node: PMNode, view: EditorView, getPos: (() => number) | boolean): NodeView =>
@@ -41,7 +41,7 @@ export function blockQuoteNodeView(
       view,
       getPos,
       portalProvider,
-      editorPlugins,
+      pluginsProvider,
       {
         options,
       },

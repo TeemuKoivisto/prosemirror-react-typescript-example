@@ -1,7 +1,8 @@
-import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
+import { EditorState, Plugin } from 'prosemirror-state';
+import { PluginKey } from '../../../core/pm'
 
 import { PortalProvider } from '../../../react/portals'
-import { EditorPlugins } from '../../../core';
+import { PluginsProvider } from '../../../core'
 import { CommandDispatch } from '../../../core/types';
 
 import { blockQuoteNodeView } from '../nodeviews/BlockQuoteView';
@@ -35,7 +36,7 @@ export const setPluginState = (stateProps: Object) => (
 
 export function blockQuotePluginFactory(
   portalProvider: PortalProvider,
-  editorPlugins: EditorPlugins,
+  pluginsProvider: PluginsProvider,
   options?: BlockQuoteOptions,
 ) {
   return new Plugin({
@@ -67,7 +68,7 @@ export function blockQuotePluginFactory(
               blockQuoteActive,
               // blockQuoteDisabled,
             };
-            editorPlugins.notify(blockquotePluginKey, nextPluginState);
+            pluginsProvider.publish(blockquotePluginKey, nextPluginState);
             return nextPluginState;
           }
         }
@@ -78,7 +79,7 @@ export function blockQuotePluginFactory(
     key: blockquotePluginKey,
     props: {
       nodeViews: {
-        blockquote: blockQuoteNodeView(portalProvider, editorPlugins, options),
+        blockquote: blockQuoteNodeView(portalProvider, pluginsProvider, options),
       },
     },
   })

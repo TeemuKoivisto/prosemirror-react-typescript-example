@@ -24,11 +24,11 @@ export const blockQuotePlugin = (options: BlockQuoteOptions = {}): EditorPlugin 
         name: 'blockquote',
         plugin: ({
           portalProvider,
-          editorPlugins,
+          pluginsProvider,
         }) =>
           blockQuotePluginFactory(
             portalProvider,
-            editorPlugins,
+            pluginsProvider,
             options,
           ),
       },

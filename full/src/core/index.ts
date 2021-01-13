@@ -1,3 +1,3 @@
 export { EditorActions } from './EditorActions'
 export { EditorContext } from './EditorContext'
-export { EditorPlugins } from './EditorPlugins'
+export { PluginsProvider } from './PluginsProvider'

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { DirectEditorProps, EditorView } from 'prosemirror-view'
-import { EditorState, Selection, Transaction } from 'prosemirror-state'
+import { EditorState, Selection, Transaction } from 'prosemirror-state';
 import applyDevTools from 'prosemirror-dev-tools'
 
 import { useEditorContext } from './core/EditorContext'
@@ -20,7 +20,7 @@ interface IProps {
 
 export function ReactEditorView(props: IProps) {
   const { editorProps, EditorLayoutComponent } = props
-  const { editorActions, editorPlugins, portalProvider } = useEditorContext()
+  const { editorActions, pluginsProvider, portalProvider } = useEditorContext()
   const editorViewRef = useRef(null)
   const [editorState, setEditorState] = useState<EditorState>()
   const [editorView, setEditorView] = useState<EditorView>()
@@ -38,15 +38,15 @@ export function ReactEditorView(props: IProps) {
   }, [])
 
   function createEditorState() {
-    const defaultEditorPlugins = createDefaultEditorPlugins(editorProps)
-    const config = processPluginsList(defaultEditorPlugins)
+    const editorPlugins = createDefaultEditorPlugins(editorProps)
+    const config = processPluginsList(editorPlugins)
     const schema = createSchema(config)
 
     const plugins = createPMPlugins({
       schema,
       editorConfig: config,
       portalProvider: portalProvider,
-      editorPlugins: editorPlugins,
+      pluginsProvider: pluginsProvider,
     })
 
     return EditorState.create({

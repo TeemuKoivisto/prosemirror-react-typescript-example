@@ -2,13 +2,13 @@ import { Plugin } from 'prosemirror-state';
 import { Schema } from 'prosemirror-model';
 
 import { EditorConfig } from './editor-config';
-import { EditorPlugins } from '../EditorPlugins';
+import { PluginsProvider } from '../PluginsProvider';
 import { PortalProvider } from '../../react/portals'
 
 export type PMPluginFactoryParams = {
   schema: Schema;
   portalProvider: PortalProvider;
-  editorPlugins: EditorPlugins
+  pluginsProvider: PluginsProvider
 };
 
 export type PMPluginCreateConfig = PMPluginFactoryParams & {

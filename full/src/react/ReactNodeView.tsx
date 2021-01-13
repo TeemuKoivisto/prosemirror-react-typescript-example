@@ -3,7 +3,7 @@ import { NodeView, EditorView, Decoration } from 'prosemirror-view'
 import { Node as PMNode } from 'prosemirror-model'
 
 import { PortalProvider } from './portals'
-import { EditorPlugins } from '../core/EditorPlugins'
+import { PluginsProvider } from '../core/PluginsProvider'
 
 export type ReactComponentProps = { [key: string]: unknown }
 export type ForwardRef = (node: HTMLElement | null) => void
@@ -31,7 +31,7 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
   private contentDOMWrapper?: Node
   private reactComponent?: React.ComponentType<any>
   private portalProvider: PortalProvider
-  private editorPlugins: EditorPlugins
+  private pluginsProvider: PluginsProvider
   private _viewShouldUpdate?: shouldUpdate
 
   reactComponentProps: P
@@ -41,7 +41,7 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     view: EditorView,
     getPos: (() => number) | boolean,
     portalProvider: PortalProvider,
-    editorPlugins: EditorPlugins,
+    pluginsProvider: PluginsProvider,
     reactComponentProps?: P,
     reactComponent?: React.ComponentType<any>,
     viewShouldUpdate?: shouldUpdate,
@@ -49,7 +49,7 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     this.node = node
     this.view = view
     this.getPos = getPos
-    this.editorPlugins = editorPlugins
+    this.pluginsProvider = pluginsProvider
     this.portalProvider = portalProvider
     this.reactComponentProps = reactComponentProps || ({} as P)
     this.reactComponent = reactComponent
@@ -189,7 +189,7 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
   static fromComponent(
     component: React.ComponentType<any>,
     portalProvider: PortalProvider,
-    editorPlugins: EditorPlugins,
+    pluginsProvider: PluginsProvider,
     props?: ReactComponentProps,
     viewShouldUpdate?: (nextNode: PMNode) => boolean,
   ) {
@@ -199,7 +199,7 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
         view,
         getPos,
         portalProvider,
-        editorPlugins,
+        pluginsProvider,
         props,
         component,
         viewShouldUpdate,
