@@ -15,7 +15,7 @@ export const BlockQuote = forwardRef((props: IProps, ref: any) => {
   const [attrs, setAttrs] = useState({ ...initialProps.attrs })
 
   function handlePropsUpdate(newProps: any) {
-    console.log(newProps)
+    // console.log(newProps)
   }
   return (
     <StyledBlockQuote className={className} ref={ref}/>

@@ -16,7 +16,7 @@ export class AnalyticsProvider {
 
   shouldTrack: boolean = false
   logToConsole: boolean = false
-  logLevel: LOG_LEVEL = LOG_LEVEL.debug
+  logLevel: LOG_LEVEL = LOG_LEVEL.error
 
   logs: {
     [namespace: string]: {
