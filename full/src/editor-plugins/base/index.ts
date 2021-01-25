@@ -11,9 +11,13 @@ import {
   createNewPmBlockQuote, splitBlock
 } from './commands/general'
 
+import { basePluginFactory, basePluginKey } from './pm-plugins/main';
+
 import { EditorPlugin, PMPluginFactory } from '../../core/types';
 // import { keymap } from '../../utils/keymap';
 
+export { basePluginKey } from './pm-plugins/main'
+export type { BaseState } from './pm-plugins/main'
 export interface BasePluginOptions {
 }
 
@@ -30,6 +34,18 @@ export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
           'Ctrl-Alt-p': createNewPmBlockQuote,
           'Ctrl-Alt-s': splitBlock,
         })
+      },
+      {
+        name: 'base',
+        plugin: ({
+          portalProvider,
+          pluginsProvider,
+        }) =>
+          basePluginFactory(
+            portalProvider,
+            pluginsProvider,
+            options,
+          ),
       },
     ]
 

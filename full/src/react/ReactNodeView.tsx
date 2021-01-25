@@ -5,11 +5,18 @@ import { Node as PMNode } from 'prosemirror-model'
 import { PortalProvider } from './portals'
 import { PluginsProvider } from '../core/PluginsProvider'
 
-export type ReactComponentProps = { [key: string]: unknown }
-export type ForwardRef = (node: HTMLElement | null) => void
-export type shouldUpdate = (nextNode: PMNode) => boolean
+import { createListenProps } from './hooks/createListenProps'
 
-export class ReactNodeView<P = ReactComponentProps> implements NodeView {
+export type ReactComponentProps = { [key: string]: unknown }
+export interface Attrs { [key: string]: any }
+export type ForwardRef = (node: HTMLElement | null) => void
+
+export interface NodeViewProps<P = ReactComponentProps, A extends Attrs = {}> {
+  componentProps: P
+  attrs: A
+}
+
+export class ReactNodeView<P = ReactComponentProps, A extends Attrs = {}> implements NodeView {
   /**
    * The outer DOM node that represents the document node. When not
    * given, the default strategy is used to create a DOM node.
@@ -28,13 +35,12 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
   view: EditorView
   getPos: (() => number) | boolean
 
-  private contentDOMWrapper?: Node
   private reactComponent?: React.ComponentType<any>
   private portalProvider: PortalProvider
   private pluginsProvider: PluginsProvider
-  private _viewShouldUpdate?: shouldUpdate
-
+  
   reactComponentProps: P
+  useListenProps?: (cb: (newProps: NodeViewProps<P, A>) => void) => void
 
   constructor(
     node: PMNode,
@@ -44,7 +50,6 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     pluginsProvider: PluginsProvider,
     reactComponentProps?: P,
     reactComponent?: React.ComponentType<any>,
-    viewShouldUpdate?: shouldUpdate,
   ) {
     this.node = node
     this.view = view
@@ -53,7 +58,6 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     this.portalProvider = portalProvider
     this.reactComponentProps = reactComponentProps || ({} as P)
     this.reactComponent = reactComponent
-    this._viewShouldUpdate = viewShouldUpdate
   }
 
   /**
@@ -75,7 +79,11 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     // expensive render?
     //
     this.dom = this.createContainerDOM()
-    this.setDomAttrs(this.node, this.dom)
+    // Instead of just mindlessly copying the attributes to the container node
+    // I think letting the component render them is preferred.
+    // You can't really apply styles outside the component to the parent either way
+    // and the attributes are stored inside this.node and thus not needed to be actually shown.
+    // this.setDomAttrs(this.node, this.dom)
 
     // @see ED-3790
     // something gets messed up during mutation processing inside of a
@@ -85,22 +93,29 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
 
     // Finally, we provide an element to render content into.
     // We will be moving this node around as we need to.
-    const { wrapper: contentDOMWrapper, contentDOM } = this.createContentDOM() ?? {}
+    this.contentDOM = this.createContentDOM()
     
-    // I am really not sure what is the purpose of the contentDOMWrapper...
-    // Having only contentDOM to which the contents are appended seem enough in most cases
-    // Yet there might some edge-case I'm not aware that requires an additional div to wrap
-    // the contentDOM with.
-    this.contentDOM = contentDOM ?? contentDOMWrapper
-    this.contentDOMWrapper = contentDOMWrapper
-    
-    if (contentDOMWrapper) {
-      this.dom.appendChild(contentDOMWrapper)
+    if (this.contentDOM) {
+      // This contentDOM is thrown out by the reactComponent once it renders
+      // but which is then re-added with the handleRef
+      this.dom.appendChild(this.contentDOM)
     }
 
-    this.renderReactComponent(this.render(this.reactComponentProps, this.handleRef))
+    const useListenProps = createListenProps<NodeViewProps<P, A>>(this.dom, this.portalProvider)
+    this.renderReactComponent(this.render(
+      this.createProps(this.node),
+      this.handleRef,
+      useListenProps
+    ))
 
     return this
+  }
+
+  createProps(node: PMNode) : NodeViewProps<P, A> {
+    return {
+      componentProps: this.reactComponentProps,
+      attrs: node.attrs as A,
+    }
   }
 
   private renderReactComponent(component: React.ReactElement<any> | null) {
@@ -114,61 +129,58 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     return this.node.isInline ? document.createElement('span') : document.createElement('div')
   }
 
-  createContentDOM(): { wrapper: Node, contentDOM?: Node | null } | undefined {
+  /**
+   * If this.node is a leaf node, there shouldn't be a contentDOM.
+   * Perhaps a check should be in place to validate this..
+   */
+  createContentDOM(): Node | undefined {
     return undefined
   }
 
-  handleRef = (node: HTMLElement | null) => this._handleRef(node)
-
-  private _handleRef(node: HTMLElement | null) {
-    const contentDOM = this.contentDOMWrapper || this.contentDOM
-
-    // move the contentDOM node inside the inner reference after rendering
-    if (node && contentDOM && !node.contains(contentDOM)) {
-      node.appendChild(contentDOM)
+  /**
+   * After the component has been rendered, if this nodeView contains a contentDOM it is
+   * appended to the element the component chooses to by forwarding a ref to it.
+   * @param node the element the ref points to inside the component.
+   */
+  handleRef = (node: HTMLElement | null) => {
+    if (node && this.contentDOM && !node.contains(this.contentDOM)) {
+      node.appendChild(this.contentDOM)
     }
   }
 
-  render(props: P, forwardRef?: ForwardRef): React.ReactElement<any> | null {
+  render(
+    initialProps: NodeViewProps<P, A>,
+    forwardRef: ForwardRef,
+    useListenProps: (cb: (newProps: NodeViewProps<P, A>) => void) => void
+  ): React.ReactElement<any> | null {
     return this.reactComponent ? (
       <this.reactComponent
-        view={this.view}
-        getPos={this.getPos}
-        node={this.node}
-        forwardRef={forwardRef}
-        {...props}
+        ref={forwardRef}
+        initialProps={initialProps}
+        useListenProps={useListenProps}
       />
     ) : null
   }
 
-  update(node: PMNode, _decorations: Decoration[]) {
-    if (this.dom && !this.node.sameMarkup(node)) {
-      this.setDomAttrs(node, this.dom)
-    }
-
+  update(node: PMNode, _decorations: Decoration[]) {    
+    if (!this.dom) return false
+    // Sometimes it might happen that the current transaction transforms/splits a node
+    // into entirely different node (eg block nodes becoming paragraphs all of sudden)
+    // I guess you could do some magic there to avoid redrawing but for now I have little idea how to
+    // utilize it so this returns false and the update is processed by PM default behavior.
+    // Might be relevant
+    // https://discuss.prosemirror.net/t/how-to-modify-node-attribute-without-replacing-it-and-causing-it-to-re-render/2510/9
+    if (node.type !== this.node.type) return false
     this.node = node
-    // View should not process a re-render if this is false.
-    // We dont want to destroy the view, so we return true.
-    if (!this.viewShouldUpdate(node)) {
-      return true
-    }
-
-    this.renderReactComponent(
-      this.render(this.reactComponentProps, this.handleRef)
-    )
-
-    return true
-  }
-
-  viewShouldUpdate(nextNode: PMNode): boolean {
-    if (this._viewShouldUpdate) {
-      return this._viewShouldUpdate(nextNode)
-    }
+    // TODO pass down also type & marks & decorations if changed?
+    this.portalProvider.update(this.dom, this.createProps(node))
     return true
   }
 
   /**
    * Copies the attributes from a ProseMirror Node to a DOM node.
+   * NOT used at the moment since it messes up classes if used for component HTMLElement directly.
+   * Also I think it's better for component to decide how to set those attributes.
    * @param node The Prosemirror Node from which to source the attributes
    */
   setDomAttrs(node: PMNode, element: HTMLElement) {
@@ -177,11 +189,28 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     })
   }
 
-  destroy() {
-    if (!this.dom) {
-      return
+  /**
+   * Used to prevent changes to DOM inside the contentDOM from confusing PM to attempt
+   * "fixing" this nodeView by removing the added children etc
+   * https://github.com/remirror/remirror/blob/a2fa2c2b935a6fce99e3f79aad8a207c920e236e/packages/%40remirror/extension-react-component/src/react-node-view.tsx
+   * @param mutation
+   */
+  ignoreMutation(mutation: MutationRecord | {
+    type: 'selection'
+    target: Element
+  }): boolean {
+    if (mutation.type === 'selection') {
+      return false
+    } else if (!this.contentDOM) {
+      return true
     }
-    this.portalProvider.remove(this.dom)
+    return !this.contentDOM.contains(mutation.target)
+  }
+
+  destroy() {
+    if (this.dom) {
+      this.portalProvider.remove(this.dom)
+    }
     this.dom = undefined
     this.contentDOM = undefined
   }
@@ -191,7 +220,6 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
     portalProvider: PortalProvider,
     pluginsProvider: PluginsProvider,
     props?: ReactComponentProps,
-    viewShouldUpdate?: (nextNode: PMNode) => boolean,
   ) {
     return (node: PMNode, view: EditorView, getPos: (() => number) | boolean) =>
       new ReactNodeView(
@@ -202,7 +230,6 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
         pluginsProvider,
         props,
         component,
-        viewShouldUpdate,
       ).init()
   }
 }

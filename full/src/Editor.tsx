@@ -1,15 +1,22 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
+import { EditorView } from 'prosemirror-view'
 
 import { ReactEditorView } from './ReactEditorView'
-import { EditorContext, EditorActions, PluginsProvider } from './core'
+import { EditorContext, EditorViewProvider, PluginsProvider, AnalyticsProvider } from './core'
 import { PortalProvider, PortalRenderer } from './react/portals'
 
 import { FullPage } from './ui/FullPage'
 
+import { AnalyticsProps } from './core/AnalyticsProvider'
 import { EditorAppearance } from './types/editor-ui'
 
 export interface EditorProps {
+  disabled?: boolean
+  shouldTrack?: boolean
+  analytics?: AnalyticsProps
   appearance?: EditorAppearance
+  onEditorReady?: (viewProvider: EditorViewProvider) => void
+  onDocumentEdit?: (editorView: EditorView) => void
 }
 
 const components = {
@@ -20,22 +27,34 @@ export function Editor(props: EditorProps) {
   const {
     appearance = 'full-page',
   } = props
-  const editorActions = useMemo(() => new EditorActions, [])
+  // These three have to be inside useMemos for SSR compatibility
+  const viewProvider = useMemo(() => new EditorViewProvider, [])
   const portalProvider = useMemo(() => new PortalProvider, [])
   const pluginsProvider = useMemo(() => new PluginsProvider, [])
+  const analyticsProvider = useMemo(() => new AnalyticsProvider(props.analytics), [])
   const Component = useMemo(() => components[appearance], [appearance])
+
+  useEffect(() => {
+    () => {
+      // Clean-up mounted react components in portal provider
+      portalProvider.destroy()
+    }
+  }, [])
 
   return (
     <EditorContext.Provider value={{
-      editorActions,
+      viewProvider,
       portalProvider,
       pluginsProvider,
+      analyticsProvider
     }}>
       <ReactEditorView
         editorProps={props}
         EditorLayoutComponent={Component}
       />
-      <PortalRenderer/>
+      {/* <PortalRenderer /> */}
     </EditorContext.Provider>
   )
 }
+
+Editor.displayName = 'FullEditor'

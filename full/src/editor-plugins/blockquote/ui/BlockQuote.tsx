@@ -1,12 +1,24 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useState } from 'react'
 import styled from 'styled-components'
 
+import { UIProps } from '../'
+
 interface IProps {
+  className?: string
+  initialProps: UIProps,
+  useListenProps: (cb: (newProps: UIProps) => void) => void
 }
 
 export const BlockQuote = forwardRef((props: IProps, ref: any) => {
+  const { className, initialProps, useListenProps } = props
+  useListenProps(handlePropsUpdate)
+  const [attrs, setAttrs] = useState({ ...initialProps.attrs })
+
+  function handlePropsUpdate(newProps: any) {
+    console.log(newProps)
+  }
   return (
-    <StyledBlockQuote ref={ref}/>
+    <StyledBlockQuote className={className} ref={ref}/>
   )
 })
 

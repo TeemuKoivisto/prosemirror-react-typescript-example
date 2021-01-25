@@ -1,13 +1,15 @@
-import React from 'react'
-import { toggleMark, setBlockType, wrapIn } from 'prosemirror-commands'
-import { EditorView } from 'prosemirror-view'
-import { MarkType } from 'prosemirror-model'
+import React, { useEffect, useState } from 'react'
+import { toggleMark } from 'prosemirror-commands'
 import styled from 'styled-components'
 
 import {
-  MdFormatBold, MdFormatItalic, MdFormatUnderlined, MdArrowDownward, MdBorderHorizontal,
-  MdFormatListNumbered, MdTextFormat, MdSpaceBar
+  MdFormatBold, MdFormatItalic
 } from 'react-icons/md'
+
+import {
+  basePluginKey,
+  BaseState,
+} from '../editor-plugins/base'
 
 import { useEditorContext } from '../core/EditorContext'
 
@@ -27,31 +29,37 @@ interface IProps {
 
 export function Toolbar(props: IProps) {
   // Iterate over primaryToolbarComponents here
-  const { editorActions } = useEditorContext()
+  const { viewProvider, pluginsProvider } = useEditorContext()
+  const [currentMarks, setCurrentMarks] = useState<string[]>([])
 
-  function handleToggleMark(markSchema: MarkType) {
-    const view = editorActions.editorView
-    toggleMark(markSchema)(view.state, view.dispatch)
-    editorActions.focus()
+  useEffect(() => {
+    pluginsProvider.subscribe(basePluginKey, onBasePluginChange)
+    return () => {
+      pluginsProvider.unsubscribe(basePluginKey, onBasePluginChange)
+    }
+  }, [])
+
+  function onBasePluginChange(newPluginState: BaseState) {
+    setCurrentMarks(newPluginState.activeMarks)
   }
   function toggleBold() {
-    handleToggleMark(editorActions.editorView.state.schema.marks.strong)
+    viewProvider.execCommand(toggleMark(viewProvider.editorView.state.schema.marks.strong))
   }
   function toggleItalics() {
-    handleToggleMark(editorActions.editorView.state.schema.marks.em)
+    viewProvider.execCommand(toggleMark(viewProvider.editorView.state.schema.marks.em))
   }
   return (
     <Container>
       <TopRow>
         <MarkButton
-          active={false}
+          active={currentMarks.includes('strong')}
           name="bold"
           icon={<MdFormatBold size={24}/>}
           onClick={toggleBold}
         />
         <MarkButton
-          active={false}
-          name="italic"
+          active={currentMarks.includes('em')}
+          name="italics"
           icon={<MdFormatItalic size={24}/>}
           onClick={toggleItalics}
         />

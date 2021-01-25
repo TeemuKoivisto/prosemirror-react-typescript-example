@@ -3,30 +3,18 @@ import { NodeView, EditorView } from 'prosemirror-view'
 import { Node as PMNode } from 'prosemirror-model'
 
 import { PortalProvider } from '../../../react/portals'
-import { ReactNodeView, ForwardRef } from '../../../react/ReactNodeView'
+import { ReactNodeView } from '../../../react/ReactNodeView'
 
 import { BlockQuote } from '../ui/BlockQuote'
 
-import { BlockQuoteOptions } from '../'
+import { BlockQuoteOptions, IViewProps, IBlockQuoteAttrs, UIProps } from '../'
 import { PluginsProvider } from '../../../core'
 
-export interface IProps {
-  options?: BlockQuoteOptions;
-}
-
-export class BlockQuoteView extends ReactNodeView<IProps> {
+export class BlockQuoteView extends ReactNodeView<IViewProps, IBlockQuoteAttrs> {
   createContentDOM() {
-    const wrapper = document.createElement('div')
-    wrapper.classList.add(`${this.node.type.name}-dom-wrapper`);
-    return {
-      wrapper
-    }
-  }
-
-  render(_props: {}, forwardRef: ForwardRef) {
-    return (
-      <BlockQuote ref={forwardRef}/>
-    )
+    const contentDOM = document.createElement('div')
+    contentDOM.classList.add(`${this.node.type.name}__content-dom`)
+    return contentDOM
   }
 }
 
@@ -45,5 +33,6 @@ export function blockQuoteNodeView(
       {
         options,
       },
+      BlockQuote
     ).init()
 }
