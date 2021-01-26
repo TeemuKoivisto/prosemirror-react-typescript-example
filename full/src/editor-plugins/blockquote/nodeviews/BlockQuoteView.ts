@@ -1,4 +1,3 @@
-import React from 'react'
 import { NodeView, EditorView } from 'prosemirror-view'
 import { Node as PMNode } from 'prosemirror-model'
 
@@ -7,7 +6,7 @@ import { ReactNodeView } from '../../../react/ReactNodeView'
 
 import { BlockQuote } from '../ui/BlockQuote'
 
-import { BlockQuoteOptions, IViewProps, IBlockQuoteAttrs, UIProps } from '../'
+import { BlockQuoteOptions, IViewProps, IBlockQuoteAttrs } from '..'
 import { PluginsProvider } from '../../../core'
 
 export class BlockQuoteView extends ReactNodeView<IViewProps, IBlockQuoteAttrs> {

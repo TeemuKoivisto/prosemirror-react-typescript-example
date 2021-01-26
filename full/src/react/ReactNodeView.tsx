@@ -40,7 +40,6 @@ export class ReactNodeView<P = ReactComponentProps, A extends Attrs = {}> implem
   private pluginsProvider: PluginsProvider
   
   reactComponentProps: P
-  useListenProps?: (cb: (newProps: NodeViewProps<P, A>) => void) => void
 
   constructor(
     node: PMNode,
