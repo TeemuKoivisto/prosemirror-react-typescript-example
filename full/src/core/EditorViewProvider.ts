@@ -65,6 +65,10 @@ export class EditorViewProvider {
       plugins: this.editorView.state.plugins,
     }, rawValue)
     this.editorView.updateState(state)
+
+    // Fire an empty transaction to trigger PortalProvider to flush the created nodeViews
+    let tr = this.editorView.state.tr
+    this.editorView.dispatch(tr)
   }
 
   replaceDocument(
