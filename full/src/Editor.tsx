@@ -34,13 +34,6 @@ export function Editor(props: EditorProps) {
   const analyticsProvider = useMemo(() => new AnalyticsProvider(props.analytics), [])
   const Component = useMemo(() => components[appearance], [appearance])
 
-  useEffect(() => {
-    () => {
-      // Clean-up mounted react components in portal provider
-      portalProvider.destroy()
-    }
-  }, [])
-
   return (
     <EditorContext.Provider value={{
       viewProvider,
@@ -52,7 +45,7 @@ export function Editor(props: EditorProps) {
         editorProps={props}
         EditorLayoutComponent={Component}
       />
-      {/* <PortalRenderer /> */}
+      <PortalRenderer />
     </EditorContext.Provider>
   )
 }

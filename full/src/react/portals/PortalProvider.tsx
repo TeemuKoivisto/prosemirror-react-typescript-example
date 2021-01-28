@@ -1,91 +1,66 @@
 import React from 'react'
-// import { createPortal } from 'react-dom'
-import { render, unmountComponentAtNode } from 'react-dom'
+import { createPortal } from 'react-dom'
 
-export const PORTALS_UPDATE = 'portals-update'
-
-export interface MountedComponent {
-  component: React.ReactElement
-}
-interface Operation {
-  type: 'CREATE' | 'UPDATE' | 'DELETE'
-  props?: any
-}
 type Listener<T = any> = (data: T) => void
 
 export class PortalProvider {
 
-  mounted: Map<HTMLElement, MountedComponent> = new Map()
-  pendingUpdates: Map<HTMLElement, Operation> = new Map()
-  listeners: Map<HTMLElement, Set<Listener>> = new Map()
+  shouldUpdatePortals: boolean = true
+  portals: Map<HTMLElement, React.ReactPortal> = new Map()
+  pendingUpdatedProps: Map<HTMLElement, any> = new Map()
+  nodeViewListeners: Map<HTMLElement, Set<Listener>> = new Map()
+  portalRendererCallback?: (newPortals: Map<HTMLElement, React.ReactPortal>) => void
 
   render(component: React.ReactElement<any>, container: HTMLElement) {
-    this.mounted.set(container, {
-      component,
-    })
-    this.pendingUpdates.set(container, {
-      type: 'CREATE'
-    })
+    this.portals.set(container, createPortal(component, container))
+    this.shouldUpdatePortals = true
   }
 
   update(container: HTMLElement, props: any) {
-    this.pendingUpdates.set(container, {
-      type: 'UPDATE',
-      props,
-    })
+    this.pendingUpdatedProps.set(container, props)
   }
 
   remove(container: HTMLElement) {
-    this.pendingUpdates.set(container, {
-      type: 'DELETE'
-    })
+    this.portals.delete(container)
+    this.shouldUpdatePortals = true
   }
 
   flush() {
-    const updated = Array.from(this.pendingUpdates.entries()).map(([container, operation]) => {
-      const values = this.mounted.get(container)
-      if (!values) return
-      const { component } = values
-      if (operation.type === 'CREATE') {
-        render(component, container)
-      } else if (operation.type === 'UPDATE') {
-        const set = this.listeners.get(container)
-        if (set) {
-          set.forEach(cb => cb(operation.props))
-        }
-      } else if (operation.type === 'DELETE') {
-        unmountComponentAtNode(container)
+    Array.from(this.pendingUpdatedProps.entries()).map(([container, operation]) => {
+      const set = this.nodeViewListeners.get(container)
+      if (set) {
+        set.forEach(cb => cb(operation.props))
       }
-      this.pendingUpdates.delete(container)
-      return values
+      this.pendingUpdatedProps.delete(container)
     })
+    if (this.portalRendererCallback && this.shouldUpdatePortals) {
+      this.portalRendererCallback!(this.portals)
+      this.shouldUpdatePortals = false
+    }
   }
 
   subscribe(container: HTMLElement, cb: (data: any) => void) {
-    const set = this.listeners.get(container) ?? new Set()
+    const set = this.nodeViewListeners.get(container) ?? new Set()
     set.add(cb)
-    this.listeners.set(container, set)
+    this.nodeViewListeners.set(container, set)
   }
 
   unsubscribe(container: HTMLElement, cb: (data: any) => void) {
-    const set = this.listeners.get(container)
+    const set = this.nodeViewListeners.get(container)
     if (!set) return
     if (set.has(cb)) {
       set.delete(cb)
     }
     if (set.size === 0) {
-      this.listeners.delete(container)
+      this.nodeViewListeners.delete(container)
     } else {
-      this.listeners.set(container, set)
+      this.nodeViewListeners.set(container, set)
     }
   }
 
-  destroy() {
-    this.listeners = new Map()
-    Array.from(this.mounted.entries()).map(([container, values]) => {
-      unmountComponentAtNode(container)
-    })
-    this.mounted = new Map()
-    this.pendingUpdates = new Map()
+  addPortalRendererCallback(cb: (newPortals: Map<HTMLElement, React.ReactPortal>) => void) {
+    this.portalRendererCallback = cb
+    // Render the portals immediately
+    cb(this.portals)
   }
 }
