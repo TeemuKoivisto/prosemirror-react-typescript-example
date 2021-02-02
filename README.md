@@ -6,9 +6,10 @@ This repository shows three example editors: `atlassian`, `full` and `minimal` w
 
 ## How to install
 
-You should have Yarn installed globally. Then you can simply run:
+You should have Yarn installed globally.
 
-`yarn start` to start the `example-app` in http://localhost:3000
+1. Run: `yarn` to install all the dependencies using Yarn workspaces (no need to install them individually for each project).
+2. Then you can simply run: `yarn start` to start the `example-app` in http://localhost:3000
 
 The other examples can be executed with `yarn nextjs` and `yarn ssr`. Note: you should probably run only one example at the time since each commands starts the Rollup compilers in the editor subfolders.
 
