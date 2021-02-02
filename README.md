@@ -2,42 +2,39 @@
 
 Just the basic boilerplate needed to get going with this combo.
 
-Originally the editors were served together with the React example-app, but since that is only acceptable for toy apps the editors are now run and compiled as individual libraries which the example-app imports.
-
-I also added a SSR example since I was dabbling with Next.js and wondered how well rich-text editors and SSR go together. Not without friction, I must say.
-
-And in addition to that I added a Next.js version which works somewhat better, but I'm still annoyed at the empty second white frame when rendering the page using SSR. Bundling the app as a static HTML prevented this issue but the editors are still loaded outside of the initial render, which makes them jump around a little bit.
+This repository shows three example editors: `atlassian`, `full` and `minimal` which are imported as their own modules in three separate example apps: `example-app`, `example-ssr-app` and `example-nextjs-app`. The previous linking mess is now managed through Yarn workspaces.
 
 ## How to install
 
-To run the example-app locally you should for each `atlassian`, `full` and `minimal` editor execute:
+You should have Yarn installed globally. Then you can simply run:
 
-1. Install their dependencies: `cd full && yarn`
-2. Link the library as local npm module: `yarn link`
-3. Build the editor `yarn build` or start the compiler `yarn watch`
+`yarn start` to start the `example-app` in http://localhost:3000
 
-After having compiled and linked the editors, execute:
+The other examples can be executed with `yarn nextjs` and `yarn ssr`. Note: you should probably run only one example at the time since each commands starts the Rollup compilers in the editor subfolders.
 
-1. `cd example-app && yarn`
-2. `yarn link atlassian && link full && yarn link minimal`
-3. `yarn start`
+## Background
 
-The react app should open at http://localhost:3000 with the example editors. Any changes to the editors should automatically reload the page. To export types/methods/whatever from the editors for the example-app you should add the import to the `index.ts` eg:
+It has been a long-running project of mine to implement a rich-text editor. My transition has been from Draft.js to Slate.js to finally ProseMirror yet its definitely not easy to integrate ProseMirror with React to create a truly production-ready rich-text editor.
 
-```ts
-export { Editor } from './Editor'
-export { createNewUnderline } from ./actions
-```
+In the end what I decided to do was to copy the approach by Atlassian editor https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/ and then devise my approach on top of it. This has been so far a solid solution as their editor has been battle-tested for myriad of use cases I could have not even possibly fathomed. I have re-implemented as much as I have seen useful from their editor in the `atlassian` editor.
 
-## Design
+The other examples, `minimal` and `full`, are my own derivations where `minimal` should give the basic idea what is going on and `full` at some point in the future the best approach I have come up with.
 
-The aim of this project is to showcase how to bootstrap a PM-React-TS editor with the minimum boilerplate to build a PM-based rich-text editor in a sound and robust manner.
+Also during this time I have dabbled with SSR and Next.js so I added examples where I trial PM+React with server-side rendering. It's not unfeasible but it begs the question "why?" since so far I don't think there are that great benefits to SSR'ing a rich-text editor. I mean, what do you need it for? Faster initial render? But this isn't a blog page so I assume people are fine waiting a little when their editor loads. The only good reason would be SEO benefits but since when people have required public rich-text editors in SEO results?
 
-The `minimal` editor should contain the absolute minimum required.
+In my SSR examples I load the editor in both client and server but without actually rendering the editor doc HTML and hydrating the page from it. I just use `useEffect` to set the state before painting which should look perfectly the same as server-side rendering the page. You could probably hack something together that would do just that but I don't really have time for it.
 
-The `full` editor should, at one point, contain all the extra functionality that would make the experience of developing such editor somewhat painless. Although there definitely will be some pain.
+Also compared to the basic `example-app` server-side rendering the pages show an empty white frame before the actual app renders. Which to me is a bit weird (and also the `example-ssr-app` really messes up the loading of styles, haven't bothered to fix that). This is remedied with `example-nextjs-app` if you build the app with `yarn static` and then serve it: `yarn serve` (with however the atlassian editor still jumping around a little bit). Just something to keep in mind if you decide to use SSR. 
 
-The `atlassian` editor is a direct derivation of this editor https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/ to showcase how a real industrial-grade PM editor is implemented. Although I have to say, some parts of the code are not perhaps up to the latest React software engineering standards.
+## Architecture
+
+I think the majority of the code is pretty self-explanatory in the `minimal` and `full` examples. For the `atlassian` editor you kinda have to delve deep yourself into the original editor to figure out why things are what they are.
+
+But the basic gist of it is, you need a custom interface (EditorPlugin) to add extra logic to the basic PM plugins (`./full/src/editor-plugins`). These are loaded alongside the EditorState and EditorView and include for example all the basic PM plugin logic (pluginKey, normal pmPlugins, nodeviews, typings) as well as possible API providers, extensions, portalProvider, toolbar components and so forth. However, since Atlassian editor uses a separate repository to store the editor schema I use also a separate folder for schema. This keeps things simpler but definitely not entirely modular. 
+
+React components can hook up to the editor state by using EditorContext for watching either plugin changes or executing commands with editorViewProvider. Incase you want to use nodeViews as React components they use portalProvider to render themselves as portals which are updated inside each `dispatchTransaction` call to flush the changes only once (instead of updating them in each `update` call in each ReactNodeView separately).
+
+And well, that's about it. Syncing PM editor state to React components isn't always that easy and definitely there are still some enhancements that I should do. But in the mean time I guess the current approach is ok and so far it performs very well compared to eg Slate.js.
 
 Contributions or comments would be appreciated.
 

@@ -1,12 +1,12 @@
-# Full editor example
+# Full editor
 
-Heavily inspired by Atlassian's editor https://atlaskit.atlassian.com/packages/editor/editor-core
+This is supposed to be the final result of this project with all the necessary boilerplate derived from the `atlassian` editor but re-implemented in my own way.
 
-In conjunction with using React for NodeViews, also through sharing the same EditorContext the components have access to same global providers eg StyledComponents, translation and so on.
+## How to install
 
-Which saves a lot of trouble when sharing a lot of state without wanting to write a lot of boilerplate eg mapStateToProps to every component. Or at least that is what I think it does. Not sure yet.
+This project uses Yarn workspaces so you don't really have to install anything. By running `yarn` in the root folder all the dependencies should be installed automatically.
 
 ## Commands
 
-Can be found in `package.json`. Use `yarn <cmd>` or `npm run <cmd>` or sometimes `npm <cmd>` works too.
-
+* `yarn watch` starts the Rollup compiler and watches changes to the editor
+* `yarn build` compiles the code as both CommonJS and ES module.
