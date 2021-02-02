@@ -26,6 +26,8 @@ yarn-error.log*
 
 tmp/
 
+.eslintcache
+
 # example ssr app
 server-dist/
 client-dist/

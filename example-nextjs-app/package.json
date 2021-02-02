@@ -9,11 +9,11 @@
     "start": "next start"
   },
   "dependencies": {
-    "atlassian": "file:../atlassian",
-    "full": "file:../full",
+    "@pm-react-example/atlassian": "*",
+    "@pm-react-example/full": "*",
+    "@pm-react-example/minimal": "*",
     "lodash.debounce": "^4.0.8",
-    "minimal": "file:../minimal",
-    "next": "10.0.3",
+    "next": "10.0.6",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-icons": "^4.1.0",
@@ -21,10 +21,10 @@
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.6",
-    "@types/node": "14.14.14",
+    "@types/node": "14.14.22",
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
-    "@types/styled-components": "5.1.5",
+    "@types/styled-components": "5.1.7",
     "babel-plugin-styled-components": "^1.12.0",
     "serve": "^11.3.2",
     "typescript": "4.1"

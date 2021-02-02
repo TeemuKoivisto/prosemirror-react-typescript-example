@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { Editor } from 'minimal'
+import { Editor } from '@pm-react-example/minimal'
 
 import { PageHeader } from '../components/PageHeader'
 

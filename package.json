@@ -1,0 +1,19 @@
+{
+  "name": "pm-react-example",
+  "version": "0.5.2",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "*"
+  ],
+  "scripts": {
+    "build": "concurrently 'cd ./atlassian && yarn build' 'cd ./full && yarn build' 'cd ./minimal && yarn build'",
+    "deploy": "yarn build && cd example-app && yarn deploy",
+    "start": "concurrently 'cd ./atlassian && yarn watch' 'cd ./full && yarn watch' 'cd ./minimal && yarn watch' 'cd example-app && yarn start'",
+    "ssr": "concurrently 'cd ./atlassian && yarn watch' 'cd ./full && yarn watch' 'cd ./minimal && yarn watch' 'cd example-ssr-app && yarn watch:client' 'cd example-ssr-app && yarn watch:server' 'cd example-ssr-app && yarn dev'",
+    "nextjs": "concurrently 'cd ./atlassian && yarn watch' 'cd ./full && yarn watch' 'cd ./minimal && yarn watch' 'cd example-nextjs-app && yarn dev'"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}

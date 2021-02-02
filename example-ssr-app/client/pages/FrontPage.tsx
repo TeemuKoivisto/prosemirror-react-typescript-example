@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 import debounce from 'lodash.debounce'
 
-import { Editor, EditorViewProvider, JSONEditorState } from 'full'
+import { Editor, EditorViewProvider, JSONEditorState } from '@pm-react-example/full'
 
 import { PageHeader } from '../components/PageHeader'
 
