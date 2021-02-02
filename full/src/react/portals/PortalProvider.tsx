@@ -26,10 +26,10 @@ export class PortalProvider {
   }
 
   flush() {
-    Array.from(this.pendingUpdatedProps.entries()).map(([container, operation]) => {
+    Array.from(this.pendingUpdatedProps.entries()).map(([container, props]) => {
       const set = this.nodeViewListeners.get(container)
       if (set) {
-        set.forEach(cb => cb(operation.props))
+        set.forEach(cb => cb(props))
       }
       this.pendingUpdatedProps.delete(container)
     })
