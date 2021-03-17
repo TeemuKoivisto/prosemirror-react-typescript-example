@@ -3,6 +3,10 @@ import { DirectEditorProps, EditorView } from 'prosemirror-view'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { Node as PMNode } from 'prosemirror-model'
 import applyDevTools from 'prosemirror-dev-tools'
+import {
+  collab, receiveTransaction, sendableSteps, getVersion
+} from 'prosemirror-collab'
+import { Step } from 'prosemirror-transform'
 
 import { useEditorContext } from './core/EditorContext'
 
@@ -15,6 +19,12 @@ import {
   validNode,
 } from './utils/nodes'
 import { getDocStructure, SimplifiedNode } from './utils/document-logger'
+import {
+  sendSteps,
+  getDocument,
+  fetchEvents,
+  IEventsResponse,
+} from './collab-api'
 
 import useSsrLayoutEffect from './react/hooks/useSsrLayoutEffect'
 
@@ -24,6 +34,8 @@ interface IProps {
   editorProps: EditorProps
   EditorLayoutComponent: (props: any) => JSX.Element
 }
+
+let collabVersion = 0
 
 export function ReactEditorView(props: IProps) {
   const { editorProps, EditorLayoutComponent } = props
@@ -39,6 +51,16 @@ export function ReactEditorView(props: IProps) {
       const view = createEditorView(editorViewDOM, pmEditorProps)
       viewProvider.init(view)
       editorProps.onEditorReady && editorProps.onEditorReady(viewProvider)
+      if (editorProps.collab) {
+        getDocument().then(data => {
+          viewProvider.replaceDocument(data.doc)
+          collabVersion = data.version
+        })
+        subscribeToCollab()
+      }
+    }
+    return () => {
+      viewProvider.editorView.destroy()
     }
   }, [])
 
@@ -53,7 +75,9 @@ export function ReactEditorView(props: IProps) {
       portalProvider: portalProvider,
       pluginsProvider: pluginsProvider,
     })
-
+    
+    if (editorProps.collab) plugins.push(collab())
+    
     return EditorState.create({
       schema,
       plugins,
@@ -114,6 +138,7 @@ export function ReactEditorView(props: IProps) {
       analyticsProvider.perf.debug('EditorView', 'dispatchTransaction flush')
       portalProvider.flush()
       analyticsProvider.perf.stop('EditorView', 'dispatchTransaction flush', 0)
+      editorProps.collab && sendStepsToCollabServer(editorState)
       editorProps.onDocumentEdit && editorProps.onDocumentEdit(editorView)
     } else {
       const invalidNodes = nodes
@@ -128,6 +153,48 @@ export function ReactEditorView(props: IProps) {
     }
 
     analyticsProvider.perf.stop('EditorView', 'dispatchTransaction', 1000)
+  }
+
+  async function subscribeToCollab() {
+    const response = await fetchEvents(collabVersion)
+    if (response.status == 502) {
+      // Status 502 is a connection timeout error,
+      // may happen when the connection was pending for too long,
+      // and the remote server or a proxy closed it
+      // let's reconnect
+      await subscribeToCollab()
+    } else if (response.status != 200) {
+      // Reconnect in one second
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      await subscribeToCollab()
+    } else {
+      // Get and show the message
+      const data: IEventsResponse = await response.json()
+      handleCollabEvents(data)
+      subscribeToCollab()
+    }
+  }
+
+  function handleCollabEvents(data: IEventsResponse) {
+    const { editorView } = viewProvider
+    let tr = receiveTransaction(
+      editorView.state,
+      data.steps.map(j => Step.fromJSON(editorView.state.schema, j)),
+      data.clientIDs
+    )
+    editorView.dispatch(tr)
+    collabVersion = data.version
+  }
+
+  async function sendStepsToCollabServer(newState: EditorState) {
+    const sendable = sendableSteps(newState)
+    if (sendable) {
+      const { version } = await sendSteps({
+        ...sendable,
+        version: collabVersion
+      })
+      if (version) collabVersion = version
+    }
   }
 
   return (

@@ -6,6 +6,8 @@ import {
 } from './editor-plugins'
 
 import { Preset } from './core/create/preset'
+import { createSchema } from './core/create/create-schema'
+import { processPluginsList } from './core/create/create-plugins'
 
 export function createDefaultEditorPlugins(props: EditorProps, prevProps?: EditorProps): EditorPlugin[] {
   const preset = new Preset<EditorPlugin>()
@@ -15,4 +17,12 @@ export function createDefaultEditorPlugins(props: EditorProps, prevProps?: Edito
   preset.add(blockQuotePlugin)
 
   return preset.getEditorPlugins()
+}
+
+export function createDefaultSchema() {
+  const editorProps: EditorProps = {}
+  const editorPlugins = createDefaultEditorPlugins(editorProps)
+  const config = processPluginsList(editorPlugins)
+  const schema = createSchema(config)
+  return schema
 }

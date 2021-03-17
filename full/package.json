@@ -15,11 +15,13 @@
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^11.1.1",
+    "@types/prosemirror-collab": "^1.1.1",
     "@types/prosemirror-commands": "^1.0.4",
     "@types/prosemirror-history": "^1.0.2",
     "@types/prosemirror-keymap": "^1.0.4",
     "@types/prosemirror-model": "^1.11.2",
     "@types/prosemirror-state": "^1.2.6",
+    "@types/prosemirror-transform": "^1.1.2",
     "@types/prosemirror-view": "^1.17.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
@@ -38,6 +40,7 @@
     "styled-components": ">=5.2.1"
   },
   "dependencies": {
+    "prosemirror-collab": "^1.2.2",
     "prosemirror-commands": "^1.1.5",
     "prosemirror-dev-tools": "^3.0.2",
     "prosemirror-history": "^1.1.3",

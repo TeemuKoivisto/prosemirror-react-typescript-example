@@ -29,7 +29,7 @@ class EditorStore {
   setEditorView = (viewProvider: EditorViewProvider) => {
     this.viewProvider = viewProvider
     if (this.currentEditorState) {
-      viewProvider.replaceState(this.currentEditorState)
+      // viewProvider.replaceState(this.currentEditorState)
     }
   }
 
@@ -59,6 +59,7 @@ export function FrontPage(props: IProps) {
             logLevel: 'debug',
             logToConsole: true,
           }}
+          collab={true}
           onDocumentEdit={handleDocumentEdit}
           onEditorReady={handleEditorReady}
         />

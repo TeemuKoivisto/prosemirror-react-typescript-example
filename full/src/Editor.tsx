@@ -15,6 +15,7 @@ export interface EditorProps {
   shouldTrack?: boolean
   analytics?: AnalyticsProps
   appearance?: EditorAppearance
+  collab?: boolean
   onEditorReady?: (viewProvider: EditorViewProvider) => void
   onDocumentEdit?: (editorView: EditorView) => void
 }
