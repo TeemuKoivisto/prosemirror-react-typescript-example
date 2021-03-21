@@ -2,6 +2,8 @@ import {
   EditorViewProvider,
   JSONEditorState,
 } from '@pm-react-example/full'
+import { Node as PMNode } from 'prosemirror-model'
+import { PMDoc } from '../types/document'
 
 export class EditorStore {
 
@@ -25,13 +27,22 @@ export class EditorStore {
     }
   }
 
-  syncCurrentEditorState = () => {
+  syncStoredEditorState = () => {
     const newState = this.viewProvider!.stateToJSON()
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(newState))
+    return newState
   }
 
   createEmptyDoc = () => {
     const json = JSON.parse('{"type":"doc","content":[{"type":"paragraph","content":[]}]}')
-    return this.viewProvider?.editorView.state.schema.nodeFromJSON(json)
+    const node = this.viewProvider?.editorView.state.schema.nodeFromJSON(json)
+    node.check()
+    return json
+  }
+
+  setCurrentDoc = (doc: PMDoc) => {
+    this.viewProvider?.replaceDocument(doc)
+    const newState = this.viewProvider!.stateToJSON()
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(newState))
   }
 }

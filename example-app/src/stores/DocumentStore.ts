@@ -3,7 +3,7 @@ import { EditorStore } from './EditorStore'
 
 import { uuidv4 } from '../utils'
 
-import { IDBDocument } from '../types/document'
+import { IDBDocument, PMDoc } from '../types/document'
 
 export class DocumentStore {
 
@@ -37,15 +37,33 @@ export class DocumentStore {
 
   @action setCurrentDocument = (id: string) => {
     this.currentDocument = this.documentsMap.get(id) ?? null
+    if (this.currentDocument) {
+      this.editorStore.setCurrentDoc(this.currentDocument.doc)
+    }
   }
 
   @action createNewDocument = () => {
     const id = uuidv4()
     const doc = this.editorStore.createEmptyDoc()
-    this.documentsMap.set(id, { id, title: 'Untitled', doc })
+    const newDocument = { id, title: 'Untitled', doc }
+    this.documentsMap.set(id, newDocument)
+    this.currentDocument = newDocument
+    this.editorStore.setCurrentDoc(doc)
+    return newDocument
   }
 
   @action updateDocument = (id: string, doc: IDBDocument) => {
     this.documentsMap.set(id, doc)
+  }
+
+  @action syncDocument = () => {
+    const { doc } = this.editorStore.syncStoredEditorState()
+    if (!this.currentDocument) {
+      const id = uuidv4()
+      const newDocument = { id, title: 'Untitled', doc }
+      this.documentsMap.set(id, newDocument)
+      this.currentDocument = newDocument
+    }
+    this.documentsMap.set(this.currentDocument.id, this.currentDocument)
   }
 }

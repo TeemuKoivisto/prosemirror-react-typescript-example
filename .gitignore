@@ -38,4 +38,4 @@ out/
 .vercel
 
 # collab server
-./collab-server/data.json
+data.json

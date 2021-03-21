@@ -24,7 +24,7 @@ export const FrontPage = inject((stores: Stores) => ({
 }))
 (observer((props: IProps) => {
   const { className, documentStore, editorStore } = props
-  const debouncedSync = useMemo(() => debounce(editorStore!.syncCurrentEditorState, 500), [])
+  const debouncedSync = useMemo(() => debounce(documentStore!.syncDocument, 500), [])
   const collabEnabled = false
 
   function handleCollabClick() {

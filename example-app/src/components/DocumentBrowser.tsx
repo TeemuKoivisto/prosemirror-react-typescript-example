@@ -15,6 +15,7 @@ interface IProps {
   currentDocument?: IDBDocument | null
   setCurrentDocument?: (id: string) => void
   createNewDocument?: () => void
+  syncDocument?: () => void
 }
 
 const DocumentBrowserEl = inject((stores: Stores) => ({
@@ -22,17 +23,19 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   currentDocument: stores.documentStore.currentDocument,
   setCurrentDocument: stores.documentStore.setCurrentDocument,
   createNewDocument: stores.documentStore.createNewDocument,
+  syncDocument: stores.documentStore.syncDocument,
   editorStore: stores.editorStore,
 }))
 (observer((props: IProps) => {
   const {
-    className, documents, currentDocument, setCurrentDocument, createNewDocument
+    className, documents, currentDocument, setCurrentDocument, createNewDocument, syncDocument
   } = props
   function onDocumentClick(id: string) {
     setCurrentDocument!(id)
   }
   function onNewDocumentClick() {
     createNewDocument!()
+    syncDocument!()
   }
   return (
     <div className={className}>
@@ -79,7 +82,7 @@ const DocumentsList = styled.ul`
 `
 const Doc = styled.li<{ selected?: boolean }>`
   background: ${({ selected }) => selected ? '#eee' : '#eee'};
-  border: ${({ selected }) => selected && '1px solid #222'};
+  border: 1px solid ${({ selected }) => selected ? '#222' : 'transparent'};
   border-radius: 2px;
   cursor: pointer;
   padding: 0.5rem;
