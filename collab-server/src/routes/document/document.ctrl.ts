@@ -46,6 +46,19 @@ function outputEvents(inst: CollaborativeInstance, data: {
   }
 }
 
+export const getDocuments = async (
+  req: IRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const docs = docService.getDocuments()
+    res.json({ docs })
+  } catch (err) {
+    next(err)
+  }
+}
+
 export const getDocument = async (
   req: IRequest<{}, {}, { documentId: string }>,
   res: Response,
@@ -62,7 +75,6 @@ export const getDocument = async (
       userCount: instance.userCount,
       version: instance.currentVersion,
     })
-
   } catch (err) {
     next(err)
   }

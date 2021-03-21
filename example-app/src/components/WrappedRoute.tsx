@@ -31,7 +31,6 @@ export const WrappedRoute = ({ component, ...rest } : IWrappedRoute) =>
   <Route {...rest} render={renderWrapper(component)}/>
 
 const MainWrapper = styled.div`
-  background: snow;
   min-height: 100vh;
 `
 const MainContainer = styled.main`

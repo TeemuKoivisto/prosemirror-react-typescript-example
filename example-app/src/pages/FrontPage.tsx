@@ -1,72 +1,62 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import debounce from 'lodash.debounce'
+import { inject, observer } from 'mobx-react'
 
-import { Editor, EditorViewProvider, JSONEditorState } from '@pm-react-example/full'
+import { Editor, EditorViewProvider } from '@pm-react-example/full'
 
 import { PageHeader } from '../components/PageHeader'
+import { DocumentBrowser } from '../components/DocumentBrowser'
+
+import { Stores } from '../stores'
+import { DocumentStore } from '../stores/DocumentStore'
+import { EditorStore } from '../stores/EditorStore'
 
 interface IProps {
   className?: string
+  documentStore?: DocumentStore
+  editorStore?: EditorStore
 }
 
-class EditorStore {
+export const FrontPage = inject((stores: Stores) => ({
+  documentStore: stores.documentStore,
+  editorStore: stores.editorStore,
+}))
+(observer((props: IProps) => {
+  const { className, documentStore, editorStore } = props
+  const debouncedSync = useMemo(() => debounce(editorStore!.syncCurrentEditorState, 500), [])
+  const collabEnabled = false
 
-  viewProvider?: EditorViewProvider
-  currentEditorState?: JSONEditorState
-  STORAGE_KEY = 'full-editor-state'
-
-  constructor() {
-    if (typeof window !== 'undefined') {
-      const existing = localStorage.getItem(this.STORAGE_KEY)
-      if (existing && existing !== null && existing.length > 0) {
-        let stored = JSON.parse(existing)
-        this.currentEditorState = stored
-      }
-    }
+  function handleCollabClick() {
   }
-
-  setEditorView = (viewProvider: EditorViewProvider) => {
-    this.viewProvider = viewProvider
-    if (this.currentEditorState) {
-      // viewProvider.replaceState(this.currentEditorState)
-    }
-  }
-
-  syncCurrentEditorState = () => {
-    const newState = this.viewProvider!.stateToJSON()
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(newState))
-  }
-}
-
-export function FrontPage(props: IProps) {
-  const { className } = props
-  const editorStore = useMemo(() => new EditorStore(), [])
-  const debouncedSync = useMemo(() => debounce(editorStore.syncCurrentEditorState, 500), [])
-
   function handleDocumentEdit() {
     debouncedSync()
   }
   function handleEditorReady(viewProvider: EditorViewProvider) {
-    editorStore.setEditorView(viewProvider)
+    editorStore!.setEditorView(viewProvider)
   }
   return (
     <Container className={className}>
-      <PageHeader>
-        <Editor
-          analytics={{
-            shouldTrack: true,
-            logLevel: 'debug',
-            logToConsole: true,
-          }}
-          collab={true}
-          onDocumentEdit={handleDocumentEdit}
-          onEditorReady={handleEditorReady}
-        />
-      </PageHeader>
+      <PageHeader />
+      <DocumentBrowser />
+      <Button onClick={handleCollabClick}>{collabEnabled ? 'Disable' : 'Enable'} collab</Button>
+      <Editor
+        analytics={{
+          shouldTrack: true,
+          logLevel: 'debug',
+          logToConsole: true,
+        }}
+        collab={collabEnabled}
+        onDocumentEdit={handleDocumentEdit}
+        onEditorReady={handleEditorReady}
+      />
     </Container>
   )
-}
+}))
 
 const Container = styled.div`
+  & > ${DocumentBrowser} {
+    margin: 1rem 0;
+  }
 `
+const Button = styled.button``

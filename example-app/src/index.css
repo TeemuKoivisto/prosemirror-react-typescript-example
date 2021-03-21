@@ -1,0 +1,17 @@
+:root {
+  --color-primary: #551a8b;
+  --light-gray: #dadce0;
+  --text-dark: #222;
+}
+html {
+  font-size: 16px;
+  color: var(--text-dark);
+}
+body {
+  background: snow;
+  margin: 0.5rem;
+  padding: 0;
+}
+* {
+  box-sizing: border-box;
+}

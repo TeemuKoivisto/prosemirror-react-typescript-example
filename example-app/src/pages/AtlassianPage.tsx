@@ -13,9 +13,8 @@ export function AtlassianPage(props: IProps) {
   const { className } = props
   return (
     <Container className={className}>
-      <PageHeader>
-        <Editor performanceTracking/>
-      </PageHeader>
+      <PageHeader />
+      <Editor performanceTracking/>
     </Container>
   )
 }

@@ -3,11 +3,10 @@ import styled from 'styled-components'
 
 interface IProps {
   className?: string
-  children: React.ReactNode
 }
 
 export function PageHeader(props: IProps) {
-  const { className, children } = props
+  const { className } = props
   return (
     <Container className={className}>
       <header>
@@ -23,7 +22,6 @@ export function PageHeader(props: IProps) {
           <li><strong>Enter (Ctrl + alt + s</strong> also for full): Split current block</li>
           <li><b>/</b>: Quick insert (Atlassian editor only)</li>
         </ul>
-        { children }
       </div>
     </Container>
   )

@@ -46,13 +46,12 @@ export class CollaborativeInstance {
     if (this.currentVersion != version) return false
     let doc = this.doc
     const maps = []
-
     const patchedSteps: PatchedStep[] = []
 
     for (let i = 0; i < steps.length; i++) {
       const step = steps[i] as PatchedStep
       step.clientID = clientID
-      let result = step.apply(doc)
+      const result = step.apply(doc)
       if (result.doc) doc = result.doc
       maps.push(step.getMap())
       patchedSteps.push(step)
@@ -68,7 +67,7 @@ export class CollaborativeInstance {
     return {
       version: this.currentVersion,
       // cursors: this.getCursors(user)
-    };
+    }
   }
 
   getEvents(version: number) {

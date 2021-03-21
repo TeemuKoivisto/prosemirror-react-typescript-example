@@ -55,8 +55,8 @@ export function ReactEditorView(props: IProps) {
         getDocument().then(data => {
           viewProvider.replaceDocument(data.doc)
           collabVersion = data.version
+          subscribeToCollab()
         })
-        subscribeToCollab()
       }
     }
     return () => {
