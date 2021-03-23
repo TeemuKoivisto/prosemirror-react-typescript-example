@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { EditorView } from 'prosemirror-view'
 
 import { ReactEditorView } from './ReactEditorView'
@@ -15,7 +15,9 @@ export interface EditorProps {
   shouldTrack?: boolean
   analytics?: AnalyticsProps
   appearance?: EditorAppearance
-  collab?: boolean
+  collab?: {
+    documentId: string
+  }
   onEditorReady?: (viewProvider: EditorViewProvider) => void
   onDocumentEdit?: (editorView: EditorView) => void
 }

@@ -3,7 +3,11 @@ import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 
 import {
-  FiPlus, FiRefreshCw
+  FiCloud,
+  FiCloudOff,
+  FiPlus,
+  FiUser,
+  FiUsers,
 } from 'react-icons/fi'
 
 import { Stores } from '../stores'
@@ -13,6 +17,10 @@ interface IProps {
   className?: string
   documents?: IDBDocument[]
   currentDocument?: IDBDocument | null
+  syncToAPI?: boolean
+  collabEnabled?: boolean
+  toggleSyncToAPI?: () => void
+  toggleCollab?: () => void
   setCurrentDocument?: (id: string) => void
   createNewDocument?: () => void
   syncDocument?: () => void
@@ -21,15 +29,26 @@ interface IProps {
 const DocumentBrowserEl = inject((stores: Stores) => ({
   documents: stores.documentStore.documents,
   currentDocument: stores.documentStore.currentDocument,
+  syncToAPI: stores.documentStore.syncToAPI,
+  collabEnabled: stores.editorStore.collabEnabled,
+  toggleSyncToAPI: stores.documentStore.toggleSyncToAPI,
+  toggleCollab: stores.editorStore.toggleCollab,
   setCurrentDocument: stores.documentStore.setCurrentDocument,
   createNewDocument: stores.documentStore.createNewDocument,
   syncDocument: stores.documentStore.syncDocument,
-  editorStore: stores.editorStore,
 }))
 (observer((props: IProps) => {
   const {
-    className, documents, currentDocument, setCurrentDocument, createNewDocument, syncDocument
+    className, documents, currentDocument, syncToAPI, collabEnabled,
+    toggleSyncToAPI, toggleCollab, setCurrentDocument, createNewDocument, syncDocument
   } = props
+  function handleSyncClick() {
+    toggleSyncToAPI!()
+  }
+  function handleCollabClick() {
+    if (!syncToAPI) toggleSyncToAPI!()
+    toggleCollab!()
+  }
   function onDocumentClick(id: string) {
     setCurrentDocument!(id)
   }
@@ -39,7 +58,15 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   }
   return (
     <div className={className}>
-      <SyncButton><FiRefreshCw size={16}/></SyncButton>
+      <SyncButton active={syncToAPI} onClick={handleSyncClick} title="Toggle syncing of documents">
+        { syncToAPI ? <FiCloud size={16}/> : <FiCloudOff size={16}/> }
+      </SyncButton>
+      <SyncButton active={collabEnabled} onClick={handleCollabClick} title="Toggle collaborative editing">
+        { collabEnabled ? <FiUsers size={16}/> : <FiUser size={16}/> }
+      </SyncButton>
+      <AddNewDocButton onClick={onNewDocumentClick}>
+        <FiPlus size={20}/>
+      </AddNewDocButton>
       <DocumentsList>
         { documents!.map(d =>
         <Doc
@@ -50,16 +77,13 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
           {d.title}
         </Doc>  
         )}
-        <AddNewDoc onClick={onNewDocumentClick}>
-          <FiPlus size={20}/>
-        </AddNewDoc>
       </DocumentsList>
     </div>
   )
 }))
 
-const SyncButton = styled.button`
-  background: #fff;
+const SyncButton = styled.button<{ active?: boolean }> `
+  background: ${({ active }) => active ? '#b9ceff' : '#e2e2e2'};
   border: 0;
   border-radius: 100%;
   cursor: pointer;
@@ -68,13 +92,14 @@ const SyncButton = styled.button`
   padding: 0.5rem;
   transition: 1s background cubic-bezier(0.075, 0.82, 0.165, 1);
   &:hover {
-    background: #bbb;
+    background: ${({ active }) => active ? '#9a69c7' : '#bbb'};
   }
 `
 const DocumentsList = styled.ul`
   display: flex;
   list-style: none;
   margin: 0;
+  overflow-x: scroll;
   padding: 0;
   & > * + * {
     margin-left: 1rem;
@@ -91,13 +116,14 @@ const Doc = styled.li<{ selected?: boolean }>`
     background: #bbb;
   }
 `
-const AddNewDoc = styled.button`
+const AddNewDocButton = styled.button`
   background: #9a69c7;
   border: 0;
   border-radius: 2px;
   color: #fff;
   cursor: pointer;
-  padding: 0;
+  margin-right: 1rem;
+  padding: 0.5rem;
   transition: 1s background cubic-bezier(0.075, 0.82, 0.165, 1);
   width: 35px;
   &:hover {

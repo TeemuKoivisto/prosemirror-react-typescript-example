@@ -1,17 +1,20 @@
+import { action, observable, makeObservable } from 'mobx'
 import {
   EditorViewProvider,
   JSONEditorState,
 } from '@pm-react-example/full'
-import { Node as PMNode } from 'prosemirror-model'
 import { PMDoc } from '../types/document'
 
 export class EditorStore {
 
   viewProvider?: EditorViewProvider
   currentEditorState?: JSONEditorState
+  @observable collabEnabled: boolean = false
+  @observable collabVersion: number = 0
   STORAGE_KEY = 'full-editor-state'
 
   constructor() {
+    makeObservable(this)
     if (typeof window === 'undefined') return
     const existing = localStorage.getItem(this.STORAGE_KEY)
     if (existing && existing !== null && existing.length > 0) {
@@ -44,5 +47,10 @@ export class EditorStore {
     this.viewProvider?.replaceDocument(doc)
     const newState = this.viewProvider!.stateToJSON()
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(newState))
+  }
+
+  @action toggleCollab = () => {
+    this.collabEnabled = !this.collabEnabled
+    this.collabVersion = 0
   }
 }

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { DirectEditorProps, EditorView } from 'prosemirror-view'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { Node as PMNode } from 'prosemirror-model'
@@ -7,6 +7,8 @@ import {
   collab, receiveTransaction, sendableSteps, getVersion
 } from 'prosemirror-collab'
 import { Step } from 'prosemirror-transform'
+
+import { INewStepsResponse } from '@pm-react-example/shared'
 
 import { useEditorContext } from './core/EditorContext'
 
@@ -23,7 +25,6 @@ import {
   sendSteps,
   getDocument,
   fetchEvents,
-  IEventsResponse,
 } from './collab-api'
 
 import useSsrLayoutEffect from './react/hooks/useSsrLayoutEffect'
@@ -63,6 +64,16 @@ export function ReactEditorView(props: IProps) {
       viewProvider.editorView.destroy()
     }
   }, [])
+
+  useEffect(() => {
+    if (editorProps.collab?.documentId) {
+      getDocument().then(data => {
+        viewProvider.replaceDocument(data.doc)
+        collabVersion = data.version
+        subscribeToCollab()
+      })
+    }
+  }, [editorProps.collab?.documentId])
 
   function createEditorState() {
     const editorPlugins = createDefaultEditorPlugins(editorProps)
@@ -156,6 +167,7 @@ export function ReactEditorView(props: IProps) {
   }
 
   async function subscribeToCollab() {
+    if (!editorProps.collab) return
     const response = await fetchEvents(collabVersion)
     if (response.status == 502) {
       // Status 502 is a connection timeout error,
@@ -169,13 +181,13 @@ export function ReactEditorView(props: IProps) {
       await subscribeToCollab()
     } else {
       // Get and show the message
-      const data: IEventsResponse = await response.json()
+      const data: INewStepsResponse = await response.json()
       handleCollabEvents(data)
       subscribeToCollab()
     }
   }
 
-  function handleCollabEvents(data: IEventsResponse) {
+  function handleCollabEvents(data: INewStepsResponse) {
     const { editorView } = viewProvider
     let tr = receiveTransaction(
       editorView.state,
@@ -189,8 +201,11 @@ export function ReactEditorView(props: IProps) {
   async function sendStepsToCollabServer(newState: EditorState) {
     const sendable = sendableSteps(newState)
     if (sendable) {
+      // TODO hackz
+      const clientID = sendable.clientID as number
       const { version } = await sendSteps({
         ...sendable,
+        clientID,
         version: collabVersion
       })
       if (version) collabVersion = version

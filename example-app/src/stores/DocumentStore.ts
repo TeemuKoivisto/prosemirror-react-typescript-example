@@ -1,14 +1,15 @@
 import { action, computed, observable, makeObservable } from 'mobx'
 import { EditorStore } from './EditorStore'
 
-import { uuidv4 } from '../utils'
+import { IDBDocument, uuidv4 } from '@pm-react-example/shared'
 
-import { IDBDocument, PMDoc } from '../types/document'
+import { getDocuments } from '../document-api'
 
 export class DocumentStore {
 
   @observable documentsMap: Map<string, IDBDocument> = new Map()
   @observable currentDocument: IDBDocument | null = null
+  @observable syncToAPI: boolean = false
   STORAGE_KEY = 'full-editor-documents'
 
   editorStore: EditorStore
@@ -33,6 +34,31 @@ export class DocumentStore {
     return Array.from(this.documentsMap.entries()).map(
       ([_id, doc]) => doc
     )
+  }
+
+  @action toggleSyncToAPI = async () => {
+    this.syncToAPI = !this.syncToAPI
+    if (this.syncToAPI) {
+      const { docs } = await getDocuments()
+      this.handleDocumentsChanged(docs)
+    }
+  }
+
+  /**
+   * Synchronizes the added and deleted documents NOT the content (this done through the editor collab sync)
+   * @param resp 
+   */
+  @action handleDocumentsChanged = (docs: IDBDocument[]) => {
+    const currentDocsIds = Array.from(this.documentsMap.entries()).map(([id, _doc]) => id)
+    docs.forEach(d => {
+      const idx = currentDocsIds.indexOf(d.id)
+      if (idx === -1) {
+        this.documentsMap.set(d.id, d)
+      }
+      currentDocsIds.splice(idx, 1)
+    })
+    // TODO use this to save the locally created documents
+    return currentDocsIds
   }
 
   @action setCurrentDocument = (id: string) => {

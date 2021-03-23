@@ -1,7 +1,8 @@
 import { Step } from 'prosemirror-transform'
 import { Node as PMNode } from 'prosemirror-model'
 
-import { IDBDocument, PatchedStep } from '../../types/document'
+import { IDBDocument } from '@pm-react-example/shared'
+import { PatchedStep } from '../../types/document'
 
 const MAX_STEP_HISTORY = 10000
 
@@ -9,7 +10,7 @@ export class CollaborativeInstance {
 
   currentVersion: number = 0
   doc: PMNode
-  documentId: number
+  documentId: string
   steps: PatchedStep[] = []
   lastActive: number = Date.now()
   users: {[ip: string]: boolean} = {}
@@ -19,9 +20,9 @@ export class CollaborativeInstance {
   }} = {}
   collectingTimeoutId: NodeJS.Timeout | null = null
 
-  constructor(document: IDBDocument) {
-    this.doc = document.doc
-    this.documentId = document.id
+  constructor(doc: PMNode, documentId: string) {
+    this.doc = doc
+    this.documentId = documentId
   }
 
   addPendingRequest(ip: string, onDocChanges: () => void) {

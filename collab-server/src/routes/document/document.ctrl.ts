@@ -8,6 +8,9 @@ import { CustomError } from '../../common/error'
 import { PatchedStep } from '../../types/document'
 import { IRequest } from '../../types/request'
 import { CollaborativeInstance } from './CollaborativeInstance'
+import {
+  IGetDocumentsResponse, IGetDocumentResponse, ISaveCollabStepsParams, INewStepsResponse
+} from '@pm-react-example/shared'
 
 interface IGetDocEventsQueryParams {
   version: number
@@ -19,8 +22,8 @@ interface ISaveDocParams {
 }
 
 function reqIP(req: Request) : string {
-  if (req.headers["x-forwarded-for"]) {
-    return req.headers["x-forwarded-for"][0]
+  if (req.headers['x-forwarded-for']) {
+    return req.headers['x-forwarded-for'][0]
   }
   return req.socket.remoteAddress
 }
@@ -34,10 +37,10 @@ function parseQueryParam(param: undefined | string | string[] | ParsedQs | Parse
   return param
 }
 
-function outputEvents(inst: CollaborativeInstance, data: {
+function createNewStepsResponse(inst: CollaborativeInstance, data: {
   steps: PatchedStep[]
   users: number
-}) {
+}) : INewStepsResponse {
   return {
     version: inst.currentVersion,
     steps: data.steps.map(s => s.toJSON()),
@@ -53,7 +56,8 @@ export const getDocuments = async (
 ) => {
   try {
     const docs = docService.getDocuments()
-    res.json({ docs })
+    const result: IGetDocumentsResponse = { docs }
+    res.json(result)
   } catch (err) {
     next(err)
   }
@@ -65,16 +69,15 @@ export const getDocument = async (
   next: NextFunction
 ) => {
   try {
-    const documentId = parseInt(req.params.documentId, 10)
     const IP = reqIP(req)
-    const instance = docService.getInstance(documentId)
+    const instance = docService.getInstance(req.params.documentId)
     instance.registerUser(IP)
-
-    res.json({
+    const result: IGetDocumentResponse = {
       doc: instance.doc.toJSON(),
       userCount: instance.userCount,
       version: instance.currentVersion,
-    })
+    }
+    res.json(result)
   } catch (err) {
     next(err)
   }
@@ -86,22 +89,21 @@ export const getDocumentEvents = async (
   next: NextFunction
 ) => {
   try {
-    const documentId = parseInt(req.params.documentId, 10)
     const version = parseInt(parseQueryParam(req.query.version))
     const IP = reqIP(req)
-    const instance = docService.getInstance(documentId)
+    const instance = docService.getInstance(req.params.documentId)
     instance.registerUser(IP)
     const data = instance.getEvents(version)
     if (!data) {
       next(new CustomError('History no longer available', 410))
     } else if (data.steps.length > 0) {
       instance.sendUpdates()
-      res.json(outputEvents(instance, data))
+      res.json(createNewStepsResponse(instance, data))
     } else {
       instance.addPendingRequest(IP, () => {
-        res.json(outputEvents(instance, instance.getEvents(version)))
+        res.json(createNewStepsResponse(instance, instance.getEvents(version)))
       })
-      res.on("close", () => {
+      res.on('close', () => {
         instance.removePendingRequest(IP)
       })
     }
@@ -110,17 +112,16 @@ export const getDocumentEvents = async (
   }
 }
 
-export const saveDocChanges  = async (
-  req: IRequest<ISaveDocParams, {}, { documentId: string }>,
+export const saveCollabSteps  = async (
+  req: IRequest<ISaveCollabStepsParams, {}, { documentId: string }>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const documentId = parseInt(req.params.documentId, 10)
     const { version, steps, clientID } = req.body
     const IP = reqIP(req)
     const parsedSteps = docService.parseSteps(steps)
-    const instance = docService.getInstance(documentId)
+    const instance = docService.getInstance(req.params.documentId)
     instance.registerUser(IP)
     const result = instance.addEvents(version, parsedSteps, clientID)
     if (result) {

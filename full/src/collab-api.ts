@@ -1,36 +1,17 @@
-import { Step } from 'prosemirror-transform'
-import { Transaction } from 'prosemirror-state'
-import { Node as PMNode } from 'prosemirror-model'
+import {
+  IGetDocumentResponse, ISaveCollabStepsParams,
+} from '@pm-react-example/shared'
 
 const COLLAB_API_URL = 'http://localhost:3400'
 
-interface Sendable {
-  version: number
-  steps: Step[]
-  clientID: number | string
-  origins: Transaction[]
-}
-
-export interface IGetDocumentResponse {
-  doc: PMNode
-  userCount: number
-  version: number
-}
-export interface IEventsResponse {
-  version: number
-  steps: Step[]
-  clientIDs: number[]
-  usersCount: number
-}
-
-export async function sendSteps(sendable: Sendable) : Promise<{ version: number }> {
+export async function sendSteps(payload: ISaveCollabStepsParams) : Promise<{ version: number }> {
   const resp = await fetch(`${COLLAB_API_URL}/doc/1/events`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(sendable)
+    body: JSON.stringify(payload)
   })
   return resp.json()
 }

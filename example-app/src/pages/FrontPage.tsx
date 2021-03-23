@@ -25,10 +25,18 @@ export const FrontPage = inject((stores: Stores) => ({
 (observer((props: IProps) => {
   const { className, documentStore, editorStore } = props
   const debouncedSync = useMemo(() => debounce(documentStore!.syncDocument, 500), [])
-  const collabEnabled = false
+  const collab = useMemo(() => {
+    if (editorStore!.collabEnabled) {
+      if (documentStore!.currentDocument) {
+        return {
+          documentId: documentStore!.currentDocument.id
+        }
+      }
+      documentStore!.syncDocument()
+    }
+    return undefined
+  }, [documentStore?.currentDocument, editorStore!.collabEnabled])
 
-  function handleCollabClick() {
-  }
   function handleDocumentEdit() {
     debouncedSync()
   }
@@ -39,14 +47,13 @@ export const FrontPage = inject((stores: Stores) => ({
     <Container className={className}>
       <PageHeader />
       <DocumentBrowser />
-      <Button onClick={handleCollabClick}>{collabEnabled ? 'Disable' : 'Enable'} collab</Button>
       <Editor
         analytics={{
           shouldTrack: true,
           logLevel: 'debug',
           logToConsole: true,
         }}
-        collab={collabEnabled}
+        collab={collab}
         onDocumentEdit={handleDocumentEdit}
         onEditorReady={handleEditorReady}
       />
@@ -59,4 +66,3 @@ const Container = styled.div`
     margin: 1rem 0;
   }
 `
-const Button = styled.button``
