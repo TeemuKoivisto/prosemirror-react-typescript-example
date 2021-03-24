@@ -31,8 +31,9 @@ export class EditorStore {
     return node.toJSON()
   }
 
-  setCurrentDoc = (doc: PMDoc) => {
-    this.viewProvider?.replaceDocument(doc)
+  setCurrentDoc = (doc?: PMDoc) => {
+    const pmDoc = doc ?? this.createEmptyDoc()
+    this.viewProvider?.replaceDocument(pmDoc)
   }
 
   @action toggleCollab = () => {

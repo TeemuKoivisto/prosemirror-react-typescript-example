@@ -62,11 +62,14 @@ export class DocumentStore {
   }
 
   @action setCurrentDocument = (id: string) => {
-    this.syncDocument()
-    this.currentDocument = this.documentsMap.get(id) ?? null
+    const { doc } = this.editorStore.getEditorState()
     if (this.currentDocument) {
-      this.editorStore.setCurrentDoc(this.currentDocument.doc)
+      // There might be unsaved changes as the debouncing takes a half sec after
+      // user has stopped typing. Could probably set it to lower and just omit this 🤔
+      this.updateDocument(this.currentDocument.id, { ...this.currentDocument, doc })
     }
+    this.currentDocument = this.documentsMap.get(id) ?? null
+    this.editorStore.setCurrentDoc(this.currentDocument?.doc)
   }
 
   @action createNewDocument = async (existingDoc?: PMDoc) => {
