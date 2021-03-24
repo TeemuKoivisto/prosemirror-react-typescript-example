@@ -1,5 +1,11 @@
 :root {
+  --color-bg-base: #fffafa;
+  --color-gray-light: #e2e2e2;
+  --color-gray: #bbb;
+  --color-primary-lighter: #b9ceff;
+  --color-primary-light: #9a69c7;
   --color-primary: #551a8b;
+  --color-text-dark: #222;
   --light-gray: #dadce0;
   --text-dark: #222;
 }

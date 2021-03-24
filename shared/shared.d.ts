@@ -10,10 +10,16 @@ declare module '@pm-react-example/shared' {
   export interface IDBDocument {
     id: string
     title: string
+    // createdAt: number
+    // updatedAt: number
     doc: PMDoc
   }  
 
   // Document API
+  export interface ICreateDocumentParams {
+    title: string
+    doc: PMDoc
+  }
   export interface IGetDocumentsResponse {
     docs: IDBDocument[]
   }

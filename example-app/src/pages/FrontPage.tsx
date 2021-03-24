@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react'
 import { Editor, EditorViewProvider } from '@pm-react-example/full'
 
 import { PageHeader } from '../components/PageHeader'
+import { CollabInfo } from '../components/CollabInfo'
 import { DocumentBrowser } from '../components/DocumentBrowser'
 
 import { Stores } from '../stores'
@@ -46,6 +47,7 @@ export const FrontPage = inject((stores: Stores) => ({
   return (
     <Container className={className}>
       <PageHeader />
+      <CollabInfo />
       <DocumentBrowser />
       <Editor
         analytics={{

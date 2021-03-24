@@ -1,13 +1,20 @@
 import fs from 'fs/promises'
-import { Node as PMNode } from 'prosemirror-model'
 
-import { IDBDocument, uuidv4 } from '@pm-react-example/shared'
+import { IDBDocument, PMDoc, uuidv4 } from '@pm-react-example/shared'
 
 export class DB {
   docsMap: Map<string, IDBDocument> = new Map()
 
-  constructor(parseDoc: (data: any) => PMNode) {
-    this.read(parseDoc)
+  constructor() {
+    this.read()
+  }
+
+  add(title: string, doc: PMDoc) {
+    const id = uuidv4()
+    const dbDoc = { id, title, doc }
+    this.docsMap.set(id, dbDoc)
+    this.write()
+    return dbDoc
   }
 
   get(id: string) {
@@ -18,21 +25,18 @@ export class DB {
     return Array.from(this.docsMap.entries()).map(([_id, d]) => d)
   }
 
-  add(title: string, doc: PMNode) {
-    const id = uuidv4()
-    const dbDoc = { id, title, doc: doc.toJSON() }
-    this.docsMap.set(id, dbDoc)
-    this.write()
-    return dbDoc
-  }
-
   update(id: string, data: Partial<IDBDocument>) {
     const old = this.docsMap.get(id)
     this.docsMap.set(id, { ...old, ...data })
     this.write()
   }
 
-  async read(parseDoc: (data: any) => PMNode) {
+  delete(id: string) {
+    this.docsMap.delete(id)
+    this.write()
+  }
+
+  async read() {
     const exists = await fs.access('./data.json').then(() => true).catch(() => false)
     const data = exists ? await fs.readFile('./data.json', 'utf-8') : undefined
     const parsed: [string, IDBDocument][] = data ? JSON.parse(data) : []
@@ -40,7 +44,7 @@ export class DB {
       this.docsMap.set(mapValue[0], {
         id: mapValue[0],
         title: mapValue[1].title,
-        doc: parseDoc(mapValue[1].doc),
+        doc: mapValue[1].doc
       })
     })
   }
@@ -49,3 +53,5 @@ export class DB {
     fs.writeFile('./data.json', JSON.stringify(Array.from(this.docsMap.entries())))
   }
 }
+
+export const db = new DB()

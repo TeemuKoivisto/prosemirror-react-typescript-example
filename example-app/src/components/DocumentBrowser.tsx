@@ -6,6 +6,7 @@ import {
   FiCloud,
   FiCloudOff,
   FiPlus,
+  FiTrash,
   FiUser,
   FiUsers,
 } from 'react-icons/fi'
@@ -23,6 +24,7 @@ interface IProps {
   toggleCollab?: () => void
   setCurrentDocument?: (id: string) => void
   createNewDocument?: () => void
+  deleteDocument?: (id: string) => void
   syncDocument?: () => void
 }
 
@@ -35,14 +37,16 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   toggleCollab: stores.editorStore.toggleCollab,
   setCurrentDocument: stores.documentStore.setCurrentDocument,
   createNewDocument: stores.documentStore.createNewDocument,
+  deleteDocument: stores.documentStore.deleteDocument,
   syncDocument: stores.documentStore.syncDocument,
 }))
 (observer((props: IProps) => {
   const {
     className, documents, currentDocument, syncToAPI, collabEnabled,
-    toggleSyncToAPI, toggleCollab, setCurrentDocument, createNewDocument, syncDocument
+    toggleSyncToAPI, toggleCollab, setCurrentDocument, createNewDocument, deleteDocument, syncDocument
   } = props
   function handleSyncClick() {
+    if (syncToAPI && collabEnabled) toggleCollab!()
     toggleSyncToAPI!()
   }
   function handleCollabClick() {
@@ -54,7 +58,11 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   }
   function onNewDocumentClick() {
     createNewDocument!()
-    syncDocument!()
+  }
+  function onDeleteDocumentClick() {
+    if (currentDocument) {
+      deleteDocument!(currentDocument.id)
+    }
   }
   return (
     <div className={className}>
@@ -64,9 +72,12 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
       <SyncButton active={collabEnabled} onClick={handleCollabClick} title="Toggle collaborative editing">
         { collabEnabled ? <FiUsers size={16}/> : <FiUser size={16}/> }
       </SyncButton>
-      <AddNewDocButton onClick={onNewDocumentClick}>
+      <SquareButton color="primary-light" onClick={onNewDocumentClick}>
         <FiPlus size={20}/>
-      </AddNewDocButton>
+      </SquareButton>
+      <SquareButton color="danger-red" disabled={!currentDocument} onClick={onDeleteDocumentClick}>
+        <FiTrash size={20} />
+      </SquareButton>
       <DocumentsList>
         { documents!.map(d =>
         <Doc
@@ -83,7 +94,7 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
 }))
 
 const SyncButton = styled.button<{ active?: boolean }> `
-  background: ${({ active }) => active ? '#b9ceff' : '#e2e2e2'};
+  background: var(${({ active }) => active ? '--color-primary-lighter' : '--color-gray-light'});
   border: 0;
   border-radius: 100%;
   cursor: pointer;
@@ -92,7 +103,7 @@ const SyncButton = styled.button<{ active?: boolean }> `
   padding: 0.5rem;
   transition: 1s background cubic-bezier(0.075, 0.82, 0.165, 1);
   &:hover {
-    background: ${({ active }) => active ? '#9a69c7' : '#bbb'};
+    background: var(${({ active }) => active ? '--color-primary-light' : '--color-gray'});
   }
 `
 const DocumentsList = styled.ul`
@@ -107,7 +118,7 @@ const DocumentsList = styled.ul`
 `
 const Doc = styled.li<{ selected?: boolean }>`
   background: ${({ selected }) => selected ? '#eee' : '#eee'};
-  border: 1px solid ${({ selected }) => selected ? '#222' : 'transparent'};
+  border: 1px solid ${({ selected }) => selected ? 'var(--color-text-dark)' : 'transparent'};
   border-radius: 2px;
   cursor: pointer;
   padding: 0.5rem;
@@ -116,18 +127,30 @@ const Doc = styled.li<{ selected?: boolean }>`
     background: #bbb;
   }
 `
-const AddNewDocButton = styled.button`
-  background: #9a69c7;
+const getColor = (color: string, disabled?: boolean) => {
+  if (disabled) return 'var(--color-gray-light)'
+  if (color === 'primary-light') return 'var(--color-primary-light)'
+  if (color === 'danger-red') return '#ff7575'
+  return 'black'
+}
+const getHoverColor = (color: string, disabled?: boolean) => {
+  if (disabled) return 'var(--color-gray-light)'
+  if (color === 'primary-light') return 'var(--color-primary)'
+  if (color === 'danger-red') return 'red'
+  return 'black'
+}
+const SquareButton = styled.button<{ color: string }>`
+  background: ${({ disabled, color }) => getColor(color, disabled)};
   border: 0;
   border-radius: 2px;
   color: #fff;
-  cursor: pointer;
+  cursor: ${({ disabled }) => !disabled && 'pointer'};
   margin-right: 1rem;
   padding: 0.5rem;
   transition: 1s background cubic-bezier(0.075, 0.82, 0.165, 1);
   width: 35px;
   &:hover {
-    background: var(--color-primary);
+    background: ${({ disabled, color }) => getHoverColor(color, disabled)};
   }
 `
 
