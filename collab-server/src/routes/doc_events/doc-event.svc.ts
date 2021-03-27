@@ -3,7 +3,7 @@ import { Step } from 'prosemirror-transform'
 import { createDefaultSchema } from '@pm-react-example/full'
 
 import { CollaborativeInstance } from './CollaborativeInstance'
-import { db } from '../../DB'
+import { docDb } from '../../db/doc.db'
 
 const instancesMap = new Map<string, CollaborativeInstance>()
 const schema = createDefaultSchema()
@@ -19,11 +19,11 @@ export const docEventService = {
     if (instancesMap.has(docId)) {
       return instancesMap.get(docId)
     }
-    let dbDoc = db.get(docId)
+    let dbDoc = docDb.get(docId)
     let doc
     if (!dbDoc) {
       doc = this.createEmptyDoc()
-      dbDoc = db.add('Untitled', doc.toJSON())
+      dbDoc = docDb.add('Untitled', doc.toJSON())
     } else {
       doc = schema.nodeFromJSON(dbDoc)
     }
@@ -35,7 +35,7 @@ export const docEventService = {
     if (savingTimeout) return
     savingTimeout = setTimeout(() => {
       const data = { doc: inst.doc.toJSON() }
-      db.update(inst.documentId, data)
+      docDb.update(inst.documentId, data)
       savingTimeout = null
     }, 5000)
   },

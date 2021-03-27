@@ -148,9 +148,11 @@ export function ReactEditorView(props: IProps) {
       analyticsProvider.perf.stop('EditorView', 'dispatchTransaction updateState', 100)
       analyticsProvider.perf.debug('EditorView', 'dispatchTransaction flush')
       portalProvider.flush()
-      analyticsProvider.perf.stop('EditorView', 'dispatchTransaction flush', 0)
+      analyticsProvider.perf.stop('EditorView', 'dispatchTransaction flush', 100)
       editorProps.collab && sendStepsToCollabServer(editorState)
-      editorProps.onDocumentEdit && editorProps.onDocumentEdit(editorView)
+      if (editorProps.onDocumentEdit && !transaction.getMeta('dontTriggerOnDocumentEdit')) {
+        editorProps.onDocumentEdit(editorView)
+      }
     } else {
       const invalidNodes = nodes
         .filter(node => !validNode(node))

@@ -1,5 +1,7 @@
 import { IDBDocument, IGetDocumentsResponse, ICreateDocumentParams } from '@pm-react-example/shared'
 
+import { stores } from './index'
+
 const {
   REACT_APP_API_URL = 'http://localhost:3400'
 } = process.env
@@ -45,6 +47,7 @@ export async function deleteDocument(docId: string) : Promise<void> {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Authorization': `User ${stores.authStore.user?.id}`,
     },
   })
   return await resp.json()

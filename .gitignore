@@ -38,4 +38,5 @@ out/
 .vercel
 
 # collab server
-data.json
+doc.db.json
+collab.db.json

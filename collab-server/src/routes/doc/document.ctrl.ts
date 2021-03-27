@@ -1,12 +1,13 @@
 import { Response, NextFunction } from 'express'
 
 import { docService } from './document.svc'
+import { CustomError } from 'src/common/error'
+import { socketIO } from '../../socketIO'
 
 import { IRequest } from '../../types/request'
 import {
   ICreateDocumentParams, IGetDocumentsResponse, IDBDocument
 } from '@pm-react-example/shared'
-import { socketIO } from '../../socketIO'
 
 export const getDocuments = async (
   req: IRequest,
@@ -68,7 +69,11 @@ export const deleteDocument = async (
   next: NextFunction
 ) => {
   try {
-    docService.deleteDocument(req.params.documentId)
+    const userId = req.headers['authorization'].split(' ').pop()
+    const result = docService.deleteDocument(req.params.documentId, userId)
+    if (!result) {
+      return next(new CustomError('Document is in-use by another user', 403))
+    }
     socketIO.emitDocDeleted(req.params.documentId)
     res.json()
   } catch (err) {

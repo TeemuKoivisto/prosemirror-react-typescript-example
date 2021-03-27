@@ -13,7 +13,13 @@ declare module '@pm-react-example/shared' {
     // createdAt: number
     // updatedAt: number
     doc: PMDoc
-  }  
+  }
+
+  // User
+  export interface IUser {
+    id: string
+    name: string
+  }
 
   // Document API
   export interface ICreateDocumentParams {
@@ -41,6 +47,32 @@ declare module '@pm-react-example/shared' {
     steps: { [key: string]: any }[]
     clientIDs: number[]
     usersCount: number
+  }
+
+  // Socket IO actions
+  export enum EActionType {
+    DOC_CREATE = 'doc:create',
+    DOC_DELETE = 'doc:delete',
+    DOC_LOCK = 'doc:lock'
+  }
+  export type Action = IDocCreateAction | IDocDeleteAction
+  export interface IDocCreateAction {
+    type: EActionType.DOC_CREATE
+    payload: {
+      doc: IDBDocument
+    }
+  }
+  export interface IDocDeleteAction {
+    type: EActionType.DOC_DELETE
+    payload: {
+      documentId: string
+    }
+  }
+  export interface IDocLockAction {
+    type: EActionType.DOC_LOCK
+    payload: {
+      documentId?: string
+    }
   }
 
   // Utils

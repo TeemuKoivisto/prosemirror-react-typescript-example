@@ -1,10 +1,14 @@
 import io from 'socket.io'
 import { Server } from 'http'
 
-import { IDBDocument } from '@pm-react-example/shared'
-import { IUser } from './types/user'
+import {
+  IDBDocument, IUser,
+  EActionType, IDocCreateAction, IDocDeleteAction, IDocLockAction
+} from '@pm-react-example/shared'
 
-const usersMap: Map<number, IUser> = new Map()
+import { collabDb } from './db/collab.db'
+
+const usersMap: Map<string, IUser> = new Map()
 let socket: io.Server | null = null
 
 export const socketIO = {
@@ -16,16 +20,32 @@ export const socketIO = {
     })
     
     socket.on('connection', async (socket) => {
-      console.log('asdf', socket.handshake.query)
-      // usersMap.set()
-      socket.on('doc:update', async (payload) => {
-        console.log('doc:update ', payload)
+  
+      const user: IUser = socket.handshake.auth.user
+      socket['_user'] = user
+      usersMap.set(user.id, user)
+
+      // socket.emit('user:join', {
+      //   usersCount: usersMap.size
+      // })
+  
+      socket.on(EActionType.DOC_LOCK, (action: IDocLockAction) => {
+        const { id } = socket['_user']
+        const { payload: { documentId } } = action
+        console.log(`user ${socket['_user'].id.slice(0, 5)} is editing doc ${documentId.slice(0, 5)}`)
+        if (documentId) {
+          collabDb.lockDoc(id, documentId)
+        } else {
+          collabDb.releaseDoc(id)
+        }
       })
       socket.on('disconnect', () => {
-        console.log('disconnect')
-        socket.emit('user:leave', {
-          usersCount: usersMap.size
-        })
+        const { id } = socket['_user']
+        usersMap.delete(id)
+        collabDb.releaseDoc(id)
+        // socket.emit('user:leave', {
+        //   usersCount: usersMap.size
+        // })
         // io.sockets.emit('getCount', io.sockets.adapter.rooms.get(documentId) === undefined ? 0 : io.sockets.adapter.rooms.get(documentId).size)
       })
     })
@@ -34,14 +54,21 @@ export const socketIO = {
     socket.close()
   },
   emitDocCreated(doc: IDBDocument) {
-    socket.emit('doc:created', {
-      doc
-    })
+    const action: IDocCreateAction = {
+      type: EActionType.DOC_CREATE,
+      payload: {
+        doc
+      }
+    }
+    socket.emit(EActionType.DOC_CREATE, action)
   },
   emitDocDeleted(documentId: string) {
-    socket.emit('doc:deleted', {
-      documentId
-    })
+    const action: IDocDeleteAction = {
+      type: EActionType.DOC_DELETE,
+      payload: {
+        documentId
+      }
+    }
+    socket.emit(EActionType.DOC_DELETE, action)
   },
 }
-

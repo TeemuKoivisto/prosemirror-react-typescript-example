@@ -1,21 +1,27 @@
-import { db } from '../../DB'
+import { docDb } from '../../db/doc.db'
+import { collabDb } from '../../db/collab.db'
+
 
 import { IDBDocument, ICreateDocumentParams } from '@pm-react-example/shared'
 
 export const docService = {
   addDocument(params: ICreateDocumentParams) {
-    return db.add(params.title, params.doc)
+    return docDb.add(params.title, params.doc)
   },
   getDocument(id: string) {
-    return db.get(id)
+    return docDb.get(id)
   },
   getDocuments() {
-    return db.getAll()
+    return docDb.getAll()
   },
   updateDocument(id: string, data: Partial<IDBDocument>) {
-    return db.update(id, data)
+    return docDb.update(id, data)
   },
-  deleteDocument(id: string) {
-    return db.delete(id)
+  deleteDocument(id: string, userId: string) {
+    if (collabDb.isLocked(userId, id)) {
+      return false
+    }
+    docDb.delete(id)
+    return true
   }
 }

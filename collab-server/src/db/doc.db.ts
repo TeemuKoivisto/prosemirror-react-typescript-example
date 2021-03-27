@@ -2,8 +2,14 @@ import fs from 'fs/promises'
 
 import { IDBDocument, PMDoc, uuidv4 } from '@pm-react-example/shared'
 
-export class DB {
+interface StoredData {
+  docsMap: [string, IDBDocument][]
+}
+
+class DocDB {
+
   docsMap: Map<string, IDBDocument> = new Map()
+  FILE = './doc.db.json'
 
   constructor() {
     this.read()
@@ -37,10 +43,10 @@ export class DB {
   }
 
   async read() {
-    const exists = await fs.access('./data.json').then(() => true).catch(() => false)
-    const data = exists ? await fs.readFile('./data.json', 'utf-8') : undefined
-    const parsed: [string, IDBDocument][] = data ? JSON.parse(data) : []
-    parsed.forEach(mapValue => {
+    const exists = await fs.access(this.FILE).then(() => true).catch(() => false)
+    const data = exists ? await fs.readFile(this.FILE, 'utf-8') : undefined
+    const parsed: StoredData = data ? JSON.parse(data) : []
+    parsed?.docsMap?.forEach(mapValue => {
       this.docsMap.set(mapValue[0], {
         id: mapValue[0],
         title: mapValue[1].title,
@@ -50,8 +56,11 @@ export class DB {
   }
 
   write() {
-    fs.writeFile('./data.json', JSON.stringify(Array.from(this.docsMap.entries())))
+    const data: StoredData = {
+      docsMap: Array.from(this.docsMap.entries())
+    }
+    fs.writeFile(this.FILE, JSON.stringify(data))
   }
 }
 
-export const db = new DB()
+export const docDb = new DocDB()

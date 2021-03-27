@@ -73,8 +73,11 @@ export class EditorViewProvider {
 
   replaceDocument(
     rawValue: Object,
-    shouldScrollToBottom = true,
-    shouldAddToHistory = true,
+    options: {
+      shouldScrollToBottom?: boolean
+      shouldAddToHistory?: boolean
+      shouldTriggerOnDocumentEdit?: boolean
+    } = {}
   ): boolean {
     if (!this.editorView || rawValue === undefined || rawValue === null) {
       return false
@@ -82,6 +85,9 @@ export class EditorViewProvider {
 
     const { state } = this.editorView
     const { schema } = state
+    const {
+      shouldScrollToBottom, shouldAddToHistory, shouldTriggerOnDocumentEdit
+    } = options
 
     const content = parseRawValue(
       rawValue,
@@ -105,7 +111,9 @@ export class EditorViewProvider {
     if (!shouldAddToHistory) {
       tr.setMeta('addToHistory', false)
     }
-
+    if (!shouldTriggerOnDocumentEdit) {
+      tr.setMeta('dontTriggerOnDocumentEdit', true)
+    }
     this.editorView.dispatch(tr)
     return true
   }

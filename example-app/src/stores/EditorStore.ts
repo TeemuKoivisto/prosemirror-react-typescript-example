@@ -40,4 +40,8 @@ export class EditorStore {
     this.collabEnabled = !this.collabEnabled
     this.collabVersion = 0
   }
+
+  @action reset = () => {
+    this.setCurrentDoc()
+  }
 }

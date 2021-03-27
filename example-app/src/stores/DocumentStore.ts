@@ -1,7 +1,9 @@
 import { action, computed, observable, makeObservable, runInAction } from 'mobx'
 import { EditorStore } from './EditorStore'
 
-import { IDBDocument, PMDoc, uuidv4 } from '@pm-react-example/shared'
+import {
+  IDBDocument, PMDoc, uuidv4, EActionType, Action,
+} from '@pm-react-example/shared'
 
 import { getDocuments, createDocument, updateDocument, deleteDocument } from '../document-api'
 
@@ -36,8 +38,6 @@ export class DocumentStore {
     )
   }
 
-
-
   @action getDocuments = async () => {
     const { docs } = await getDocuments()
     // Synchronizes the added and deleted documents NOT the content
@@ -57,12 +57,12 @@ export class DocumentStore {
   }
 
   @action setCurrentDocument = (id: string) => {
-    const { doc } = this.editorStore.getEditorState()
-    if (this.currentDocument) {
+    // const { doc } = this.editorStore.getEditorState()
+    // if (this.currentDocument) {
       // There might be unsaved changes as the debouncing takes a half sec after
       // user has stopped typing. Could probably set it to lower and just omit this 🤔
-      this.updateDocument(this.currentDocument.id, { ...this.currentDocument, doc })
-    }
+      // this.updateDocument(this.currentDocument.id, { ...this.currentDocument, doc })
+    // }
     this.currentDocument = this.documentsMap.get(id) ?? null
     this.editorStore.setCurrentDoc(this.currentDocument?.doc)
   }
@@ -113,6 +113,14 @@ export class DocumentStore {
     })
   }
 
+  @action receiveUpdate = (action: Action) => {
+    if (action.type === EActionType.DOC_CREATE) {
+      this.documentsMap.set(action.payload.doc.id, action.payload.doc)
+    } else if (action.type === EActionType.DOC_DELETE) {
+      this.documentsMap.delete(action.payload.documentId)
+    }
+  }
+
   @action syncDocument = () => {
     const { doc } = this.editorStore.getEditorState()
     if (!this.currentDocument) {
@@ -120,5 +128,10 @@ export class DocumentStore {
     } else {
       this.updateDocument(this.currentDocument.id, { ...this.currentDocument, doc })
     }
+  }
+
+  @action reset = () => {
+    this.documentsMap = new Map()
+    this.currentDocument = null
   }
 }
