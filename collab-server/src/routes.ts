@@ -1,7 +1,7 @@
 import express, { Router } from 'express'
 
-import * as documentCtrl from './routes/document/document.ctrl'
-import * as docEventCtrl from './routes/document/doc-event.ctrl'
+import * as documentCtrl from './routes/doc/document.ctrl'
+import * as docEventCtrl from './routes/doc_events/doc-event.ctrl'
 
 const router: Router = Router()
 

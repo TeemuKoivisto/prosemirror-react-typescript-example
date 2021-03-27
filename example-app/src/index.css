@@ -6,15 +6,15 @@
   --color-primary-light: #9a69c7;
   --color-primary: #551a8b;
   --color-text-dark: #222;
-  --light-gray: #dadce0;
-  --text-dark: #222;
+
+  --width-tablet: 768px;
 }
 html {
   font-size: 16px;
-  color: var(--text-dark);
+  color: var(--color-text-dark);
 }
 body {
-  background: snow;
+  /* background: var(--color-bg-base); */
   margin: 0.5rem;
   padding: 0;
 }

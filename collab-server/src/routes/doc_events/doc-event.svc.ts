@@ -3,7 +3,7 @@ import { Step } from 'prosemirror-transform'
 import { createDefaultSchema } from '@pm-react-example/full'
 
 import { CollaborativeInstance } from './CollaborativeInstance'
-import { db } from './DB'
+import { db } from '../../DB'
 
 const instancesMap = new Map<string, CollaborativeInstance>()
 const schema = createDefaultSchema()

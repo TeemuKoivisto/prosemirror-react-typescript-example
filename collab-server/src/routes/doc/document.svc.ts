@@ -1,4 +1,4 @@
-import { db } from './DB'
+import { db } from '../../DB'
 
 import { IDBDocument, ICreateDocumentParams } from '@pm-react-example/shared'
 

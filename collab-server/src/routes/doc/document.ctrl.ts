@@ -6,6 +6,7 @@ import { IRequest } from '../../types/request'
 import {
   ICreateDocumentParams, IGetDocumentsResponse, IDBDocument
 } from '@pm-react-example/shared'
+import { socketIO } from '../../socketIO'
 
 export const getDocuments = async (
   req: IRequest,
@@ -41,6 +42,7 @@ export const createDocument = async (
 ) => {
   try {
     const result: IDBDocument = docService.addDocument(req.body)
+    socketIO.emitDocCreated(result)
     res.json(result)
   } catch (err) {
     next(err)
@@ -67,6 +69,7 @@ export const deleteDocument = async (
 ) => {
   try {
     docService.deleteDocument(req.params.documentId)
+    socketIO.emitDocDeleted(req.params.documentId)
     res.json()
   } catch (err) {
     next(err)

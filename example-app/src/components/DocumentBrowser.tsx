@@ -18,39 +18,37 @@ interface IProps {
   className?: string
   documents?: IDBDocument[]
   currentDocument?: IDBDocument | null
-  syncToAPI?: boolean
+  syncEnabled?: boolean
   collabEnabled?: boolean
-  toggleSyncToAPI?: () => void
+  toggleSyncing?: () => void
   toggleCollab?: () => void
   setCurrentDocument?: (id: string) => void
   createNewDocument?: () => void
   deleteDocument?: (id: string) => void
-  syncDocument?: () => void
 }
 
 const DocumentBrowserEl = inject((stores: Stores) => ({
   documents: stores.documentStore.documents,
   currentDocument: stores.documentStore.currentDocument,
-  syncToAPI: stores.documentStore.syncToAPI,
+  syncEnabled: stores.syncStore.syncEnabled,
   collabEnabled: stores.editorStore.collabEnabled,
-  toggleSyncToAPI: stores.documentStore.toggleSyncToAPI,
+  toggleSyncing: stores.syncStore.toggleSyncing,
   toggleCollab: stores.editorStore.toggleCollab,
   setCurrentDocument: stores.documentStore.setCurrentDocument,
   createNewDocument: stores.documentStore.createNewDocument,
   deleteDocument: stores.documentStore.deleteDocument,
-  syncDocument: stores.documentStore.syncDocument,
 }))
 (observer((props: IProps) => {
   const {
-    className, documents, currentDocument, syncToAPI, collabEnabled,
-    toggleSyncToAPI, toggleCollab, setCurrentDocument, createNewDocument, deleteDocument, syncDocument
+    className, documents, currentDocument, syncEnabled, collabEnabled,
+    toggleSyncing, toggleCollab, setCurrentDocument, createNewDocument, deleteDocument,
   } = props
   function handleSyncClick() {
-    if (syncToAPI && collabEnabled) toggleCollab!()
-    toggleSyncToAPI!()
+    if (syncEnabled && collabEnabled) toggleCollab!()
+    toggleSyncing!()
   }
   function handleCollabClick() {
-    if (!syncToAPI) toggleSyncToAPI!()
+    if (!syncEnabled) toggleSyncing!()
     toggleCollab!()
   }
   function onDocumentClick(id: string) {
@@ -66,8 +64,8 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   }
   return (
     <div className={className}>
-      <SyncButton active={syncToAPI} onClick={handleSyncClick} title="Toggle syncing of documents">
-        { syncToAPI ? <FiCloud size={16}/> : <FiCloudOff size={16}/> }
+      <SyncButton active={syncEnabled} onClick={handleSyncClick} title="Toggle syncing of documents">
+        { syncEnabled ? <FiCloud size={16}/> : <FiCloudOff size={16}/> }
       </SyncButton>
       <SyncButton active={collabEnabled} onClick={handleCollabClick} title="Toggle collaborative editing">
         { collabEnabled ? <FiUsers size={16}/> : <FiUser size={16}/> }
