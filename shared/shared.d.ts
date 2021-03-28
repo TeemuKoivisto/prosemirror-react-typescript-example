@@ -60,12 +60,14 @@ declare module '@pm-react-example/shared' {
     type: EActionType.DOC_CREATE
     payload: {
       doc: IDBDocument
+      userId: string
     }
   }
   export interface IDocDeleteAction {
     type: EActionType.DOC_DELETE
     payload: {
       documentId: string
+      userId: string
     }
   }
   export interface IDocLockAction {

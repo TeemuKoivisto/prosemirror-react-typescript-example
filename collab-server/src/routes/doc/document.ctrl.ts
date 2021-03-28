@@ -42,8 +42,9 @@ export const createDocument = async (
   next: NextFunction
 ) => {
   try {
+    const userId = req.headers['authorization'].split(' ').pop()
     const result: IDBDocument = docService.addDocument(req.body)
-    socketIO.emitDocCreated(result)
+    socketIO.emitDocCreated(result, userId)
     res.json(result)
   } catch (err) {
     next(err)
@@ -56,8 +57,12 @@ export const updateDocument = async (
   next: NextFunction
 ) => {
   try {
-    docService.updateDocument(req.params.documentId, req.body)
-    res.json()
+    const userId = req.headers['authorization'].split(' ').pop()
+    const result = docService.updateDocument(req.params.documentId, req.body, userId)
+    if (!result) {
+      return next(new CustomError('Document is in-use by another user', 403))
+    }
+    res.json(true)
   } catch (err) {
     next(err)
   }
@@ -70,12 +75,13 @@ export const deleteDocument = async (
 ) => {
   try {
     const userId = req.headers['authorization'].split(' ').pop()
-    const result = docService.deleteDocument(req.params.documentId, userId)
+    const { documentId } = req.params
+    const result = docService.deleteDocument(documentId, userId)
     if (!result) {
       return next(new CustomError('Document is in-use by another user', 403))
     }
-    socketIO.emitDocDeleted(req.params.documentId)
-    res.json()
+    socketIO.emitDocDeleted(documentId, userId)
+    res.json(true)
   } catch (err) {
     next(err)
   }

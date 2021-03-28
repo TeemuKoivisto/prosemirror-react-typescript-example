@@ -16,7 +16,10 @@ export class Stores {
     this.authStore = new AuthStore(this.reset)
     this.toastStore = new ToastStore()
     this.editorStore = new EditorStore()
-    this.documentStore = new DocumentStore(this.editorStore)
+    this.documentStore = new DocumentStore({
+      editorStore: this.editorStore,
+      toastStore: this.toastStore
+    })
     this.syncStore = new SyncStore({
       authStore: this.authStore,
       documentStore: this.documentStore,

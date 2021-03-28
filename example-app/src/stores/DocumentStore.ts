@@ -1,11 +1,17 @@
 import { action, computed, observable, makeObservable, runInAction } from 'mobx'
+
 import { EditorStore } from './EditorStore'
+import { ToastStore } from './ToastStore'
+import { getDocuments, createDocument, updateDocument, deleteDocument } from '../document-api'
 
 import {
   IDBDocument, PMDoc, uuidv4, EActionType, Action,
 } from '@pm-react-example/shared'
 
-import { getDocuments, createDocument, updateDocument, deleteDocument } from '../document-api'
+interface IProps {
+  editorStore: EditorStore
+  toastStore: ToastStore
+}
 
 export class DocumentStore {
 
@@ -14,10 +20,12 @@ export class DocumentStore {
   STORAGE_KEY = 'full-editor-documents'
 
   editorStore: EditorStore
+  toastStore: ToastStore
 
-  constructor(editorStore: EditorStore) {
+  constructor(props: IProps) {
     makeObservable(this)
-    this.editorStore = editorStore
+    this.editorStore = props.editorStore
+    this.toastStore = props.toastStore
     
     if (typeof window === 'undefined') return
     const existing = localStorage.getItem(this.STORAGE_KEY)
@@ -41,7 +49,7 @@ export class DocumentStore {
   @action getDocuments = async () => {
     const { docs } = await getDocuments()
     // Synchronizes the added and deleted documents NOT the content
-    // (this done through the editor collab sync)
+    // (this is done through the editor collab sync)
     runInAction(() => {
       const currentDocsIds = Array.from(this.documentsMap.entries()).map(([id, _doc]) => id)
       docs.forEach(d => {
@@ -77,7 +85,7 @@ export class DocumentStore {
     }
     // Incase the server is down or just not in use, create a local document
     // that hopefully will be synced to the server
-    const id = result ? result.id : uuidv4()
+    const id = result?.id ?? uuidv4()
     if (!result) {
       result = { id, ...params }
     }
@@ -94,6 +102,12 @@ export class DocumentStore {
       // TOOO: Should probably retry or something -> needs a robust event bus
       // Redux? oh god this gets so complicated
       // Probably with a websocket this becomes easier
+      runInAction(() => {
+        this.toastStore.createToast(err?.message, 'danger')
+        const oldDoc = this.documentsMap.get(id)
+        this.editorStore.setCurrentDoc(oldDoc?.doc)
+      })
+      return
     }
     runInAction(() => {
       this.documentsMap.set(id, doc)
@@ -104,8 +118,11 @@ export class DocumentStore {
     try {
       await deleteDocument(id)
     } catch (err) {
+      this.toastStore.createToast(err?.message, 'danger')
+      return
     }
     runInAction(() => {
+      console.log('exists ', this.documentsMap.has(id))
       this.documentsMap.delete(id)
       this.currentDocument = this.documents[0] ?? null
       const doc = this.currentDocument?.doc ?? this.editorStore.createEmptyDoc()
@@ -113,11 +130,14 @@ export class DocumentStore {
     })
   }
 
-  @action receiveUpdate = (action: Action) => {
-    if (action.type === EActionType.DOC_CREATE) {
+  @action receiveUpdate = (action: Action, wasThisUser: boolean) => {
+    if (wasThisUser) {
+    } else if (action.type === EActionType.DOC_CREATE) {
       this.documentsMap.set(action.payload.doc.id, action.payload.doc)
+      this.toastStore.createToast('Received document created')
     } else if (action.type === EActionType.DOC_DELETE) {
       this.documentsMap.delete(action.payload.documentId)
+      this.toastStore.createToast('Received document deleted', 'danger')
     }
   }
 

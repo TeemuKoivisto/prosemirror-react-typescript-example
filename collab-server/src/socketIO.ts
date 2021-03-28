@@ -53,20 +53,22 @@ export const socketIO = {
   stop() {
     socket.close()
   },
-  emitDocCreated(doc: IDBDocument) {
+  emitDocCreated(doc: IDBDocument, userId: string) {
     const action: IDocCreateAction = {
       type: EActionType.DOC_CREATE,
       payload: {
-        doc
+        doc,
+        userId
       }
     }
     socket.emit(EActionType.DOC_CREATE, action)
   },
-  emitDocDeleted(documentId: string) {
+  emitDocDeleted(documentId: string, userId: string) {
     const action: IDocDeleteAction = {
       type: EActionType.DOC_DELETE,
       payload: {
-        documentId
+        documentId,
+        userId
       }
     }
     socket.emit(EActionType.DOC_DELETE, action)

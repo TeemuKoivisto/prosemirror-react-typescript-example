@@ -68,12 +68,10 @@ export class SyncStore {
       }
     })
     this.socket.on(EActionType.DOC_CREATE, (action: IDocCreateAction) => {
-      this.documentStore.receiveUpdate(action)
-      this.toastStore.createToast('Received document created')
+      this.documentStore.receiveUpdate(action, action.payload.userId === this.authStore.user?.id)
     })
     this.socket.on(EActionType.DOC_DELETE, (action: IDocDeleteAction) => {
-      this.documentStore.receiveUpdate(action)
-      this.toastStore.createToast('Received document deleted', 'danger')
+      this.documentStore.receiveUpdate(action, action.payload.userId === this.authStore.user?.id)
     })
   }
 

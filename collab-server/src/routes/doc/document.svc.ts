@@ -14,8 +14,12 @@ export const docService = {
   getDocuments() {
     return docDb.getAll()
   },
-  updateDocument(id: string, data: Partial<IDBDocument>) {
-    return docDb.update(id, data)
+  updateDocument(id: string, data: Partial<IDBDocument>, userId: string) {
+    if (collabDb.isLocked(userId, id)) {
+      return false
+    }
+    docDb.update(id, data)
+    return true
   },
   deleteDocument(id: string, userId: string) {
     if (collabDb.isLocked(userId, id)) {
