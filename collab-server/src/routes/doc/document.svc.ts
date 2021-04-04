@@ -5,8 +5,10 @@ import { collabDb } from '../../db/collab.db'
 import { IDBDocument, ICreateDocumentParams } from '@pm-react-example/shared'
 
 export const docService = {
-  addDocument(params: ICreateDocumentParams) {
-    return docDb.add(params.title, params.doc)
+  addDocument(params: ICreateDocumentParams, userId: string) {
+    const doc = docDb.add(params.title, params.doc)
+    collabDb.lockDoc(userId, doc.id)
+    return doc
   },
   getDocument(id: string) {
     return docDb.get(id)

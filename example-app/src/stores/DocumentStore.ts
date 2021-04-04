@@ -85,10 +85,10 @@ export class DocumentStore {
       // TODO not really
       this.unsyncedChanges = false
     } catch (err) {
+      this.unsyncedChanges = true
     }
     // Incase the server is down or just not in use, create a local document
     // that hopefully will be synced to the server
-    this.unsyncedChanges = true
     const id = result?.id ?? uuidv4()
     if (!result) {
       result = { id, ...params }

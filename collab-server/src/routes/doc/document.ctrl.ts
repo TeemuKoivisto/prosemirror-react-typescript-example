@@ -43,7 +43,7 @@ export const createDocument = async (
 ) => {
   try {
     const userId = req.headers['authorization'].split(' ').pop()
-    const result: IDBDocument = docService.addDocument(req.body)
+    const result: IDBDocument = docService.addDocument(req.body, userId)
     socketIO.emitDocCreated(result, userId)
     res.json(result)
   } catch (err) {

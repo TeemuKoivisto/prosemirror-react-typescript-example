@@ -14,8 +14,12 @@ class CollabDB {
   }
 
   lockDoc(userId: string, documentId: string) {
-    this.lockedDocs.set(userId, documentId)
-    this.write()
+    this.lockedDocs.delete(userId)
+    const currentLockedDocs = Array.from(this.lockedDocs.values())
+    if (!currentLockedDocs.includes(documentId)) {
+      this.lockedDocs.set(userId, documentId)
+      this.write()
+    }
   }
 
   releaseDoc(userId: string) {
