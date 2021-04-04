@@ -17,6 +17,7 @@ export class DocumentStore {
 
   @observable documentsMap: Map<string, IDBDocument> = new Map()
   @observable currentDocument: IDBDocument | null = null
+  @observable unsyncedChanges: boolean = false
   STORAGE_KEY = 'full-editor-documents'
 
   editorStore: EditorStore
@@ -81,10 +82,13 @@ export class DocumentStore {
     let result
     try {
       result = await createDocument(params)
+      // TODO not really
+      this.unsyncedChanges = false
     } catch (err) {
     }
     // Incase the server is down or just not in use, create a local document
     // that hopefully will be synced to the server
+    this.unsyncedChanges = true
     const id = result?.id ?? uuidv4()
     if (!result) {
       result = { id, ...params }
@@ -98,17 +102,23 @@ export class DocumentStore {
   @action updateDocument = async (id: string, doc: IDBDocument) => {
     try {
       await updateDocument(id, doc)
+      // TODO not really how it works but a compromise for now
+      this.unsyncedChanges = false
     } catch (err) {
       // TOOO: Should probably retry or something -> needs a robust event bus
       // Redux? oh god this gets so complicated
       // Probably with a websocket this becomes easier
-      runInAction(() => {
-        this.toastStore.createToast(err?.message, 'danger')
-        const oldDoc = this.documentsMap.get(id)
-        this.editorStore.setCurrentDoc(oldDoc?.doc)
-      })
-      return
+      if (err.statusCode === 403) {
+        runInAction(() => {
+          this.toastStore.createToast(err?.message, 'danger')
+          const oldDoc = this.documentsMap.get(id)
+          this.editorStore.setCurrentDoc(oldDoc?.doc)
+        })
+        return
+      }
+      this.unsyncedChanges = true
     }
+    // Either success or user/backend is offline
     runInAction(() => {
       this.documentsMap.set(id, doc)
     })
@@ -122,7 +132,6 @@ export class DocumentStore {
       return
     }
     runInAction(() => {
-      console.log('exists ', this.documentsMap.has(id))
       this.documentsMap.delete(id)
       this.currentDocument = this.documents[0] ?? null
       const doc = this.currentDocument?.doc ?? this.editorStore.createEmptyDoc()

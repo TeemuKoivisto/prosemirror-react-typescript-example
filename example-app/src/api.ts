@@ -1,27 +1,39 @@
 import { stores } from './index'
 
+import { APIError } from '@pm-react-example/shared'
+
 const {
   REACT_APP_API_URL = 'http://localhost:3400'
 } = process.env
 
-export async function get<T>(path: string, defaultError = 'Request failed'): Promise<T> {
-  const resp = await fetch(`${REACT_APP_API_URL}/${path}`, {
+async function wrappedFetch(path: string, options: RequestInit, defaultError = 'Request failed') {
+  let resp
+  try {
+    resp = await fetch(`${REACT_APP_API_URL}/${path}`, options)
+  } catch (err) {
+    // Must be a connection error (?)
+    throw new APIError('Connection error', 550)
+  }
+  const data = await resp.json()
+  if (!resp.ok) {
+    throw new APIError(data?.message || defaultError, resp.status)
+  }
+  return data
+}
+
+export function get<T>(path: string, defaultError?: string): Promise<T> {
+  return wrappedFetch(path, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `User ${stores.authStore.user?.id}`,
     },
-  })
-  const data = await resp.json()
-  if (!resp.ok) {
-    throw Error(data?.message || defaultError)
-  }
-  return data
+  }, defaultError)
 }
 
-export async function post<T>(path: string, payload: any, defaultError = 'Request failed'): Promise<T> {
-  const resp = await fetch(`${REACT_APP_API_URL}/${path}`, {
+export function post<T>(path: string, payload: any, defaultError?: string): Promise<T> {
+  return wrappedFetch(path, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -29,16 +41,11 @@ export async function post<T>(path: string, payload: any, defaultError = 'Reques
       'Authorization': `User ${stores.authStore.user?.id}`,
     },
     body: JSON.stringify(payload)
-  })
-  const data = await resp.json()
-  if (!resp.ok) {
-    throw Error(data?.message || defaultError)
-  }
-  return data
+  }, defaultError)
 }
 
-export async function put<T>(path: string, payload: any, defaultError = 'Request failed'): Promise<T> {
-  const resp = await fetch(`${REACT_APP_API_URL}/${path}`, {
+export function put<T>(path: string, payload: any, defaultError?: string): Promise<T> {
+  return wrappedFetch(path, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',
@@ -46,26 +53,16 @@ export async function put<T>(path: string, payload: any, defaultError = 'Request
       'Authorization': `User ${stores.authStore.user?.id}`,
     },
     body: JSON.stringify(payload)
-  })
-  const data = await resp.json()
-  if (!resp.ok) {
-    throw Error(data?.message || defaultError)
-  }
-  return data
+  }, defaultError)
 }
 
-export async function del<T>(path: string, defaultError = 'Request failed'): Promise<T> {
-  const resp = await fetch(`${REACT_APP_API_URL}/${path}`, {
+export function del<T>(path: string, defaultError?: string): Promise<T> {
+  return wrappedFetch(path, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': `User ${stores.authStore.user?.id}`,
     },
-  })
-  const data = await resp.json()
-  if (!resp.ok) {
-    throw Error(data?.message || defaultError)
-  }
-  return data
+  }, defaultError)
 }

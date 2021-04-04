@@ -22,6 +22,7 @@ interface IProps {
 export class SyncStore {
 
   @observable socket: SocketIOClient.Socket | null = null
+  @observable syncEnabled: boolean = false
 
   authStore: AuthStore
   documentStore: DocumentStore
@@ -44,19 +45,21 @@ export class SyncStore {
     )
   }
 
-  @computed get syncEnabled() {
-    return this.socket !== null
+  @computed get isDisconnected() {
+    return this.syncEnabled && this.socket?.disconnected
   }
 
   @action toggleSyncing = () => {
     if (this.socket !== null) {
       this.socket?.close()
       this.socket = null
+      this.syncEnabled = false
       return
     }
 
     this.documentStore.getDocuments()
 
+    this.syncEnabled = true
     this.socket = io(REACT_APP_API_URL, {
       reconnectionDelayMax: 10000,
       auth: {

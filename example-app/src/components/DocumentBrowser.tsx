@@ -1,8 +1,10 @@
-import * as React from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { inject, observer } from 'mobx-react'
 
 import {
+  FiWifi,
+  FiWifiOff,
   FiCloud,
   FiCloudOff,
   FiPlus,
@@ -18,6 +20,7 @@ interface IProps {
   className?: string
   documents?: IDBDocument[]
   currentDocument?: IDBDocument | null
+  unsyncedChanges?: boolean
   syncEnabled?: boolean
   collabEnabled?: boolean
   toggleSyncing?: () => void
@@ -30,6 +33,7 @@ interface IProps {
 const DocumentBrowserEl = inject((stores: Stores) => ({
   documents: stores.documentStore.documents,
   currentDocument: stores.documentStore.currentDocument,
+  unsyncedChanges: stores.documentStore.unsyncedChanges,
   syncEnabled: stores.syncStore.syncEnabled,
   collabEnabled: stores.editorStore.collabEnabled,
   toggleSyncing: stores.syncStore.toggleSyncing,
@@ -40,7 +44,7 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
 }))
 (observer((props: IProps) => {
   const {
-    className, documents, currentDocument, syncEnabled, collabEnabled,
+    className, documents, currentDocument, unsyncedChanges, syncEnabled, collabEnabled,
     toggleSyncing, toggleCollab, setCurrentDocument, createNewDocument, deleteDocument,
   } = props
   function handleSyncClick() {
@@ -64,6 +68,9 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   }
   return (
     <div className={className}>
+      <ConnectionButton active={unsyncedChanges} title="Has unsynced changes">
+        { unsyncedChanges ? <FiWifiOff size={16}/> : <FiWifi size={16}/> }
+      </ConnectionButton>
       <SyncButton active={syncEnabled} onClick={handleSyncClick} title="Toggle syncing of documents">
         { syncEnabled ? <FiCloud size={16}/> : <FiCloudOff size={16}/> }
       </SyncButton>
@@ -91,17 +98,26 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   )
 }))
 
-const SyncButton = styled.button<{ active?: boolean }> `
-  background: var(${({ active }) => active ? '--color-primary-lighter' : '--color-gray-light'});
+const Button = styled.button`
   border: 0;
   border-radius: 100%;
-  cursor: pointer;
   height: fit-content;
   margin-right: 1rem;
   padding: 0.5rem;
   transition: 1s background cubic-bezier(0.075, 0.82, 0.165, 1);
+`
+const SyncButton = styled(Button)<{ active?: boolean }>`
+  background: var(${({ active }) => active ? '--color-primary-lighter' : '--color-gray-light'});
+  cursor: pointer;
   &:hover {
     background: var(${({ active }) => active ? '--color-primary-light' : '--color-gray'});
+  }
+`
+const ConnectionButton = styled(Button)<{ active?: boolean }>`
+  background: ${({ active }) => active ? '#ffbbbb' : 'var(--color-gray-light)'};
+  cursor: default;
+  &:hover {
+    background: ${({ active }) => active ? '#ffbbbb' : 'var(--color-gray-light)'};
   }
 `
 const DocumentsList = styled.ul`
