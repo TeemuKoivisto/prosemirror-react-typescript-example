@@ -1,0 +1,1 @@
+export { PluginKey } from './plugin'

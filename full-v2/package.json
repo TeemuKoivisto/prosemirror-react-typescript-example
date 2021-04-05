@@ -1,0 +1,58 @@
+{
+  "name": "@pm-react-example/full-v2",
+  "version": "0.0.1",
+  "author": "Teemu Koivisto <teemukoivisto.xyz@gmail.com>",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw"
+  },
+  "devDependencies": {
+    "@pm-react-example/shared": "*",
+    "@rollup/plugin-alias": "^3.1.2",
+    "@rollup/plugin-node-resolve": "^11.1.1",
+    "@types/prosemirror-collab": "^1.1.1",
+    "@types/prosemirror-commands": "^1.0.4",
+    "@types/prosemirror-history": "^1.0.2",
+    "@types/prosemirror-keymap": "^1.0.4",
+    "@types/prosemirror-model": "^1.11.2",
+    "@types/prosemirror-state": "^1.2.6",
+    "@types/prosemirror-transform": "^1.1.2",
+    "@types/prosemirror-view": "^1.17.1",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-icons": "^3.0.0",
+    "@types/socket.io-client": "^1.4.36",
+    "@types/styled-components": "^5.1.7",
+    "node-sass": "^5.0.0",
+    "postcss": "^8.2.4",
+    "rollup": "^2.38.4",
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.29.0",
+    "typescript": "^4.1.3"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.1",
+    "react-dom": ">=17.0.1",
+    "styled-components": ">=5.2.1"
+  },
+  "dependencies": {
+    "prosemirror-collab": "^1.2.2",
+    "prosemirror-commands": "^1.1.5",
+    "prosemirror-dev-tools": "^3.0.2",
+    "prosemirror-history": "^1.1.3",
+    "prosemirror-keymap": "^1.1.4",
+    "prosemirror-model": "^1.13.1",
+    "prosemirror-state": "^1.3.4",
+    "prosemirror-tables": "^1.1.1",
+    "prosemirror-transform": "^1.2.9",
+    "prosemirror-utils": "^0.9.6",
+    "prosemirror-view": "^1.17.3"
+  }
+}
