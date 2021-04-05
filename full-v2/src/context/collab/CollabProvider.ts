@@ -57,12 +57,10 @@ export class CollabProvider {
   async joinCollabSession() {
     // const doc = this.editorViewProvider.stateToJSON()
     // save doc
-    const {
-      doc, steps, version, userCount
-    } = await this.apiProvider.post<IJoinResponse>(this.joinURL, { userId: this.userId })
+    await this.apiProvider.post<boolean>(this.joinURL, { userId: this.userId })
     this.isCollaborating = true
     // this.editorViewProvider.execCommand(replaceDocument(doc, version))
-    this.editorViewProvider.execCommand(setCollab(version))
+    this.editorViewProvider.execCommand(setCollab(0))
     this.apiProvider.on(ECollabActionType.COLLAB_USERS_CHANGED, this.onUsersChanged)
     this.apiProvider.on(ECollabActionType.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
     this.apiProvider.on(ECollabActionType.COLLAB_SERVER_UPDATE, this.onReceiveServerUpdate)
@@ -70,7 +68,7 @@ export class CollabProvider {
 
   async leaveCollabSession() {
     this.isCollaborating = false
-    this.apiProvider.post<true>(this.leaveURL, { userId: this.userId })
+    this.apiProvider.post<boolean>(this.leaveURL, { userId: this.userId })
     this.editorViewProvider.execCommand(setCollab(0))
     this.apiProvider.off(ECollabActionType.COLLAB_USERS_CHANGED, this.onUsersChanged)
     this.apiProvider.off(ECollabActionType.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
@@ -143,15 +141,15 @@ export class CollabProvider {
     const { editorView } = this.editorViewProvider
     const { state } = editorView
     const currentVersion = getVersion(state)
-    const { version, steps } = data.payload
+    const { version, steps, clientIDs } = data.payload
     const expectedVersion = currentVersion + steps.length
     if (version !== expectedVersion) {
       throw Error(`Version ${version} received when expected: ${expectedVersion}`)
     }
     let tr = receiveTransaction(
-      editorView.state,
-      steps.map(j => Step.fromJSON(editorView.state.schema, j)),
-      steps.map(step => step.clientID),
+      state,
+      steps.map(j => Step.fromJSON(state.schema, j)),
+      clientIDs,
     )
     editorView.dispatch(tr)
   }

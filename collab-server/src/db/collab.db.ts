@@ -18,6 +18,10 @@ class CollabDB {
     this.read()
   }
 
+  getUsersSelectedDocId(userId: string) {
+    return this.selectedDocs.get(userId)
+  }
+
   canUserEdit(userId: string, documentId: string) {
     const editedDoc = this.editedDocs.get(documentId)
     return !editedDoc || editedDoc.users.includes(userId) || editedDoc.collab

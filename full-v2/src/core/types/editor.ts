@@ -1,5 +1,5 @@
 import React from 'react'
-import { EditorView } from 'prosemirror-view'
+import { EditorState } from 'prosemirror-state'
 
 import { EditorContext } from '@context'
 
@@ -10,5 +10,5 @@ export interface EditorProps {
   disabled?: boolean
   appearance?: EditorAppearance
   onEditorReady?: (ctx: EditorContext) => void
-  onDocumentEdit?: (editorView: EditorView) => void
+  onDocumentEdit?: (newState: EditorState) => void
 }

@@ -15,9 +15,9 @@ class DocDB {
     this.read()
   }
 
-  add(title: string, doc: PMDoc) {
+  add(title: string, doc: PMDoc, collab = false) {
     const id = uuidv4()
-    const dbDoc = { id, title, doc }
+    const dbDoc = { id, title, doc, collab }
     this.docsMap.set(id, dbDoc)
     this.write()
     return dbDoc
@@ -50,7 +50,8 @@ class DocDB {
       this.docsMap.set(mapValue[0], {
         id: mapValue[0],
         title: mapValue[1].title,
-        doc: mapValue[1].doc
+        doc: mapValue[1].doc,
+        collab: mapValue[1].collab,
       })
     })
   }

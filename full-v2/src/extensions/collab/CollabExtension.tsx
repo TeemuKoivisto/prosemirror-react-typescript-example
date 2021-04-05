@@ -22,7 +22,7 @@ export class CollabExtension extends Extension<CollabExtensionProps> {
   }
 
   static getPluginState(state: EditorState) {
-    getPluginState(state)
+    return getPluginState(state)
   }
 
   get plugins() {

@@ -47,6 +47,10 @@ export class DocumentStore {
     )
   }
 
+  @computed get collabEnabled() {
+    return !!this.currentDocument?.collab
+  }
+
   @action getDocuments = async () => {
     const { docs } = await getDocuments()
     // Synchronizes the added and deleted documents NOT the content
@@ -78,7 +82,7 @@ export class DocumentStore {
 
   @action createNewDocument = async (existingDoc?: PMDoc) => {
     const doc = existingDoc ?? this.editorStore.createEmptyDoc()
-    const params = { title: 'Untitled', doc }
+    const params = { title: 'Untitled', doc, collab: false }
     let result
     try {
       result = await createDocument(params)
@@ -99,9 +103,10 @@ export class DocumentStore {
     return result
   }
 
-  @action updateDocument = async (id: string, doc: IDBDocument) => {
+  @action updateDocument = async (id: string, dbDoc: IDBDocument) => {
+    console.log('UPDATE DOCUMENT', dbDoc)
     try {
-      await updateDocument(id, doc)
+      await updateDocument(id, dbDoc)
       // TODO not really how it works but a compromise for now
       this.unsyncedChanges = false
     } catch (err) {
@@ -120,7 +125,7 @@ export class DocumentStore {
     }
     // Either success or user/backend is offline
     runInAction(() => {
-      this.documentsMap.set(id, doc)
+      this.documentsMap.set(id, dbDoc)
     })
   }
 
@@ -156,6 +161,13 @@ export class DocumentStore {
       this.createNewDocument(doc)
     } else {
       this.updateDocument(this.currentDocument.id, { ...this.currentDocument, doc })
+    }
+  }
+
+  @action toggleCollab = () => {
+    if (this.currentDocument) {
+      this.currentDocument.collab = !this.currentDocument.collab
+      this.updateDocument(this.currentDocument.id, this.currentDocument)
     }
   }
 

@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io'
 import {
-  EActionType, IDocCreateAction, IDocDeleteAction, IDocLockAction,
+  EActionType, IDocCreateAction, IDocDeleteAction, IDocSelectAction,
   ECollabActionType, ICollabUsersChangedAction, ICollabEditAction,
   ICollabServerUpdateAction
 } from '@pm-react-example/shared'
@@ -8,7 +8,7 @@ import {
 export type ExampleAppSocket = Socket<ISocketListenEvents, ISocketEmitEvents>
 
 export interface ISocketListenEvents {
-  [EActionType.DOC_LOCK]: (action: IDocLockAction) => void
+  [EActionType.DOC_SELECT]: (action: IDocSelectAction) => void
 }
 
 export interface ISocketEmitEvents {

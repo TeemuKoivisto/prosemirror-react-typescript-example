@@ -34,8 +34,11 @@ export const clientJoin = async (
     const instance = docCollabService.getInstance(documentId)
     instance.handleUserJoin(userId)
     const data = instance.currentDocument
-    socketIO.emitCollabUsersChanged(userId, data.userCount, documentId)
-    res.json(data)
+    socketIO.addUserToDocumentRoom(userId, documentId)
+    socketIO.emitCollabUsersChanged(documentId, userId, data.userCount)
+    // Can't return the data here since the socket already sends the changes to all the clients, including sender
+    // The emitting logic would otherwise have to be modified to send to all except user
+    res.json(true)
   } catch (err) {
     next(err)
   }
@@ -54,7 +57,7 @@ export const clientLeave = async (
     }
     const instance = docCollabService.getInstance(documentId)
     instance.handleUserLeave(userId)
-    socketIO.emitCollabUsersChanged(userId, instance.currentDocument.userCount, documentId)
+    socketIO.emitCollabUsersChanged(documentId, userId, instance.currentDocument.userCount)
     res.json(true)
   } catch (err) {
     next(err)
@@ -94,10 +97,11 @@ export const saveSteps  = async (
     const parsedSteps = docCollabService.parseSteps(steps)
     const instance = docCollabService.getInstance(documentId)
     const result = instance.handleReceiveSteps(version, parsedSteps, clientID)
+    console.log('send steps ', result)
     if (!result) {
       return next(new CustomError('Version not current', 409))
     }
-    socketIO.emitEditDocument(result.version, result.steps)
+    socketIO.emitEditDocument(documentId, result)
     res.json(result)
   } catch (err) {
     next(err)

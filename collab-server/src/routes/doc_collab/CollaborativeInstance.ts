@@ -58,8 +58,10 @@ export class CollaborativeInstance {
   handleReceiveSteps(version: number, steps: Step[], clientID: number) {
     if (!this.isValidVersion(version)) throw Error(`Invalid version: ${version} with currentVersion ${this.currentVersion}`)
     if (this.currentVersion !== version) return false
+    const appliedSteps = this.applySteps(steps, clientID)
     return {
-      steps: this.applySteps(steps, clientID),
+      steps: appliedSteps.map(s => s.toJSON()), // Interesting fact: clientID is discarded nicely when toJSON'd
+      clientIDs: appliedSteps.map(s => s.clientID),
       version: this.currentVersion,
     }
   }

@@ -4,7 +4,7 @@ import { Server } from 'http'
 import {
   IDBDocument, IUser, PatchedStep,
   EActionType, IDocCreateAction, IDocDeleteAction,
-  ECollabActionType, ICollabUsersChangedAction, ICollabEditAction, ICollabServerUpdateAction
+  ECollabActionType, ICollabUsersChangedAction, ICollabEditAction, ICollabEditPayload
 } from '@pm-react-example/shared'
 
 import { collabDb } from '../db/collab.db'
@@ -29,9 +29,11 @@ export const socketIO = {
       socket['_user'] = user
       usersMap.set(user.id, user)
 
-      // socket.emit('user:join', {
-      //   usersCount: usersMap.size
-      // })
+      const { documentId } = socket.handshake.query
+      if (documentId) {
+        socket.join(documentId)
+      }
+      socket.join('all')
   
       docEvents(socket)
 
@@ -49,6 +51,11 @@ export const socketIO = {
   stop() {
     ioServer.close()
   },
+  addUserToDocumentRoom(userId: string, documentId: string) {
+    console.log(ioServer.sockets.adapter.rooms)
+    // console.log(ioServer.sockets)
+    ioServer.socketsJoin(documentId)
+  },
   emitDocCreated(doc: IDBDocument, userId: string) {
     const action: IDocCreateAction = {
       type: EActionType.DOC_CREATE,
@@ -57,7 +64,7 @@ export const socketIO = {
         userId
       }
     }
-    ioServer.emit(EActionType.DOC_CREATE, action)
+    ioServer.in('all').emit(EActionType.DOC_CREATE, action)
   },
   emitDocDeleted(documentId: string, userId: string) {
     const action: IDocDeleteAction = {
@@ -67,9 +74,9 @@ export const socketIO = {
         userId
       }
     }
-    ioServer.emit(EActionType.DOC_DELETE, action)
+    ioServer.in('all').emit(EActionType.DOC_DELETE, action)
   },
-  emitCollabUsersChanged(userId: string, userCount: number, documentId: string) {
+  emitCollabUsersChanged(documentId: string, userId: string, userCount: number) {
     const action: ICollabUsersChangedAction = {
       type: ECollabActionType.COLLAB_USERS_CHANGED,
       payload: {
@@ -77,16 +84,17 @@ export const socketIO = {
         userCount
       },
     }
-    ioServer.emit(ECollabActionType.COLLAB_USERS_CHANGED, action)
+    const room = ioServer.sockets.adapter.rooms[documentId]
+    console.log(room)
+    ioServer.in(documentId).emit(ECollabActionType.COLLAB_USERS_CHANGED, action)
   },
-  emitEditDocument(version: number, steps: PatchedStep[]) {
+  emitEditDocument(documentId: string, payload: ICollabEditPayload) {
     const action: ICollabEditAction = {
       type: ECollabActionType.COLLAB_CLIENT_EDIT,
-      payload: {
-        version,
-        steps,
-      },
+      payload,
     }
-    ioServer.emit(ECollabActionType.COLLAB_CLIENT_EDIT, action)
+    const room = ioServer.sockets.adapter.rooms[documentId]
+    console.log(room)
+    ioServer.in(documentId).emit(ECollabActionType.COLLAB_CLIENT_EDIT, action)
   }
 }

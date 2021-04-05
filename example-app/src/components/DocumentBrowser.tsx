@@ -23,7 +23,7 @@ interface IProps {
   unsyncedChanges?: boolean
   syncEnabled?: boolean
   collabEnabled?: boolean
-  toggleSyncing?: () => void
+  toggleSyncing?: (documentId: string) => void
   toggleCollab?: () => void
   setCurrentDocument?: (id: string) => void
   createNewDocument?: () => void
@@ -35,9 +35,9 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   currentDocument: stores.documentStore.currentDocument,
   unsyncedChanges: stores.documentStore.unsyncedChanges,
   syncEnabled: stores.syncStore.syncEnabled,
-  collabEnabled: stores.editorStore.collabEnabled,
+  collabEnabled: stores.documentStore.collabEnabled,
   toggleSyncing: stores.syncStore.toggleSyncing,
-  toggleCollab: stores.editorStore.toggleCollab,
+  toggleCollab: stores.documentStore.toggleCollab,
   setCurrentDocument: stores.documentStore.setCurrentDocument,
   createNewDocument: stores.documentStore.createNewDocument,
   deleteDocument: stores.documentStore.deleteDocument,
@@ -49,10 +49,10 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   } = props
   function handleSyncClick() {
     if (syncEnabled && collabEnabled) toggleCollab!()
-    toggleSyncing!()
+    toggleSyncing!(currentDocument?.id || '')
   }
   function handleCollabClick() {
-    if (!syncEnabled) toggleSyncing!()
+    if (!syncEnabled) toggleSyncing!(currentDocument?.id || '')
     toggleCollab!()
   }
   function onDocumentClick(id: string) {

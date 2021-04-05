@@ -1,5 +1,3 @@
-import { action, observable, makeObservable } from 'mobx'
-
 import { EditorContext } from '@pm-react-example/full-v2'
 import { EditorStateJSON } from '@pm-react-example/shared'
 import { PMDoc } from '../types/document'
@@ -8,12 +6,6 @@ export class EditorStore {
 
   editorCtx?: EditorContext
   currentEditorState?: EditorStateJSON
-  @observable collabEnabled: boolean = false
-  @observable collabVersion: number = 0
-
-  constructor() {
-    makeObservable(this)
-  }
 
   setEditorContext = (ctx: EditorContext) => {
     this.editorCtx = ctx
@@ -35,12 +27,7 @@ export class EditorStore {
     this.editorCtx?.viewProvider.replaceDocument(pmDoc)
   }
 
-  @action toggleCollab = () => {
-    this.collabEnabled = !this.collabEnabled
-    this.collabVersion = 0
-  }
-
-  @action reset = () => {
+  reset = () => {
     this.setCurrentDoc()
   }
 }

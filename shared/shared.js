@@ -1,7 +1,7 @@
 module.exports.EActionType = {
   DOC_CREATE: 'doc:create',
   DOC_DELETE: 'doc:delete',
-  DOC_LOCK: 'doc:lock'
+  DOC_SELECT: 'doc:select'
 }
 module.exports.ECollabActionType = {
   COLLAB_USERS_CHANGED: 'COLLAB:CLIENT_JOIN',
@@ -19,7 +19,8 @@ class CustomError extends Error {
     super(message)
     this.name = this.constructor.name
     this.statusCode = errorCode
-    Error.captureStackTrace(this, this.constructor)
+    // Doesn't exist in FF
+    if (Error.captureStackTrace) Error.captureStackTrace(this, this.constructor)
   }
 }
 module.exports.APIError = CustomError

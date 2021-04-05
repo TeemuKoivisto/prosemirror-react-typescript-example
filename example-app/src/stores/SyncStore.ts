@@ -7,7 +7,7 @@ import { ToastStore } from './ToastStore'
 
 import { APIProvider } from '@pm-react-example/full-v2'
 import {
-  EActionType, IDocCreateAction, IDocDeleteAction, IDocLockAction
+  EActionType, IDocCreateAction, IDocDeleteAction, IDocSelectAction
 } from '@pm-react-example/shared'
 
 const {
@@ -64,7 +64,7 @@ export class SyncStore {
     this.initAPIProvider()
   }
 
-  @action toggleSyncing = () => {
+  @action toggleSyncing = (documentId: string) => {
     if (this.socket !== null) {
       this.socket?.close()
       this.socket = null
@@ -82,7 +82,7 @@ export class SyncStore {
         // add JWT here for real authentication
       },
       query: {
-        'my-key': 'my-value'
+        documentId
       }
     })
     this.initAPIProvider()
@@ -95,13 +95,13 @@ export class SyncStore {
   }
 
   @action emitSelectedDoc = (documentId?: string) => {
-    const action: IDocLockAction = {
-      type: EActionType.DOC_LOCK,
+    const action: IDocSelectAction = {
+      type: EActionType.DOC_SELECT,
       payload: {
         documentId
       }
     }
-    this.socket?.emit(EActionType.DOC_LOCK, action)
+    this.socket?.emit(EActionType.DOC_SELECT, action)
   }
 
   @action reset = () => {

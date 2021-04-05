@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import debounce from 'lodash.debounce'
 import { inject, observer } from 'mobx-react'
+import { EditorState } from 'prosemirror-state'
 
 import {
   Editor as FullEditor, Base, BlockQuote, Collab,
@@ -11,12 +12,14 @@ import {
 import { DesktopLayout } from './DesktopLayout'
 
 import { Stores } from '../../stores'
+import { DocumentStore } from '../../stores/DocumentStore'
 
 interface IProps {
   className?: string
   userId?: string
   documentId?: string
   collabEnabled?: boolean
+  documentStore?: DocumentStore
   syncDocument?: () => void
   setEditorContext?: (ctx: EditorContext) => void
   setAPIProvider?: (apiProvider: APIProvider) => void
@@ -25,14 +28,15 @@ interface IProps {
 export const Editor = inject((stores: Stores) => ({
   userId: stores.authStore.user?.id,
   documentId: stores.documentStore?.currentDocument?.id,
-  collabEnabled: stores.editorStore.collabEnabled,
+  collabEnabled: stores.documentStore.collabEnabled,
+  documentStore: stores.documentStore,
   syncDocument: stores.documentStore.syncDocument,
   setEditorContext: stores.editorStore.setEditorContext,
   setAPIProvider: stores.syncStore.setAPIProvider,
 }))
 (observer((props: IProps) => {
   const {
-    userId, documentId, collabEnabled, syncDocument, setEditorContext, setAPIProvider
+    userId, documentId, collabEnabled, documentStore, syncDocument, setEditorContext, setAPIProvider
   } = props
   const providers = useMemo(() => createDefaultProviders(), [])
   const debouncedSync = useMemo(() => debounce(syncDocument!, 500), [])
@@ -46,8 +50,12 @@ export const Editor = inject((stores: Stores) => ({
     return undefined
   }, [userId, documentId, collabEnabled])
 
-  function handleDocumentEdit() {
-    if (!collabEnabled) debouncedSync()
+  function handleDocumentEdit(_newState: EditorState) {
+    // I'm at my wit's end to find a reason why collabEnabled won't update while documentStore.collabEnabled
+    // shows it's been updated! Also Collab JSX element is notified nicely yet the values stay undefined/whatever
+    // when referenced here eg documentId
+    // if (!collabEnabled) debouncedSync() // Won't work
+    if (!documentStore!.collabEnabled) debouncedSync()
   }
   function handleEditorReady(ctx: EditorContext) {
     setEditorContext!(ctx)
@@ -62,7 +70,7 @@ export const Editor = inject((stores: Stores) => ({
           onEditorReady={handleEditorReady}
         >
           <Base/>
-          <BlockQuote />
+          <BlockQuote/>
           <Collab {...collab} />
         </FullEditor>
       </DesktopLayout>

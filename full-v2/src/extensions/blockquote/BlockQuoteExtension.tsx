@@ -25,7 +25,7 @@ export class BlockQuoteExtension extends Extension<BlockQuoteExtensionProps> {
   }
 
   static getPluginState(state: EditorState) {
-    getPluginState(state)
+    return getPluginState(state)
   }
 
   get plugins() {

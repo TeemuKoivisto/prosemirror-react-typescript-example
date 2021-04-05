@@ -19,6 +19,7 @@ declare module '@pm-react-example/shared' {
     // createdAt: number
     // updatedAt: number
     doc: PMDoc
+    collab: boolean
   }
 
   // User
@@ -31,6 +32,7 @@ declare module '@pm-react-example/shared' {
   export interface ICreateDocumentParams {
     title: string
     doc: PMDoc
+    collab?: boolean
   }
   export interface IGetDocumentsResponse {
     docs: IDBDocument[]
@@ -65,7 +67,7 @@ declare module '@pm-react-example/shared' {
   export enum EActionType {
     DOC_CREATE = 'doc:create',
     DOC_DELETE = 'doc:delete',
-    DOC_LOCK = 'doc:lock'
+    DOC_SELECT = 'doc:select'
   }
   export type Action = IDocCreateAction | IDocDeleteAction
   export interface IDocCreateAction {
@@ -82,8 +84,8 @@ declare module '@pm-react-example/shared' {
       userId: string
     }
   }
-  export interface IDocLockAction {
-    type: EActionType.DOC_LOCK
+  export interface IDocSelectAction {
+    type: EActionType.DOC_SELECT
     payload: {
       documentId?: string
     }
@@ -108,12 +110,14 @@ declare module '@pm-react-example/shared' {
       userId: string
     }
   }
+  export interface ICollabEditPayload {
+    version: number
+    steps: { [key: string]: any }[] // toJSON'd PatchedStep
+    clientIDs: number[]
+  }
   export interface ICollabEditAction {
     type: ECollabActionType.COLLAB_CLIENT_EDIT
-    payload: {
-      version: number
-      steps: PatchedStep[]
-    }
+    payload: ICollabEditPayload
   }
   export interface ICollabServerUpdateAction {
     type: ECollabActionType.COLLAB_SERVER_UPDATE

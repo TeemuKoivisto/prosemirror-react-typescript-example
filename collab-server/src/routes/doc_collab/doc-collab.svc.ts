@@ -1,4 +1,5 @@
 import { Step } from 'prosemirror-transform'
+import { Node as PMNode } from 'prosemirror-model'
 
 import { createDefaultSchema } from '@pm-react-example/full-v2'
 
@@ -20,7 +21,7 @@ export const docCollabService = {
       return instancesMap.get(docId)
     }
     let dbDoc = docDb.get(docId)
-    let doc
+    let doc: PMNode
     if (!dbDoc) {
       doc = this.createEmptyDoc()
       dbDoc = docDb.add('Untitled', doc.toJSON())

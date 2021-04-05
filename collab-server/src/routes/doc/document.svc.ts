@@ -5,10 +5,11 @@ import { IDBDocument, ICreateDocumentParams } from '@pm-react-example/shared'
 
 export const docService = {
   addDocument(params: ICreateDocumentParams, userId: string) {
-    const doc = docDb.add(params.title, params.doc)
+    const { title, doc, collab } = params
+    const dbDoc = docDb.add(title, doc, collab)
     // TODO create in collab mode if already enabled
-    collabDb.selectDoc(userId, doc.id, false)
-    return doc
+    collabDb.selectDoc(userId, dbDoc.id, false)
+    return dbDoc
   },
   getDocument(id: string) {
     return docDb.get(id)
