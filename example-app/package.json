@@ -5,6 +5,7 @@
   "dependencies": {
     "@pm-react-example/atlassian": "*",
     "@pm-react-example/full": "*",
+    "@pm-react-example/full-v2": "*",
     "@pm-react-example/minimal": "*",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.4",

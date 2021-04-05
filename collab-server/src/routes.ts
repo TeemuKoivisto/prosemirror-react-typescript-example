@@ -1,7 +1,7 @@
 import express, { Router } from 'express'
 
 import * as documentCtrl from './routes/doc/document.ctrl'
-import * as docEventCtrl from './routes/doc_events/doc-event.ctrl'
+import * as docCollabCtrl from './routes/doc_collab/doc-collab.ctrl'
 
 const router: Router = Router()
 
@@ -11,7 +11,9 @@ router.get('/doc/:documentId', documentCtrl.getDocument)
 router.put('/doc/:documentId', documentCtrl.updateDocument)
 router.delete('/doc/:documentId', documentCtrl.deleteDocument)
 
-router.get('/doc/:documentId/events', docEventCtrl.getDocumentEvents)
-router.post('/doc/:documentId/events', docEventCtrl.saveCollabSteps)
+router.post('/doc/:documentId/join', docCollabCtrl.clientJoin)
+router.post('/doc/:documentId/leave', docCollabCtrl.clientLeave)
+// router.get('/doc/:documentId/events', docEventCtrl.getDocumentEvents)
+router.post('/doc/:documentId/steps', docCollabCtrl.saveSteps)
 
 export default router

@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express'
 
 import { docService } from './document.svc'
 import { CustomError } from 'src/common/error'
-import { socketIO } from '../../socketIO'
+import { socketIO } from '../../socket-io/socketIO'
 
 import { IRequest } from '../../types/request'
 import {

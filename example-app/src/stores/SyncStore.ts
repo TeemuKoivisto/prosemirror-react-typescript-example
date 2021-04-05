@@ -5,6 +5,7 @@ import { AuthStore } from './AuthStore'
 import { DocumentStore } from './DocumentStore'
 import { ToastStore } from './ToastStore'
 
+import { APIProvider } from '@pm-react-example/full-v2'
 import {
   EActionType, IDocCreateAction, IDocDeleteAction, IDocLockAction
 } from '@pm-react-example/shared'
@@ -24,6 +25,7 @@ export class SyncStore {
   @observable socket: SocketIOClient.Socket | null = null
   @observable syncEnabled: boolean = false
 
+  apiProvider: APIProvider
   authStore: AuthStore
   documentStore: DocumentStore
   toastStore: ToastStore
@@ -49,6 +51,19 @@ export class SyncStore {
     return this.syncEnabled && this.socket?.disconnected
   }
 
+  initAPIProvider = () => {
+    this.apiProvider.init({
+      API_URL: REACT_APP_API_URL,
+      getAuthorization: () => `User ${this.authStore.user?.id}`,
+      socket: this.socket
+    })
+  }
+
+  @action setAPIProvider = (apiProvider: APIProvider) => {
+    this.apiProvider = apiProvider
+    this.initAPIProvider()
+  }
+
   @action toggleSyncing = () => {
     if (this.socket !== null) {
       this.socket?.close()
@@ -70,6 +85,7 @@ export class SyncStore {
         'my-key': 'my-value'
       }
     })
+    this.initAPIProvider()
     this.socket.on(EActionType.DOC_CREATE, (action: IDocCreateAction) => {
       this.documentStore.receiveUpdate(action, action.payload.userId === this.authStore.user?.id)
     })

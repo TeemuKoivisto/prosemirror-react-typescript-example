@@ -1,14 +1,13 @@
 import { action, observable, makeObservable } from 'mobx'
-import {
-  EditorViewProvider,
-  JSONEditorState,
-} from '@pm-react-example/full'
+
+import { EditorContext } from '@pm-react-example/full-v2'
+import { EditorStateJSON } from '@pm-react-example/shared'
 import { PMDoc } from '../types/document'
 
 export class EditorStore {
 
-  viewProvider?: EditorViewProvider
-  currentEditorState?: JSONEditorState
+  editorCtx?: EditorContext
+  currentEditorState?: EditorStateJSON
   @observable collabEnabled: boolean = false
   @observable collabVersion: number = 0
 
@@ -16,24 +15,24 @@ export class EditorStore {
     makeObservable(this)
   }
 
-  setEditorView = (viewProvider: EditorViewProvider) => {
-    this.viewProvider = viewProvider
+  setEditorContext = (ctx: EditorContext) => {
+    this.editorCtx = ctx
   }
 
   getEditorState = () => {
-    return this.viewProvider!.stateToJSON()
+    return this.editorCtx!.viewProvider.stateToJSON()
   }
 
   createEmptyDoc = () : PMDoc => {
     const json = JSON.parse('{"type":"doc","content":[{"type":"paragraph","content":[]}]}')
-    const node = this.viewProvider?.editorView.state.schema.nodeFromJSON(json)
+    const node = this.editorCtx?.viewProvider.editorView.state.schema.nodeFromJSON(json)
     node.check()
     return node.toJSON()
   }
 
   setCurrentDoc = (doc?: PMDoc) => {
     const pmDoc = doc ?? this.createEmptyDoc()
-    this.viewProvider?.replaceDocument(pmDoc)
+    this.editorCtx?.viewProvider.replaceDocument(pmDoc)
   }
 
   @action toggleCollab = () => {

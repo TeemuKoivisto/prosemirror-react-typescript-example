@@ -1,6 +1,6 @@
 import { Step } from 'prosemirror-transform'
 
-import { createDefaultSchema } from '@pm-react-example/full'
+import { createDefaultSchema } from '@pm-react-example/full-v2'
 
 import { CollaborativeInstance } from './CollaborativeInstance'
 import { docDb } from '../../db/doc.db'
@@ -9,7 +9,7 @@ const instancesMap = new Map<string, CollaborativeInstance>()
 const schema = createDefaultSchema()
 let savingTimeout: NodeJS.Timeout | null = null
 
-export const docEventService = {
+export const docCollabService = {
   createEmptyDoc() {
     return schema.nodeFromJSON(
       JSON.parse('{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"This is a collaborative document!"}]}]}')
@@ -25,7 +25,7 @@ export const docEventService = {
       doc = this.createEmptyDoc()
       dbDoc = docDb.add('Untitled', doc.toJSON())
     } else {
-      doc = schema.nodeFromJSON(dbDoc)
+      doc = schema.nodeFromJSON(dbDoc.doc)
     }
     const newInstance = new CollaborativeInstance(doc, dbDoc.id)
     instancesMap.set(dbDoc.id, newInstance)

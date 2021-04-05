@@ -114,10 +114,10 @@ const SyncButton = styled(Button)<{ active?: boolean }>`
   }
 `
 const ConnectionButton = styled(Button)<{ active?: boolean }>`
-  background: ${({ active }) => active ? '#ffbbbb' : 'var(--color-gray-light)'};
+  background: ${({ active }) => active ? '#ffbbbb' : '#fff'};
   cursor: default;
   &:hover {
-    background: ${({ active }) => active ? '#ffbbbb' : 'var(--color-gray-light)'};
+    background: ${({ active }) => active ? '#ffbbbb' : '#fff'};
   }
 `
 const DocumentsList = styled.ul`
