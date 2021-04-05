@@ -38,7 +38,7 @@ export const docCollabService = {
       const data = { doc: inst.doc.toJSON() }
       docDb.update(inst.documentId, data)
       savingTimeout = null
-    }, 5000)
+    }, 2000)
   },
   parseSteps(steps: Step[]) {
     return steps.map(s => Step.fromJSON(schema, s))

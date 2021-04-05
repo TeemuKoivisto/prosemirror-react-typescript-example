@@ -53,7 +53,6 @@ export const socketIO = {
   },
   addUserToDocumentRoom(userId: string, documentId: string) {
     console.log(ioServer.sockets.adapter.rooms)
-    // console.log(ioServer.sockets)
     ioServer.socketsJoin(documentId)
   },
   emitDocCreated(doc: IDBDocument, userId: string) {

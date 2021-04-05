@@ -31,6 +31,7 @@ export const clientJoin = async (
     if (!collabDb.canUserEdit(userId, documentId)) {
       return next(new CustomError('Document is in-use by another user', 403))
     }
+    collabDb.selectDoc(userId, documentId, true)
     const instance = docCollabService.getInstance(documentId)
     instance.handleUserJoin(userId)
     const data = instance.currentDocument
@@ -38,7 +39,7 @@ export const clientJoin = async (
     socketIO.emitCollabUsersChanged(documentId, userId, data.userCount)
     // Can't return the data here since the socket already sends the changes to all the clients, including sender
     // The emitting logic would otherwise have to be modified to send to all except user
-    res.json(true)
+    res.json(data)
   } catch (err) {
     next(err)
   }
@@ -55,6 +56,7 @@ export const clientLeave = async (
     if (!collabDb.canUserEdit(userId, documentId)) {
       return res.json(false)
     }
+    collabDb.unselectDoc(userId)
     const instance = docCollabService.getInstance(documentId)
     instance.handleUserLeave(userId)
     socketIO.emitCollabUsersChanged(documentId, userId, instance.currentDocument.userCount)
@@ -93,6 +95,7 @@ export const saveSteps  = async (
     if (!collabDb.canUserEdit(userId, documentId)) {
       return next(new CustomError('Document has been made private by another user', 403))
     }
+    collabDb.selectDoc(userId, documentId, true)
     const { version, steps, clientID } = req.body
     const parsedSteps = docCollabService.parseSteps(steps)
     const instance = docCollabService.getInstance(documentId)
@@ -101,6 +104,7 @@ export const saveSteps  = async (
     if (!result) {
       return next(new CustomError('Version not current', 409))
     }
+    docCollabService.saveInstance(instance)
     socketIO.emitEditDocument(documentId, result)
     res.json(result)
   } catch (err) {
