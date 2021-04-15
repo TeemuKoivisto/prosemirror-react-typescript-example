@@ -40,7 +40,7 @@ export const socketIO = {
       socket.on('disconnect', () => {
         const { id } = socket['_user']
         usersMap.delete(id)
-        collabDb.unselectDoc(id)
+        collabDb.leaveDocument(id)
         // socket.emit('user:leave', {
         //   usersCount: usersMap.size
         // })

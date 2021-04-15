@@ -20,6 +20,7 @@ export class AuthStore {
         id,
         name: `User ${id.substring(0, 5)}`
       }
+      sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.user))
     }
   }
 

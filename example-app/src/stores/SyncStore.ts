@@ -35,17 +35,17 @@ export class SyncStore {
     this.authStore = props.authStore
     this.documentStore = props.documentStore
     this.toastStore = props.toastStore
-    this.watchCurrentDocument()
+    // this.watchCurrentDocument()
   }
 
-  watchCurrentDocument = () => {
-    reaction(
-      () => this.documentStore.currentDocument,
-      currentDocument => {
-        this.emitSelectedDoc(currentDocument?.id)
-      }
-    )
-  }
+  // watchCurrentDocument = () => {
+  //   reaction(
+  //     () => this.documentStore.currentDocument,
+  //     currentDocument => {
+  //       this.emitSelectedDoc(currentDocument?.id)
+  //     }
+  //   )
+  // }
 
   @computed get isDisconnected() {
     return this.syncEnabled && this.socket?.disconnected

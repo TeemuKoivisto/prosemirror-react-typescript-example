@@ -1,101 +1,85 @@
 import fs from 'fs/promises'
 
+import { DocVisibility } from '@pm-react-example/shared'
+
 interface StoredData {
   editedDocs: [string, EditedDoc][]
-  selectedDocs: [string, string][]
 }
 type EditedDoc = {
   users: string[]
-  collab: boolean
+  ownerId: string
+  visibility: 'private' | 'global'
 }
+
 class CollabDB {
 
   editedDocs = new Map<string, EditedDoc>()
-  selectedDocs = new Map<string, string>()
   FILE = './collab.db.json'
 
   constructor() {
     this.read()
   }
 
-  getUsersSelectedDocId(userId: string) {
-    return this.selectedDocs.get(userId)
-  }
-
   canUserEdit(userId: string, documentId: string) {
     const editedDoc = this.editedDocs.get(documentId)
-    return !editedDoc || editedDoc.users.includes(userId) || editedDoc.collab
+    return editedDoc && (editedDoc.visibility === 'global' || editedDoc.ownerId === userId)
   }
 
-  /**
-   * User either creates a document or selects it from the UI
-   * @param userId 
-   * @param documentId 
-   * @param collab 
-   */
-  selectDoc(userId: string, documentId: string, collab: boolean) {
-    const oldEditedDocId = this.selectedDocs.get(userId)
-    if (oldEditedDocId !== documentId) {
-      const oldEditedDoc = this.editedDocs.get(oldEditedDocId)
-      if (oldEditedDoc) {
-        const users = oldEditedDoc.users.filter(id => id === userId)
-        this.editedDocs.set(oldEditedDocId, { ...oldEditedDoc, users })
-      }
-      this.selectedDocs.delete(userId)
-    }
+  isUserOwner(userId: string, documentId: string) {
     const editedDoc = this.editedDocs.get(documentId)
-    const canUserEdit = !editedDoc || editedDoc.users.includes(userId) || editedDoc.collab
-    if (canUserEdit && editedDoc?.collab) {
-      // join collab session
-      const users = [...editedDoc.users, userId]
-      this.editedDocs.set(documentId, { users, collab: true })
-    } else if (canUserEdit) {
-      // start private or collab editing session
-      this.editedDocs.set(documentId, { users: [userId], collab })
+    return editedDoc && editedDoc.ownerId === userId
+  }
+
+  startEditing(userId: string, documentId: string, visibility = 'private' as DocVisibility) {
+    const doc = this.editedDocs.get(documentId)
+    if (!doc) {
+      this.editedDocs.set(documentId, {
+        users: [userId],
+        ownerId: userId,
+        visibility,
+      })
+    } else if (doc.ownerId === userId && doc.visibility === 'private') {
+      // Resuming an editing session on their private document
+      this.editedDocs.set(documentId, {
+        users: [userId],
+        ownerId: userId,
+        visibility: 'global',
+      })
+    } else if (doc.visibility === 'global') {
+      // Joining a collab session on a global document
+      const { users } = doc
+      const updatedUsers = users.includes(userId) ? users : [...users, userId]
+      this.editedDocs.set(documentId, { ...doc, users: updatedUsers })
     }
-    // Select the doc even if user can't edit it as to only release its previously locked doc
-    this.selectedDocs.set(userId, documentId)
     this.write()
   }
 
-  /**
-   * The user somehow leaves the document
-   * @param userId 
-   */
-  unselectDoc(userId: string) {
-    const oldEditedDocId = this.selectedDocs.get(userId)
-    const oldEditedDoc = this.editedDocs.get(oldEditedDocId)
-    if (oldEditedDocId && oldEditedDoc) {
-      const users = oldEditedDoc.users.filter(id => id === userId)
-      this.editedDocs.set(oldEditedDocId, { ...oldEditedDoc, users })
-      this.selectedDocs.delete(userId)
+  leaveDocument(userId: string, documentId?: string) {
+    if (!documentId) {
+      Array.from(this.editedDocs.entries()).forEach(([docId, doc]) => {
+        if (doc.users.includes(userId)) {
+          this.editedDocs.set(docId, { ...doc, users: doc.users.filter(id => id !== userId) })
+        }
+      })
+      this.write()
+    }
+    const doc = documentId && this.editedDocs.get(documentId)
+    if (doc) {
+      this.editedDocs.set(documentId, { ...doc, users: doc.users.filter(id => id !== userId) })
       this.write()
     }
   }
 
-  /**
-   * User presses collab button on a doc they've already selected
-   * @param userId 
-   * @param documentId 
-   */
-  setCollab(userId: string, documentId: string, collab: boolean) {
-    const editedDocId = this.selectedDocs.get(userId)
-    const editedDoc = this.editedDocs.get(documentId)
-    let action: 'disable-collab' | 'start-collab' | undefined
-    if (editedDocId !== documentId) {
-      // Somehow they have managed to select another doc, probably in another tab
-      // while keeping this doc open and then toggling OR they are just messing with the API
-    } else if (editedDoc.collab && !collab) {
-      // Make the doc private, disable collab and kick everyone else out
-      this.editedDocs.set(documentId, { users: [userId], collab })
-      action = 'disable-collab'
-    } else if (!editedDoc.collab && collab) {
-      // Start collab session
-      this.editedDocs.set(documentId, { users: [userId], collab })
-      action = 'start-collab'
+  setDocumentVisibility(userId: string, documentId: string, visibility: DocVisibility) {
+    const doc = this.editedDocs.get(documentId)
+    if (doc && doc.ownerId === userId) {
+      const disableAccess = visibility === 'private'
+      const users = disableAccess ? [userId] : doc.users
+      this.editedDocs.set(documentId, { ...doc, users, visibility })
+      this.write()
+      return true
     }
-    this.write()
-    return action
+    return false
   }
 
   async read() {
@@ -105,15 +89,11 @@ class CollabDB {
     parsed?.editedDocs?.forEach(mapValue => {
       this.editedDocs.set(mapValue[0], mapValue[1])
     })
-    parsed?.selectedDocs?.forEach(mapValue => {
-      this.selectedDocs.set(mapValue[0], mapValue[1])
-    })
   }
 
   write() {
     const data: StoredData = {
       editedDocs: Array.from(this.editedDocs.entries()),
-      selectedDocs: Array.from(this.selectedDocs.entries()),
     }
     fs.writeFile(this.FILE, JSON.stringify(data))
   }

@@ -15,9 +15,9 @@ class DocDB {
     this.read()
   }
 
-  add(title: string, doc: PMDoc, collab = false) {
+  add(title: string, doc: PMDoc, userId: string, visibility = 'private') {
     const id = uuidv4()
-    const dbDoc = { id, title, doc, collab }
+    const dbDoc: IDBDocument = { id, title, doc, userId, visibility: visibility as 'private' }
     this.docsMap.set(id, dbDoc)
     this.write()
     return dbDoc
@@ -50,8 +50,9 @@ class DocDB {
       this.docsMap.set(mapValue[0], {
         id: mapValue[0],
         title: mapValue[1].title,
+        userId: mapValue[1].userId,
         doc: mapValue[1].doc,
-        collab: mapValue[1].collab,
+        visibility: mapValue[1].visibility,
       })
     })
   }

@@ -15,6 +15,7 @@ export const getDocuments = async (
   next: NextFunction
 ) => {
   try {
+    const userId = req.headers['authorization'].split(' ').pop()
     const docs = docService.getDocuments()
     const result: IGetDocumentsResponse = { docs }
     res.json(result)
@@ -29,7 +30,11 @@ export const getDocument = async (
   next: NextFunction
 ) => {
   try {
-    const dbDoc = docService.getDocument(req.params.documentId)
+    const userId = req.headers['authorization'].split(' ').pop()
+    const dbDoc = docService.getDocument(req.params.documentId, userId)
+    if (!dbDoc) {
+      return next(new CustomError('Not authorized to access the document', 403))
+    }
     res.json(dbDoc)
   } catch (err) {
     next(err)
@@ -60,8 +65,10 @@ export const updateDocument = async (
     const userId = req.headers['authorization'].split(' ').pop()
     const result = docService.updateDocument(req.params.documentId, req.body, userId)
     if (!result) {
-      return next(new CustomError('Document is in-use by another user', 403))
+      return next(new CustomError('Not authorized to update the document', 403))
     }
+    // TODO check if visible changed ->
+    // socketIO.emitDocVisibilityChanged(documentId, userId)
     res.json(true)
   } catch (err) {
     next(err)
@@ -78,7 +85,7 @@ export const deleteDocument = async (
     const { documentId } = req.params
     const result = docService.deleteDocument(documentId, userId)
     if (!result) {
-      return next(new CustomError('Document is in-use by another user', 403))
+      return next(new CustomError('Not authorized to delete the document', 403))
     }
     socketIO.emitDocDeleted(documentId, userId)
     res.json(true)

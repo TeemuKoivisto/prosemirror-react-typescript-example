@@ -8,7 +8,7 @@ import { collabDb } from '../../db/collab.db'
 
 import { IRequest } from '../../types/request'
 import {
-  ISaveCollabStepsParams
+  ISaveCollabStepsParams, DocVisibility
 } from '@pm-react-example/shared'
 
 // function parseQueryParam(param: undefined | string | string[] | ParsedQs | ParsedQs[]) : string {
@@ -29,10 +29,10 @@ export const clientJoin = async (
     const { documentId } = req.params
     const userId = req.headers['authorization'].split(' ').pop()
     if (!collabDb.canUserEdit(userId, documentId)) {
-      return next(new CustomError('Document is in-use by another user', 403))
+      return next(new CustomError('Not allowed to edit the document', 403))
     }
-    collabDb.selectDoc(userId, documentId, true)
-    const instance = docCollabService.getInstance(documentId)
+    collabDb.startEditing(userId, documentId)
+    const instance = docCollabService.getInstance(documentId, userId)
     instance.handleUserJoin(userId)
     const data = instance.currentDocument
     socketIO.addUserToDocumentRoom(userId, documentId)
@@ -56,8 +56,8 @@ export const clientLeave = async (
     if (!collabDb.canUserEdit(userId, documentId)) {
       return res.json(false)
     }
-    collabDb.unselectDoc(userId)
-    const instance = docCollabService.getInstance(documentId)
+    collabDb.leaveDocument(userId, documentId)
+    const instance = docCollabService.getInstance(documentId, userId)
     instance.handleUserLeave(userId)
     socketIO.emitCollabUsersChanged(documentId, userId, instance.currentDocument.userCount)
     res.json(true)
@@ -95,10 +95,9 @@ export const saveSteps  = async (
     if (!collabDb.canUserEdit(userId, documentId)) {
       return next(new CustomError('Document has been made private by another user', 403))
     }
-    collabDb.selectDoc(userId, documentId, true)
     const { version, steps, clientID } = req.body
     const parsedSteps = docCollabService.parseSteps(steps)
-    const instance = docCollabService.getInstance(documentId)
+    const instance = docCollabService.getInstance(documentId, userId)
     const result = instance.handleReceiveSteps(version, parsedSteps, clientID)
     console.log('send steps ', result)
     if (!result) {

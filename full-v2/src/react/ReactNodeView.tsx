@@ -163,7 +163,7 @@ export class ReactNodeView<P = ReactComponentProps, A extends Attrs = {}> implem
   update(node: PMNode, _decorations: Decoration[]) {    
     if (!this.dom) return false
     // Sometimes it might happen that the current transaction transforms/splits a node
-    // into entirely different node (eg block nodes becoming paragraphs all of sudden)
+    // into entirely different node (eg block nodes like blockquotes becoming paragraphs all of sudden)
     // I guess you could do some magic there to avoid redrawing but for now I have little idea how to
     // utilize it so this returns false and the update is processed by PM default behavior.
     // Might be relevant

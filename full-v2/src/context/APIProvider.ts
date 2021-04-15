@@ -26,11 +26,15 @@ export class APIProvider {
       resp = await fetch(`${this.API_URL}/${path}`, options)
     } catch (err) {
       // Must be a connection error (?)
-      throw new APIError('Connection error', 550)
+      // throw new APIError('Connection error', 550)
+      console.error(err)
+      return
     }
     const data = await resp.json()
     if (!resp.ok) {
-      throw new APIError(data?.message || defaultError, resp.status)
+      // throw new APIError(data?.message || defaultError, resp.status)
+      console.error(data?.message || defaultError)
+      return
     }
     return data
   }

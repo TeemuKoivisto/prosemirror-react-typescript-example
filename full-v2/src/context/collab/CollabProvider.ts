@@ -57,22 +57,30 @@ export class CollabProvider {
   async joinCollabSession() {
     // const doc = this.editorViewProvider.stateToJSON()
     // save doc
-    const { version } = await this.apiProvider.post<any>(this.joinURL, { userId: this.userId })
-    this.isCollaborating = true
-    // this.editorViewProvider.execCommand(replaceDocument(doc, version))
-    this.editorViewProvider.execCommand(setCollab(version))
-    this.apiProvider.on(ECollabActionType.COLLAB_USERS_CHANGED, this.onUsersChanged)
-    this.apiProvider.on(ECollabActionType.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
-    this.apiProvider.on(ECollabActionType.COLLAB_SERVER_UPDATE, this.onReceiveServerUpdate)
+    try {
+      const { version } = await this.apiProvider.post<any>(this.joinURL, { userId: this.userId })
+      this.isCollaborating = true
+      // this.editorViewProvider.execCommand(replaceDocument(doc, version))
+      this.editorViewProvider.execCommand(setCollab(version))
+      this.apiProvider.on(ECollabActionType.COLLAB_USERS_CHANGED, this.onUsersChanged)
+      this.apiProvider.on(ECollabActionType.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
+      this.apiProvider.on(ECollabActionType.COLLAB_SERVER_UPDATE, this.onReceiveServerUpdate)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   async leaveCollabSession() {
-    this.isCollaborating = false
-    this.apiProvider.post<boolean>(this.leaveURL, { userId: this.userId })
-    this.editorViewProvider.execCommand(setCollab(0))
-    this.apiProvider.off(ECollabActionType.COLLAB_USERS_CHANGED, this.onUsersChanged)
-    this.apiProvider.off(ECollabActionType.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
-    this.apiProvider.off(ECollabActionType.COLLAB_SERVER_UPDATE, this.onReceiveServerUpdate)
+    try {
+      this.isCollaborating = false
+      this.apiProvider.post<boolean>(this.leaveURL, { userId: this.userId })
+      this.editorViewProvider.execCommand(setCollab(0))
+      this.apiProvider.off(ECollabActionType.COLLAB_USERS_CHANGED, this.onUsersChanged)
+      this.apiProvider.off(ECollabActionType.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
+      this.apiProvider.off(ECollabActionType.COLLAB_SERVER_UPDATE, this.onReceiveServerUpdate)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   //  send(tr: Transaction, _oldState: EditorState, newState: EditorState) {

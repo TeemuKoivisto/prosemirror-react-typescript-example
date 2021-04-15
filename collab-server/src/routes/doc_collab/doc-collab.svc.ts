@@ -9,6 +9,7 @@ import { docDb } from '../../db/doc.db'
 const instancesMap = new Map<string, CollaborativeInstance>()
 const schema = createDefaultSchema()
 let savingTimeout: NodeJS.Timeout | null = null
+let savedInstances = new Set<CollaborativeInstance>()
 
 export const docCollabService = {
   createEmptyDoc() {
@@ -16,7 +17,7 @@ export const docCollabService = {
       JSON.parse('{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"This is a collaborative document!"}]}]}')
     )
   },
-  getInstance(docId: string) {
+  getInstance(docId: string, userId: string) {
     if (instancesMap.has(docId)) {
       return instancesMap.get(docId)
     }
@@ -24,7 +25,7 @@ export const docCollabService = {
     let doc: PMNode
     if (!dbDoc) {
       doc = this.createEmptyDoc()
-      dbDoc = docDb.add('Untitled', doc.toJSON())
+      dbDoc = docDb.add('Untitled', doc.toJSON(), userId)
     } else {
       doc = schema.nodeFromJSON(dbDoc.doc)
     }
@@ -33,10 +34,14 @@ export const docCollabService = {
     return newInstance
   },
   saveInstance(inst: CollaborativeInstance) {
+    if (!savedInstances.has(inst)) savedInstances.add(inst)
     if (savingTimeout) return
     savingTimeout = setTimeout(() => {
-      const data = { doc: inst.doc.toJSON() }
-      docDb.update(inst.documentId, data)
+      savedInstances.forEach(ins => {
+        const data = { doc: ins.doc.toJSON() }
+        docDb.update(ins.documentId, data)
+      })
+      savedInstances = new Set()
       savingTimeout = null
     }, 2000)
   },

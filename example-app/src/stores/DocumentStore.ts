@@ -1,14 +1,17 @@
 import { action, computed, observable, makeObservable, runInAction } from 'mobx'
 
+import { AuthStore } from './AuthStore'
 import { EditorStore } from './EditorStore'
 import { ToastStore } from './ToastStore'
 import { getDocuments, createDocument, updateDocument, deleteDocument } from '../document-api'
 
 import {
   IDBDocument, PMDoc, uuidv4, EActionType, Action,
+  ICreateDocumentParams,
 } from '@pm-react-example/shared'
 
 interface IProps {
+  authStore: AuthStore
   editorStore: EditorStore
   toastStore: ToastStore
 }
@@ -20,11 +23,13 @@ export class DocumentStore {
   @observable unsyncedChanges: boolean = false
   STORAGE_KEY = 'full-editor-documents'
 
+  authStore: AuthStore
   editorStore: EditorStore
   toastStore: ToastStore
 
   constructor(props: IProps) {
     makeObservable(this)
+    this.authStore = props.authStore
     this.editorStore = props.editorStore
     this.toastStore = props.toastStore
     
@@ -48,7 +53,7 @@ export class DocumentStore {
   }
 
   @computed get collabEnabled() {
-    return !!this.currentDocument?.collab
+    return this.currentDocument?.visibility === 'global'
   }
 
   @action getDocuments = async () => {
@@ -82,7 +87,7 @@ export class DocumentStore {
 
   @action createNewDocument = async (existingDoc?: PMDoc) => {
     const doc = existingDoc ?? this.editorStore.createEmptyDoc()
-    const params = { title: 'Untitled', doc, collab: false }
+    const params: ICreateDocumentParams = { title: 'Untitled', doc, visibility: 'private' }
     let result
     try {
       result = await createDocument(params)
@@ -94,8 +99,9 @@ export class DocumentStore {
     // Incase the server is down or just not in use, create a local document
     // that hopefully will be synced to the server
     const id = result?.id ?? uuidv4()
+    const userId = this.authStore.user?.id || ''
     if (!result) {
-      result = { id, ...params }
+      result = { id, userId, ...params }
     }
     this.documentsMap.set(id, result)
     this.currentDocument = result
@@ -166,7 +172,8 @@ export class DocumentStore {
 
   @action toggleCollab = () => {
     if (this.currentDocument) {
-      this.currentDocument.collab = !this.currentDocument.collab
+      const visibility = this.currentDocument.visibility === 'private' ? 'global' : 'private'
+      this.currentDocument.visibility = visibility
       this.updateDocument(this.currentDocument.id, this.currentDocument)
     }
   }

@@ -13,13 +13,16 @@ declare module '@pm-react-example/shared' {
     [key: string]: any
   }
   export type PatchedStep = Step & { clientID: number }
+
+  export type DocVisibility = 'private' | 'global'
   export interface IDBDocument {
     id: string
     title: string
+    userId: string
     // createdAt: number
     // updatedAt: number
     doc: PMDoc
-    collab: boolean
+    visibility: DocVisibility
   }
 
   // User
@@ -32,7 +35,7 @@ declare module '@pm-react-example/shared' {
   export interface ICreateDocumentParams {
     title: string
     doc: PMDoc
-    collab?: boolean
+    visibility: DocVisibility
   }
   export interface IGetDocumentsResponse {
     docs: IDBDocument[]

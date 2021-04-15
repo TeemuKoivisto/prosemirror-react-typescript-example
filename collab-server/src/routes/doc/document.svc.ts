@@ -5,27 +5,31 @@ import { IDBDocument, ICreateDocumentParams } from '@pm-react-example/shared'
 
 export const docService = {
   addDocument(params: ICreateDocumentParams, userId: string) {
-    const { title, doc, collab } = params
-    const dbDoc = docDb.add(title, doc, collab)
+    const { title, doc, visibility } = params
+    const dbDoc = docDb.add(title, doc, userId, visibility)
     // TODO create in collab mode if already enabled
-    collabDb.selectDoc(userId, dbDoc.id, false)
+    collabDb.startEditing(userId, dbDoc.id, visibility)
     return dbDoc
   },
-  getDocument(id: string) {
-    return docDb.get(id)
+  getDocument(id: string, userId: string) {
+    const doc = docDb.get(id)
+    if (doc && doc.userId === userId) {
+      return doc
+    }
+    return false
   },
   getDocuments() {
     return docDb.getAll()
   },
   updateDocument(documentId: string, data: Partial<IDBDocument>, userId: string) {
-    if (!collabDb.canUserEdit(userId, documentId)) {
+    if (!collabDb.isUserOwner(userId, documentId)) {
       return false
     }
     docDb.update(documentId, data)
     return true
   },
   deleteDocument(documentId: string, userId: string) {
-    if (!collabDb.canUserEdit(userId, documentId)) {
+    if (!collabDb.isUserOwner(userId, documentId)) {
       return false
     }
     docDb.delete(documentId)
