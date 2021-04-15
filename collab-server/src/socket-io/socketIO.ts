@@ -51,9 +51,21 @@ export const socketIO = {
   stop() {
     ioServer.close()
   },
-  addUserToDocumentRoom(userId: string, documentId: string) {
-    console.log(ioServer.sockets.adapter.rooms)
-    ioServer.socketsJoin(documentId)
+  async addUserToDocumentRoom(userId: string, documentId: string) {
+    const sockets = await ioServer.in('all').fetchSockets()
+    for (const socket of sockets) {
+      if (socket['_user']?.id === userId) {
+        socket.join(documentId)
+      }
+    }
+  },
+  async removeUserFromDocumentRoom(userId: string, documentId: string) {
+    const sockets = await ioServer.in(documentId).fetchSockets()
+    for (const socket of sockets) {
+      if (socket['_user']?.id === userId) {
+        socket.leave(documentId)
+      }
+    }
   },
   emitDocCreated(doc: IDBDocument, userId: string) {
     const action: IDocCreateAction = {

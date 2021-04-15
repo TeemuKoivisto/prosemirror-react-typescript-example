@@ -53,12 +53,10 @@ export const clientLeave = async (
   try {
     const { documentId } = req.params
     const userId = req.headers['authorization'].split(' ').pop()
-    if (!collabDb.canUserEdit(userId, documentId)) {
-      return res.json(false)
-    }
     collabDb.leaveDocument(userId, documentId)
     const instance = docCollabService.getInstance(documentId, userId)
     instance.handleUserLeave(userId)
+    socketIO.removeUserFromDocumentRoom(userId, documentId)
     socketIO.emitCollabUsersChanged(documentId, userId, instance.currentDocument.userCount)
     res.json(true)
   } catch (err) {

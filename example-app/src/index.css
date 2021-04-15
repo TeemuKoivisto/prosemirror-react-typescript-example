@@ -1,4 +1,5 @@
 :root {
+  --color-bg-lightest: #fff;
   --color-bg-base: #fffafa;
   --color-gray-light: #e2e2e2;
   --color-gray: #bbb;
@@ -6,6 +7,7 @@
   --color-primary-light: #9a69c7;
   --color-primary: #551a8b;
   --color-text-dark: #222;
+  --color-light-red: #ffbbbb;
 
   --width-tablet: 768px;
 }

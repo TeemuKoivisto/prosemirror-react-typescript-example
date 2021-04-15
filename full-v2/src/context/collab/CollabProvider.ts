@@ -55,8 +55,7 @@ export class CollabProvider {
   }
 
   async joinCollabSession() {
-    // const doc = this.editorViewProvider.stateToJSON()
-    // save doc
+    // TODO send current doc incase unsaved changes?
     try {
       const { version } = await this.apiProvider.post<any>(this.joinURL, { userId: this.userId })
       this.isCollaborating = true

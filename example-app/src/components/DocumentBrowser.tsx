@@ -10,6 +10,7 @@ import {
   FiPlus,
   FiTrash,
   FiUser,
+  FiUserX,
   FiUsers,
 } from 'react-icons/fi'
 
@@ -23,6 +24,7 @@ interface IProps {
   unsyncedChanges?: boolean
   syncEnabled?: boolean
   collabEnabled?: boolean
+  canEditCurrentDocument?: boolean
   toggleSyncing?: (documentId: string) => void
   toggleCollab?: () => void
   setCurrentDocument?: (id: string) => void
@@ -36,6 +38,7 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   unsyncedChanges: stores.documentStore.unsyncedChanges,
   syncEnabled: stores.syncStore.syncEnabled,
   collabEnabled: stores.documentStore.collabEnabled,
+  canEditCurrentDocument: stores.documentStore.canEditCurrentDocument,
   toggleSyncing: stores.syncStore.toggleSyncing,
   toggleCollab: stores.documentStore.toggleCollab,
   setCurrentDocument: stores.documentStore.setCurrentDocument,
@@ -45,6 +48,7 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
 (observer((props: IProps) => {
   const {
     className, documents, currentDocument, unsyncedChanges, syncEnabled, collabEnabled,
+    canEditCurrentDocument,
     toggleSyncing, toggleCollab, setCurrentDocument, createNewDocument, deleteDocument,
   } = props
   function handleSyncClick() {
@@ -68,14 +72,25 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   }
   return (
     <div className={className}>
-      <ConnectionButton active={unsyncedChanges} title="Has unsynced changes">
+      <ConnectionButton
+        btnColor={unsyncedChanges ? 'red' : 'white'}
+        title={`${unsyncedChanges ? 'Has' : 'No'} unsynced changes`}
+      >
         { unsyncedChanges ? <FiWifiOff size={16}/> : <FiWifi size={16}/> }
       </ConnectionButton>
-      <SyncButton active={syncEnabled} onClick={handleSyncClick} title="Toggle syncing of documents">
+      <SyncButton
+        btnColor={syncEnabled ? 'blue' : 'gray'}
+        onClick={handleSyncClick}
+        title="Toggle syncing of documents"
+      >
         { syncEnabled ? <FiCloud size={16}/> : <FiCloudOff size={16}/> }
       </SyncButton>
-      <SyncButton active={collabEnabled} onClick={handleCollabClick} title="Toggle collaborative editing">
-        { collabEnabled ? <FiUsers size={16}/> : <FiUser size={16}/> }
+      <SyncButton
+        btnColor={collabEnabled ? 'blue' : !canEditCurrentDocument ? 'red' : 'gray'}
+        onClick={handleCollabClick}
+        title="Toggle collaborative editing"
+      >
+        { collabEnabled ? <FiUsers size={16}/> : canEditCurrentDocument ? <FiUser size={16}/> : <FiUserX size={16}/>}
       </SyncButton>
       <SquareButton color="primary-light" onClick={onNewDocumentClick}>
         <FiPlus size={20}/>
@@ -106,18 +121,32 @@ const Button = styled.button`
   padding: 0.5rem;
   transition: 1s background cubic-bezier(0.075, 0.82, 0.165, 1);
 `
-const SyncButton = styled(Button)<{ active?: boolean }>`
-  background: var(${({ active }) => active ? '--color-primary-lighter' : '--color-gray-light'});
+type ButtonColor = 'gray' | 'blue' | 'red' | 'white'
+const getBtnColor = (color?: ButtonColor, hover = false) => {
+  switch (color) {
+    case 'blue':
+      return hover ? '--color-primary-light' : '--color-primary-lighter'
+    case 'red':
+      return '--color-light-red'
+    case 'white':
+      return '--color-bg-lightest'
+    case 'gray':
+    default:
+      return hover ? '--color-gray' : '-color-gray-light'
+  }
+}
+const SyncButton = styled(Button)<{ btnColor?: ButtonColor }>`
+  background: var(${({ btnColor }) => getBtnColor(btnColor)});
   cursor: pointer;
   &:hover {
-    background: var(${({ active }) => active ? '--color-primary-light' : '--color-gray'});
+    background: var(${({ btnColor }) => getBtnColor(btnColor, true)});
   }
 `
-const ConnectionButton = styled(Button)<{ active?: boolean }>`
-  background: ${({ active }) => active ? '#ffbbbb' : '#fff'};
+const ConnectionButton = styled(Button)<{ btnColor?: ButtonColor }>`
+  background: var(${({ btnColor }) => getBtnColor(btnColor)});
   cursor: default;
   &:hover {
-    background: ${({ active }) => active ? '#ffbbbb' : '#fff'};
+    background: var(${({ btnColor }) => getBtnColor(btnColor, true)});
   }
 `
 const DocumentsList = styled.ul`

@@ -56,6 +56,12 @@ export class DocumentStore {
     return this.currentDocument?.visibility === 'global'
   }
 
+  @computed get canEditCurrentDocument() {
+    const noDoc = this.currentDocument === null
+    const isOwner = this.currentDocument?.userId === this.authStore.user?.id
+    return noDoc || isOwner || this.currentDocument?.visibility === 'global'
+  }
+
   @action getDocuments = async () => {
     const { docs } = await getDocuments()
     // Synchronizes the added and deleted documents NOT the content

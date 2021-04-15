@@ -17,6 +17,9 @@ export const docCollabService = {
       JSON.parse('{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"This is a collaborative document!"}]}]}')
     )
   },
+  evictInstance(docId: string) {
+    instancesMap.delete(docId)
+  },
   getInstance(docId: string, userId: string) {
     if (instancesMap.has(docId)) {
       return instancesMap.get(docId)

@@ -1,6 +1,7 @@
 import { Response, NextFunction } from 'express'
 
 import { docService } from './document.svc'
+import { docCollabService } from '../doc_collab/doc-collab.svc'
 import { CustomError } from 'src/common/error'
 import { socketIO } from '../../socket-io/socketIO'
 
@@ -63,10 +64,12 @@ export const updateDocument = async (
 ) => {
   try {
     const userId = req.headers['authorization'].split(' ').pop()
-    const result = docService.updateDocument(req.params.documentId, req.body, userId)
+    const { documentId } = req.params
+    const result = docService.updateDocument(documentId, req.body, userId)
     if (!result) {
       return next(new CustomError('Not authorized to update the document', 403))
     }
+    docCollabService.evictInstance(documentId)
     // TODO check if visible changed ->
     // socketIO.emitDocVisibilityChanged(documentId, userId)
     res.json(true)
@@ -87,6 +90,7 @@ export const deleteDocument = async (
     if (!result) {
       return next(new CustomError('Not authorized to delete the document', 403))
     }
+    docCollabService.evictInstance(documentId)
     socketIO.emitDocDeleted(documentId, userId)
     res.json(true)
   } catch (err) {
