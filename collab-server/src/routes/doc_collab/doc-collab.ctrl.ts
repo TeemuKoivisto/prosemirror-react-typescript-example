@@ -8,7 +8,7 @@ import { collabDb } from '../../db/collab.db'
 
 import { IRequest } from '../../types/request'
 import {
-  ISaveCollabStepsParams, DocVisibility
+  ISaveCollabStepsParams
 } from '@pm-react-example/shared'
 
 // function parseQueryParam(param: undefined | string | string[] | ParsedQs | ParsedQs[]) : string {
@@ -97,13 +97,20 @@ export const saveSteps  = async (
     const parsedSteps = docCollabService.parseSteps(steps)
     const instance = docCollabService.getInstance(documentId, userId)
     const result = instance.handleReceiveSteps(version, parsedSteps, clientID)
-    console.log('send steps ', result)
     if (!result) {
+      // TODO maybe, JUST MAYBE, return the necessary data to inform client how to sync back up
+      // Maybe steps between the current version vs client version
       return next(new CustomError('Version not current', 409))
     }
+    docCollabService.appendToHistory(documentId, result.steps, result.version)
     docCollabService.saveInstance(instance)
-    socketIO.emitEditDocument(documentId, result)
-    res.json(result)
+    const payload = {
+      steps: result.steps.map(s => s.toJSON()), // Interesting fact: clientID is discarded when toJSON'd
+      version: result.version,
+      clientIDs: result.steps.map(() => clientID) // The clientID doesn't change for any of the steps so this is a bit silly
+    }
+    socketIO.emitEditDocument(documentId, payload)
+    res.json(payload)
   } catch (err) {
     next(err)
   }

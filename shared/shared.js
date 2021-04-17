@@ -1,10 +1,10 @@
-module.exports.EActionType = {
+module.exports.EDocAction = {
   DOC_CREATE: 'doc:create',
   DOC_DELETE: 'doc:delete',
-  DOC_SELECT: 'doc:select'
+  DOC_VISIBILITY: 'doc:visibility'
 }
-module.exports.ECollabActionType = {
-  COLLAB_USERS_CHANGED: 'COLLAB:CLIENT_JOIN',
+module.exports.ECollabAction = {
+  COLLAB_USERS_CHANGED: 'COLLAB:USERS_CHANGED',
   COLLAB_CLIENT_EDIT: 'COLLAB:CLIENT_EDIT',
   COLLAB_SERVER_UPDATE: 'COLLAB:SERVER_UPDATE',
 }

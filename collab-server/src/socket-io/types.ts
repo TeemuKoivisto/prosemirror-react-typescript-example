@@ -1,20 +1,20 @@
 import { Socket } from 'socket.io'
 import {
-  EActionType, IDocCreateAction, IDocDeleteAction, IDocSelectAction,
-  ECollabActionType, ICollabUsersChangedAction, ICollabEditAction,
+  EDocAction, IDocCreateAction, IDocDeleteAction, IDocVisibilityAction,
+  ECollabAction, ICollabUsersChangedAction, ICollabEditAction,
   ICollabServerUpdateAction
 } from '@pm-react-example/shared'
 
 export type ExampleAppSocket = Socket<ISocketListenEvents, ISocketEmitEvents>
 
 export interface ISocketListenEvents {
-  [EActionType.DOC_SELECT]: (action: IDocSelectAction) => void
 }
 
 export interface ISocketEmitEvents {
-  [EActionType.DOC_CREATE]: (action: IDocCreateAction) => void
-  [EActionType.DOC_DELETE]: (action: IDocDeleteAction) => void
-  [ECollabActionType.COLLAB_USERS_CHANGED]: (action: ICollabUsersChangedAction) => void
-  [ECollabActionType.COLLAB_CLIENT_EDIT]: (action: ICollabEditAction) => void
-  [ECollabActionType.COLLAB_SERVER_UPDATE]: (action: ICollabServerUpdateAction) => void
+  [EDocAction.DOC_CREATE]: (action: IDocCreateAction) => void
+  [EDocAction.DOC_DELETE]: (action: IDocDeleteAction) => void
+  [EDocAction.DOC_VISIBILITY]: (action: IDocVisibilityAction) => void
+  [ECollabAction.COLLAB_USERS_CHANGED]: (action: ICollabUsersChangedAction) => void
+  [ECollabAction.COLLAB_CLIENT_EDIT]: (action: ICollabEditAction) => void
+  [ECollabAction.COLLAB_SERVER_UPDATE]: (action: ICollabServerUpdateAction) => void
 }

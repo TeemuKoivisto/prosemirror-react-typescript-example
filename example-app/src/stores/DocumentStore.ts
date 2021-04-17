@@ -6,7 +6,7 @@ import { ToastStore } from './ToastStore'
 import { getDocuments, createDocument, updateDocument, deleteDocument } from '../document-api'
 
 import {
-  IDBDocument, PMDoc, uuidv4, EActionType, Action,
+  IDBDocument, PMDoc, uuidv4, EDocAction, DocAction,
   ICreateDocumentParams,
 } from '@pm-react-example/shared'
 
@@ -138,6 +138,9 @@ export class DocumentStore {
     // Either success or user/backend is offline
     runInAction(() => {
       this.documentsMap.set(id, dbDoc)
+      if (this.currentDocument?.id === id) {
+        this.currentDocument = dbDoc
+      }
     })
   }
 
@@ -156,14 +159,27 @@ export class DocumentStore {
     })
   }
 
-  @action receiveUpdate = (action: Action, wasThisUser: boolean) => {
+  @action receiveUpdate = (action: DocAction, wasThisUser: boolean) => {
     if (wasThisUser) {
-    } else if (action.type === EActionType.DOC_CREATE) {
+    } else if (action.type === EDocAction.DOC_CREATE) {
       this.documentsMap.set(action.payload.doc.id, action.payload.doc)
       this.toastStore.createToast('Received document created')
-    } else if (action.type === EActionType.DOC_DELETE) {
+    } else if (action.type === EDocAction.DOC_DELETE) {
       this.documentsMap.delete(action.payload.documentId)
       this.toastStore.createToast('Received document deleted', 'danger')
+    } else if (action.type === EDocAction.DOC_VISIBILITY) {
+      const { documentId, visibility } = action.payload
+      const prevDoc = this.documentsMap.get(documentId)
+      if (!prevDoc) {
+        return
+      }
+      this.documentsMap.set(documentId, { ...prevDoc, visibility })
+      if (this.currentDocument?.id === documentId) {
+        this.currentDocument = { ...prevDoc, visibility }
+      }
+      const msg = visibility === 'global' ? 'Document has been made public' : 'Document has been made private'
+      const type = visibility === 'global' ? 'success' : 'danger'
+      this.toastStore.createToast(msg, type)
     }
   }
 
@@ -179,8 +195,11 @@ export class DocumentStore {
   @action toggleCollab = () => {
     if (this.currentDocument) {
       const visibility = this.currentDocument.visibility === 'private' ? 'global' : 'private'
-      this.currentDocument.visibility = visibility
-      this.updateDocument(this.currentDocument.id, this.currentDocument)
+      const payload: IDBDocument = {
+        ...this.currentDocument,
+        visibility
+      }
+      this.updateDocument(payload.id, payload)
     }
   }
 

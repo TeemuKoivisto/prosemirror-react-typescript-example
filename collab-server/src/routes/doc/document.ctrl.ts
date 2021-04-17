@@ -69,9 +69,15 @@ export const updateDocument = async (
     if (!result) {
       return next(new CustomError('Not authorized to update the document', 403))
     }
-    docCollabService.evictInstance(documentId)
-    // TODO check if visible changed ->
-    // socketIO.emitDocVisibilityChanged(documentId, userId)
+    // If the doc was changed, wipe out the history and collab instance
+    if (req.body.doc) {
+      docCollabService.evictInstance(documentId)
+    }
+    // TODO compare to previous visibility to decide whether to terminate collab or
+    // ping users that a document has been made global
+    if (req.body.visibility) {
+      socketIO.emitDocVisibilityChanged(documentId, req.body.visibility, userId)
+    }
     res.json(true)
   } catch (err) {
     next(err)

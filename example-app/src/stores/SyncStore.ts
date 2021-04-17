@@ -7,7 +7,7 @@ import { ToastStore } from './ToastStore'
 
 import { APIProvider } from '@pm-react-example/full-v2'
 import {
-  EActionType, IDocCreateAction, IDocDeleteAction, IDocSelectAction
+  EDocAction, IDocCreateAction, IDocDeleteAction, IDocVisibilityAction
 } from '@pm-react-example/shared'
 
 const {
@@ -86,22 +86,15 @@ export class SyncStore {
       }
     })
     this.initAPIProvider()
-    this.socket.on(EActionType.DOC_CREATE, (action: IDocCreateAction) => {
+    this.socket.on(EDocAction.DOC_CREATE, (action: IDocCreateAction) => {
       this.documentStore.receiveUpdate(action, action.payload.userId === this.authStore.user?.id)
     })
-    this.socket.on(EActionType.DOC_DELETE, (action: IDocDeleteAction) => {
+    this.socket.on(EDocAction.DOC_DELETE, (action: IDocDeleteAction) => {
       this.documentStore.receiveUpdate(action, action.payload.userId === this.authStore.user?.id)
     })
-  }
-
-  @action emitSelectedDoc = (documentId?: string) => {
-    const action: IDocSelectAction = {
-      type: EActionType.DOC_SELECT,
-      payload: {
-        documentId
-      }
-    }
-    this.socket?.emit(EActionType.DOC_SELECT, action)
+    this.socket.on(EDocAction.DOC_VISIBILITY, (action: IDocVisibilityAction) => {
+      this.documentStore.receiveUpdate(action, action.payload.userId === this.authStore.user?.id)
+    })
   }
 
   @action reset = () => {

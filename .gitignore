@@ -40,3 +40,4 @@ out/
 # collab server
 doc.db.json
 collab.db.json
+history.db.json

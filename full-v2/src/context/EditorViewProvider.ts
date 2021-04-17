@@ -73,7 +73,7 @@ export class EditorViewProvider {
     options: {
       shouldScrollToBottom?: boolean
       shouldAddToHistory?: boolean
-      shouldTriggerOnDocumentEdit?: boolean
+      triggerAfterTrEvents?: boolean
     } = {}
   ): boolean {
     if (!this.editorView || rawValue === undefined || rawValue === null) {
@@ -83,7 +83,7 @@ export class EditorViewProvider {
     const { state } = this.editorView
     const { schema } = state
     const {
-      shouldScrollToBottom, shouldAddToHistory, shouldTriggerOnDocumentEdit
+      shouldScrollToBottom, shouldAddToHistory, triggerAfterTrEvents
     } = options
 
     const content = parseRawValue(
@@ -108,8 +108,8 @@ export class EditorViewProvider {
     if (!shouldAddToHistory) {
       tr.setMeta('addToHistory', false)
     }
-    if (!shouldTriggerOnDocumentEdit) {
-      tr.setMeta('dontTriggerOnDocumentEdit', true)
+    if (!triggerAfterTrEvents) {
+      tr.setMeta('SKIP_AFTER_TR', true)
     }
     this.editorView.dispatch(tr)
     return true

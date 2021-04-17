@@ -67,64 +67,66 @@ declare module '@pm-react-example/shared' {
   }
 
   // Document sync actions
-  export enum EActionType {
+  export enum EDocAction {
     DOC_CREATE = 'doc:create',
     DOC_DELETE = 'doc:delete',
-    DOC_SELECT = 'doc:select'
+    DOC_VISIBILITY = 'doc:visibility'
   }
-  export type Action = IDocCreateAction | IDocDeleteAction
+  export type DocAction = IDocCreateAction | IDocDeleteAction | IDocVisibilityAction
   export interface IDocCreateAction {
-    type: EActionType.DOC_CREATE
+    type: EDocAction.DOC_CREATE
     payload: {
       doc: IDBDocument
       userId: string
     }
   }
   export interface IDocDeleteAction {
-    type: EActionType.DOC_DELETE
+    type: EDocAction.DOC_DELETE
     payload: {
       documentId: string
       userId: string
     }
   }
-  export interface IDocSelectAction {
-    type: EActionType.DOC_SELECT
+  export interface IDocVisibilityAction {
+    type: EDocAction.DOC_VISIBILITY
     payload: {
-      documentId?: string
+      documentId: string
+      visibility: DocVisibility
+      userId: string
     }
   }
 
   // Editor socket action
   export type EditorSocketAction = CollabAction
-  export type EditorSocketActionType = ECollabActionType
+  export type EditorSocketActionType = ECollabAction
 
   // Collab actions
   // REMEMBER: when adding enums, update the shared.js file
-  export enum ECollabActionType {
-    COLLAB_USERS_CHANGED = 'COLLAB:CLIENT_JOIN',
+  export enum ECollabAction {
+    COLLAB_USERS_CHANGED = 'COLLAB:USERS_CHANGED',
     COLLAB_CLIENT_EDIT = 'COLLAB:CLIENT_EDIT',
     COLLAB_SERVER_UPDATE = 'COLLAB:SERVER_UPDATE',
   }
   export type CollabAction = ICollabUsersChangedAction | ICollabEditAction | ICollabServerUpdateAction
   export interface ICollabUsersChangedAction {
-    type: ECollabActionType.COLLAB_USERS_CHANGED
+    type: ECollabAction.COLLAB_USERS_CHANGED
     payload: {
+      documentId: string
       userCount: number
       userId: string
     }
   }
   export interface ICollabEditPayload {
     version: number
-    steps: { [key: string]: any }[] // toJSON'd PatchedStep
+    steps: { [key: string]: any }[]
     clientIDs: number[]
   }
   export interface ICollabEditAction {
-    type: ECollabActionType.COLLAB_CLIENT_EDIT
+    type: ECollabAction.COLLAB_CLIENT_EDIT
     payload: ICollabEditPayload
   }
   export interface ICollabServerUpdateAction {
-    type: ECollabActionType.COLLAB_SERVER_UPDATE
-    payload: INewStepsResponse
+    type: ECollabAction.COLLAB_SERVER_UPDATE
     payload: {
       cursors: any
     }

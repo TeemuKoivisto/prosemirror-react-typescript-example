@@ -6,7 +6,7 @@ import { APIProvider } from '../APIProvider'
 import { EditorViewProvider } from '../EditorViewProvider'
 
 import {
-  ECollabActionType, ISaveCollabStepsParams, IJoinResponse,
+  ECollabAction, ISaveCollabStepsParams, IJoinResponse,
   ICollabUsersChangedAction, ICollabEditAction
 } from '@pm-react-example/shared'
 
@@ -61,9 +61,9 @@ export class CollabProvider {
       this.isCollaborating = true
       // this.editorViewProvider.execCommand(replaceDocument(doc, version))
       this.editorViewProvider.execCommand(setCollab(version))
-      this.apiProvider.on(ECollabActionType.COLLAB_USERS_CHANGED, this.onUsersChanged)
-      this.apiProvider.on(ECollabActionType.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
-      this.apiProvider.on(ECollabActionType.COLLAB_SERVER_UPDATE, this.onReceiveServerUpdate)
+      this.apiProvider.on(ECollabAction.COLLAB_USERS_CHANGED, this.onUsersChanged)
+      this.apiProvider.on(ECollabAction.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
+      this.apiProvider.on(ECollabAction.COLLAB_SERVER_UPDATE, this.onReceiveServerUpdate)
     } catch (err) {
       console.error(err)
     }
@@ -74,9 +74,9 @@ export class CollabProvider {
       this.isCollaborating = false
       this.apiProvider.post<boolean>(this.leaveURL, { userId: this.userId })
       this.editorViewProvider.execCommand(setCollab(0))
-      this.apiProvider.off(ECollabActionType.COLLAB_USERS_CHANGED, this.onUsersChanged)
-      this.apiProvider.off(ECollabActionType.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
-      this.apiProvider.off(ECollabActionType.COLLAB_SERVER_UPDATE, this.onReceiveServerUpdate)
+      this.apiProvider.off(ECollabAction.COLLAB_USERS_CHANGED, this.onUsersChanged)
+      this.apiProvider.off(ECollabAction.COLLAB_CLIENT_EDIT, this.onReceiveEdit)
+      this.apiProvider.off(ECollabAction.COLLAB_SERVER_UPDATE, this.onReceiveServerUpdate)
     } catch (err) {
       console.error(err)
     }

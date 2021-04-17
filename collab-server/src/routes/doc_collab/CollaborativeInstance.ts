@@ -2,6 +2,7 @@ import { Step } from 'prosemirror-transform'
 import { Node as PMNode } from 'prosemirror-model'
 
 import { IDBDocument, PatchedStep, IJoinResponse } from '@pm-react-example/shared'
+import type { DocHistory } from '../../db/history.db'
 
 const MAX_STEP_HISTORY = 10000
 
@@ -14,9 +15,13 @@ export class CollaborativeInstance {
   lastActive: number = Date.now()
   users: Set<string> = new Set()
 
-  constructor(doc: PMNode, documentId: string) {
+  constructor(doc: PMNode, documentId: string, oldHistory?: DocHistory) {
     this.doc = doc
     this.documentId = documentId
+    if (oldHistory) {
+      this.steps = oldHistory.steps
+      this.currentVersion = oldHistory.version
+    }
   }
 
   get currentDocument() : IJoinResponse {
@@ -52,6 +57,7 @@ export class CollaborativeInstance {
     if (this.steps.length > MAX_STEP_HISTORY) {
       this.steps = this.steps.slice(this.steps.length - MAX_STEP_HISTORY)
     }
+    // console.log('UPDATED DOC', this.doc.textBetween(0, this.doc.nodeSize))
     return patchedSteps
   }
 
@@ -60,8 +66,7 @@ export class CollaborativeInstance {
     if (this.currentVersion !== version) return false
     const appliedSteps = this.applySteps(steps, clientID)
     return {
-      steps: appliedSteps.map(s => s.toJSON()), // Interesting fact: clientID is discarded nicely when toJSON'd
-      clientIDs: appliedSteps.map(s => s.clientID),
+      steps: appliedSteps,
       version: this.currentVersion,
     }
   }

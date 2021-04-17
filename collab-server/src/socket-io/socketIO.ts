@@ -2,15 +2,16 @@ import io from 'socket.io'
 import { Server } from 'http'
 
 import {
-  IDBDocument, IUser, PatchedStep,
-  EActionType, IDocCreateAction, IDocDeleteAction,
-  ECollabActionType, ICollabUsersChangedAction, ICollabEditAction, ICollabEditPayload
+  IDBDocument, IUser,
+  EDocAction, ECollabAction, ICollabEditPayload, DocVisibility
 } from '@pm-react-example/shared'
 
 import { collabDb } from '../db/collab.db'
 
 import { ISocketListenEvents, ISocketEmitEvents } from './types'
-import { docEvents } from './doc.events'
+// import { docEvents } from './doc.events'
+import * as docActions from './doc.actions'
+import * as collabActions from './collab.actions'
 
 const usersMap: Map<string, IUser> = new Map()
 let ioServer: io.Server<ISocketListenEvents, ISocketEmitEvents> | null = null
@@ -35,7 +36,7 @@ export const socketIO = {
       }
       socket.join('all')
   
-      docEvents(socket)
+      // docEvents(socket)
 
       socket.on('disconnect', () => {
         const { id } = socket['_user']
@@ -68,44 +69,24 @@ export const socketIO = {
     }
   },
   emitDocCreated(doc: IDBDocument, userId: string) {
-    const action: IDocCreateAction = {
-      type: EActionType.DOC_CREATE,
-      payload: {
-        doc,
-        userId
-      }
-    }
-    ioServer.in('all').emit(EActionType.DOC_CREATE, action)
+    const action = docActions.createDocCreated(doc, userId)
+    ioServer.in('all').emit(EDocAction.DOC_CREATE, action)
   },
   emitDocDeleted(documentId: string, userId: string) {
-    const action: IDocDeleteAction = {
-      type: EActionType.DOC_DELETE,
-      payload: {
-        documentId,
-        userId
-      }
-    }
-    ioServer.in('all').emit(EActionType.DOC_DELETE, action)
+    const action = docActions.createDocDeleted(documentId, userId)
+    ioServer.in('all').emit(EDocAction.DOC_DELETE, action)
+  },
+  emitDocVisibilityChanged(documentId: string, visibility: DocVisibility, userId: string) {
+    const action = docActions.createVisibilityChanged(documentId, visibility, userId)
+    ioServer.in('all').emit(EDocAction.DOC_VISIBILITY, action)
   },
   emitCollabUsersChanged(documentId: string, userId: string, userCount: number) {
-    const action: ICollabUsersChangedAction = {
-      type: ECollabActionType.COLLAB_USERS_CHANGED,
-      payload: {
-        userId,
-        userCount
-      },
-    }
-    const room = ioServer.sockets.adapter.rooms[documentId]
-    console.log(room)
-    ioServer.in(documentId).emit(ECollabActionType.COLLAB_USERS_CHANGED, action)
+    // const room = ioServer.sockets.adapter.rooms[documentId]
+    const action = collabActions.createUsersChanged(documentId, userId, userCount)
+    ioServer.in(documentId).emit(ECollabAction.COLLAB_USERS_CHANGED, action)
   },
   emitEditDocument(documentId: string, payload: ICollabEditPayload) {
-    const action: ICollabEditAction = {
-      type: ECollabActionType.COLLAB_CLIENT_EDIT,
-      payload,
-    }
-    const room = ioServer.sockets.adapter.rooms[documentId]
-    console.log(room)
-    ioServer.in(documentId).emit(ECollabActionType.COLLAB_CLIENT_EDIT, action)
-  }
+    const action = collabActions.createEditDocument(documentId, payload)
+    ioServer.in(documentId).emit(ECollabAction.COLLAB_CLIENT_EDIT, action)
+  },
 }

@@ -116,7 +116,6 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
 const Button = styled.button`
   border: 0;
   border-radius: 100%;
-  height: fit-content;
   margin-right: 1rem;
   padding: 0.5rem;
   transition: 1s background cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -183,11 +182,15 @@ const getHoverColor = (color: string, disabled?: boolean) => {
   return 'black'
 }
 const SquareButton = styled.button<{ color: string }>`
+  align-items: center;
   background: ${({ disabled, color }) => getColor(color, disabled)};
   border: 0;
   border-radius: 2px;
   color: #fff;
   cursor: ${({ disabled }) => !disabled && 'pointer'};
+  display: flex;
+  height: fit-content;
+  justify-content: center;
   margin-right: 1rem;
   padding: 0.5rem;
   transition: 1s background cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -198,5 +201,6 @@ const SquareButton = styled.button<{ color: string }>`
 `
 
 export const DocumentBrowser = styled(DocumentBrowserEl)`
+  align-items: center;
   display: flex;
 `

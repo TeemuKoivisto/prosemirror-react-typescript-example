@@ -83,11 +83,19 @@ export function Editor(props: EditorProps) {
     portalProvider.flush()
     analyticsProvider.perf.stop('EditorView', 'dispatchTransaction flush', 100)
     // A bit hackish way to stop triggering sync events when the whole document is replaced by the user
-    if (props.onDocumentEdit && !transaction.getMeta('dontTriggerOnDocumentEdit')) {
-      props.onDocumentEdit(editorState)
+    if (!transaction.getMeta('SKIP_AFTER_TR')) {
+      afterTrHooks(editorState)
     }
-    collabProvider.isCollaborating && collabProvider.sendSteps(editorState)
     analyticsProvider.perf.stop('EditorView', 'dispatchTransaction', 1000)
+  }
+
+  function afterTrHooks(newState: EditorState) {
+    if (props.onDocumentEdit) {
+      props.onDocumentEdit(newState)
+    }
+    if (collabProvider.isCollaborating) {
+      collabProvider.sendSteps(newState)
+    }
   }
 
   return (

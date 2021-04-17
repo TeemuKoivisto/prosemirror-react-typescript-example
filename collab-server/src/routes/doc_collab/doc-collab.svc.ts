@@ -5,6 +5,8 @@ import { createDefaultSchema } from '@pm-react-example/full-v2'
 
 import { CollaborativeInstance } from './CollaborativeInstance'
 import { docDb } from '../../db/doc.db'
+import { historyDb } from '../../db/history.db'
+import { PatchedStep } from '@pm-react-example/shared'
 
 const instancesMap = new Map<string, CollaborativeInstance>()
 const schema = createDefaultSchema()
@@ -19,6 +21,7 @@ export const docCollabService = {
   },
   evictInstance(docId: string) {
     instancesMap.delete(docId)
+    historyDb.deleteHistory(docId)
   },
   getInstance(docId: string, userId: string) {
     if (instancesMap.has(docId)) {
@@ -32,9 +35,13 @@ export const docCollabService = {
     } else {
       doc = schema.nodeFromJSON(dbDoc.doc)
     }
-    const newInstance = new CollaborativeInstance(doc, dbDoc.id)
+    const oldHistory = historyDb.getHistory(docId)
+    const newInstance = new CollaborativeInstance(doc, dbDoc.id, oldHistory)
     instancesMap.set(dbDoc.id, newInstance)
     return newInstance
+  },
+  appendToHistory(documentId: string, steps: PatchedStep[], version: number) {
+    historyDb.addToHistory(documentId, steps, version)
   },
   saveInstance(inst: CollaborativeInstance) {
     if (!savedInstances.has(inst)) savedInstances.add(inst)

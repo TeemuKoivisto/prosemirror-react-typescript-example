@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import debounce from 'lodash.debounce'
 import { inject, observer } from 'mobx-react'
 import { EditorState } from 'prosemirror-state'
+import applyDevTools from 'prosemirror-dev-tools'
 
 import {
   Editor as FullEditor, Base, BlockQuote, Collab,
@@ -60,6 +61,7 @@ export const Editor = inject((stores: Stores) => ({
   function handleEditorReady(ctx: EditorContext) {
     setEditorContext!(ctx)
     setAPIProvider!(ctx.apiProvider)
+    applyDevTools(ctx.viewProvider.editorView)
   }
   return (
     <ReactEditorContext.Provider value={providers}>
