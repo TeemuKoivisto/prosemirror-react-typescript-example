@@ -16,7 +16,6 @@ export const getDocuments = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.headers['authorization'].split(' ').pop()
     const docs = docService.getDocuments()
     const result: IGetDocumentsResponse = { docs }
     res.json(result)
@@ -57,6 +56,8 @@ export const createDocument = async (
   }
 }
 
+// TODO update doc only through steps, not with regular PUT
+// maybe as a backup one can send the whole doc eg due to network error/server goes down
 export const updateDocument = async (
   req: IRequest<Partial<IDBDocument>, {}, { documentId: string }>,
   res: Response,

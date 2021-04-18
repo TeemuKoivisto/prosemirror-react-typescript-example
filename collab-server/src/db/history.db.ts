@@ -37,7 +37,13 @@ class HistoryDB {
   async read() {
     const exists = await fs.access(this.FILE).then(() => true).catch(() => false)
     const data = exists ? await fs.readFile(this.FILE, 'utf-8') : undefined
-    const parsed: StoredData = data ? JSON.parse(data) : {}
+    let parsed: StoredData
+    try {
+      parsed = data ? JSON.parse(data) : {}
+    } catch (err) {
+      console.error(err)
+      exists && fs.unlink(this.FILE)
+    }
     parsed?.docHistories?.forEach(mapValue => {
       this.docHistories.set(mapValue[0], mapValue[1])
     })

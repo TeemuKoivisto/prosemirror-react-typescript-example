@@ -50,7 +50,7 @@ export class CollabProvider {
     return `doc/${this.documentId}/steps`
   }
 
-  setConfig(config: Config) {
+  setConfig(config?: Config) {
     this.config = config
   }
 
