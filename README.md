@@ -13,6 +13,10 @@ You should have Yarn installed globally.
 
 The other examples can be executed with `yarn nextjs` and `yarn ssr`. Note: you should probably run only one example at the time since each commands starts the Rollup compilers in the editor subfolders.
 
+### Collab server
+
+It's still WIP but to run it locally you can just execute `yarn collab` to start the server. There few bugs left that I haven't gotten around to fix before deploying it.
+
 ## Background
 
 It has been a long-running project of mine to implement a rich-text editor. My transition has been from Draft.js to Slate.js to finally ProseMirror yet its definitely not easy to integrate ProseMirror with React to create a truly production-ready rich-text editor.

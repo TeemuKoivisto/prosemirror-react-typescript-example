@@ -9,7 +9,7 @@ function parseNodeEnv(NODE_ENV) : 'production' | 'local' {
 
 export const config = {
   ENV: parseNodeEnv(process.env.NODE_ENV),
-  PORT: process.env.PORT || 3300,
+  PORT: process.env.PORT || 3400,
   CORS_SAME_ORIGIN: process.env.CORS_SAME_ORIGIN || false,
   LOG: {
     LEVEL: process.env.LOG_LEVEL || 'info',
