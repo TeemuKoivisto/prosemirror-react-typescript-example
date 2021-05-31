@@ -9,7 +9,7 @@ This repository shows three example editors: `atlassian`, `full` and `minimal` w
 You should have Yarn installed globally.
 
 1. Run: `yarn` to install all the dependencies using Yarn workspaces (no need to install them individually for each project).
-2. Then you can simply run: `yarn start` to start the `example-app` in http://localhost:3000
+2. Then you can simply run: `yarn start` (31-5-2021: might have to run it twice, some problem with full-v2's type generation) to start the `example-app` in http://localhost:3000
 
 The other examples can be executed with `yarn nextjs` and `yarn ssr`. Note: you should probably run only one example at the time since each commands starts the Rollup compilers in the editor subfolders.
 
