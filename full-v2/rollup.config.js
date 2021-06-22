@@ -1,6 +1,8 @@
 import typescript from 'rollup-plugin-typescript2'
 import postcss from 'rollup-plugin-postcss'
 import alias from '@rollup/plugin-alias'
+import ttypescript from 'ttypescript'
+
 import path from 'path'
 
 import pkg from './package.json'
@@ -30,7 +32,9 @@ export default {
         { find: '@react', replacement: path.resolve(__dirname, 'src/react') },
       ]
     }),
-    typescript(),
+    typescript({
+      typescript: ttypescript
+    }),
     postcss(),
   ],
 }

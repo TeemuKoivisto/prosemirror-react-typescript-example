@@ -26,7 +26,8 @@
       "@core": ["src/core"],
       "@extensions": ["src/extensions"],
       "@react": ["src/react"],
-    }
+    },
+    "plugins": [{ "transform": "@zerollup/ts-transform-paths" }]
   },
   "include": [
     "src"
