@@ -67,7 +67,6 @@ export const Editor = inject((stores: Stores) => ({
     <ReactEditorContext.Provider value={providers}>
       <DesktopLayout>
         <FullEditor
-          providers={providers}
           onDocumentEdit={handleDocumentEdit}
           onEditorReady={handleEditorReady}
         >

@@ -1,16 +1,16 @@
-// import { Socket } from 'socket.io-client'
+import { Socket } from 'socket.io-client'
 import { EditorSocketAction, EditorSocketActionType, APIError } from '@pm-react-example/shared'
 
 interface APIProps {
   API_URL: string
   getAuthorization?: () => string
-  socket: SocketIOClient.Socket
+  socket: Socket | null
 }
 
 export class APIProvider {
 
   API_URL: string = ''
-  socket: SocketIOClient.Socket | null = null
+  socket: Socket | null = null
 
   getAuthorization: () => string = () => ''
 

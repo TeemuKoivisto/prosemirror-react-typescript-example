@@ -6,9 +6,9 @@ import { Extension } from '../Extension'
 // import { collabEditPluginFactory } from './pm-plugins/main'
 import { collabEditPluginKey, getPluginState } from './pm-plugins/state'
 
-export type CollabExtensionProps = undefined | {
-  documentId: string
-  userId: string
+export type CollabExtensionProps = {
+  documentId?: string
+  userId?: string
 }
 
 export class CollabExtension extends Extension<CollabExtensionProps> {
@@ -36,14 +36,18 @@ export class CollabExtension extends Extension<CollabExtensionProps> {
   }
 
   onPropsChanged(props: CollabExtensionProps) {
+    const { documentId, userId } = props
     const { collabProvider } = this.ctx
-    const propsChanged = this.props?.documentId !== props?.documentId || this.props?.userId !== props?.userId
+    const propsChanged = this.props?.documentId !== documentId || this.props?.userId !== userId
     if (propsChanged && collabProvider.isCollaborating) {
       collabProvider.leaveCollabSession()
+      collabProvider.setConfig()
     }
     this.props = props
-    collabProvider.setConfig(props)
-    if (propsChanged && props && props.documentId && props.userId) {
+    if (documentId && userId) {
+      collabProvider.setConfig({ documentId, userId })
+    }
+    if (propsChanged && props && documentId && userId) {
       collabProvider.joinCollabSession()
     }
   }

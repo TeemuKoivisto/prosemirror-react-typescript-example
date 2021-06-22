@@ -1,5 +1,5 @@
 import { action, computed, observable, makeObservable, reaction } from 'mobx'
-import io from 'socket.io-client'
+import { io, Socket } from 'socket.io-client'
 
 import { AuthStore } from './AuthStore'
 import { DocumentStore } from './DocumentStore'
@@ -22,10 +22,10 @@ interface IProps {
 
 export class SyncStore {
 
-  @observable socket: SocketIOClient.Socket | null = null
+  @observable socket: Socket | null = null
   @observable syncEnabled: boolean = false
 
-  apiProvider: APIProvider
+  apiProvider?: APIProvider
   authStore: AuthStore
   documentStore: DocumentStore
   toastStore: ToastStore
@@ -52,7 +52,7 @@ export class SyncStore {
   }
 
   initAPIProvider = () => {
-    this.apiProvider.init({
+    this.apiProvider?.init({
       API_URL: REACT_APP_API_URL,
       getAuthorization: () => `User ${this.authStore.user?.id}`,
       socket: this.socket
