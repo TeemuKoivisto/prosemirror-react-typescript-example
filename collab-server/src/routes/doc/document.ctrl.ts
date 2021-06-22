@@ -1,9 +1,9 @@
 import { Response, NextFunction } from 'express'
 
 import { docService } from './document.svc'
-import { docCollabService } from '../doc_collab/doc-collab.svc'
+import { docCollabService } from 'src/pm/collab.svc'
+import { documentIO } from './document.io'
 import { CustomError } from 'src/common/error'
-import { socketIO } from '../../socket-io/socketIO'
 
 import { IRequest } from '../../types/request'
 import {
@@ -49,7 +49,7 @@ export const createDocument = async (
   try {
     const userId = req.headers['authorization'].split(' ').pop()
     const result: IDBDocument = docService.addDocument(req.body, userId)
-    socketIO.emitDocCreated(result, userId)
+    documentIO.emitDocCreated(result, userId)
     res.json(result)
   } catch (err) {
     next(err)
@@ -77,7 +77,7 @@ export const updateDocument = async (
     // TODO compare to previous visibility to decide whether to terminate collab or
     // ping users that a document has been made global
     if (req.body.visibility) {
-      socketIO.emitDocVisibilityChanged(documentId, req.body.visibility, userId)
+      documentIO.emitVisibilityChanged(documentId, req.body.visibility, userId)
     }
     res.json(true)
   } catch (err) {
@@ -98,7 +98,7 @@ export const deleteDocument = async (
       return next(new CustomError('Not authorized to delete the document', 403))
     }
     docCollabService.evictInstance(documentId)
-    socketIO.emitDocDeleted(documentId, userId)
+    documentIO.emitDocDeleted(documentId, userId)
     res.json(true)
   } catch (err) {
     next(err)

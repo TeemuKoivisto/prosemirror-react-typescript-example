@@ -1,9 +1,11 @@
 import { Socket } from 'socket.io'
 import {
   EDocAction, IDocCreateAction, IDocDeleteAction, IDocVisibilityAction,
+} from '@pm-react-example/shared/doc-socket'
+import {
   ECollabAction, ICollabUsersChangedAction, ICollabEditAction,
   ICollabServerUpdateAction
-} from '@pm-react-example/shared'
+} from '@pm-react-example/shared/collab-socket'
 
 export type ExampleAppSocket = Socket<ISocketListenEvents, ISocketEmitEvents>
 

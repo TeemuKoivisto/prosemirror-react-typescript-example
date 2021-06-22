@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io-client'
-import { EditorSocketAction, EditorSocketActionType, APIError } from '@pm-react-example/shared'
+import { EditorSocketAction, EditorSocketActionType } from '@pm-react-example/shared/collab-socket'
 
 interface APIProps {
   API_URL: string

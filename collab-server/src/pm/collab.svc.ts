@@ -3,9 +3,9 @@ import { Node as PMNode } from 'prosemirror-model'
 
 import { createDefaultSchema } from '@pm-react-example/full-v2'
 
-import { CollaborativeInstance } from './CollaborativeInstance'
-import { docDb } from '../../db/doc.db'
-import { historyDb } from '../../db/history.db'
+import { CollaborativeInstance } from 'src/pm/CollaborativeInstance'
+import { docDb } from '../db/doc.db'
+import { historyDb } from '../db/history.db'
 import { PatchedStep } from '@pm-react-example/shared'
 
 const instancesMap = new Map<string, CollaborativeInstance>()

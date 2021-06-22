@@ -8,7 +8,7 @@ import { ToastStore } from './ToastStore'
 import { APIProvider } from '@pm-react-example/full-v2'
 import {
   EDocAction, IDocCreateAction, IDocDeleteAction, IDocVisibilityAction
-} from '@pm-react-example/shared'
+} from '@pm-react-example/shared/doc-socket'
 
 const {
   REACT_APP_API_URL = 'http://localhost:3400'

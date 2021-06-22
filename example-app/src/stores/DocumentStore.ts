@@ -6,9 +6,9 @@ import { ToastStore } from './ToastStore'
 import { getDocuments, createDocument, updateDocument, deleteDocument } from '../document-api'
 
 import {
-  IDBDocument, PMDoc, uuidv4, EDocAction, DocAction,
-  ICreateDocumentParams,
+  IDBDocument, PMDoc, uuidv4, ICreateDocumentParams,
 } from '@pm-react-example/shared'
+import { EDocAction, DocAction } from '@pm-react-example/shared/doc-socket'
 
 interface IProps {
   authStore: AuthStore

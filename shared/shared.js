@@ -1,13 +1,3 @@
-module.exports.EDocAction = {
-  DOC_CREATE: 'doc:create',
-  DOC_DELETE: 'doc:delete',
-  DOC_VISIBILITY: 'doc:visibility'
-}
-module.exports.ECollabAction = {
-  COLLAB_USERS_CHANGED: 'COLLAB:USERS_CHANGED',
-  COLLAB_CLIENT_EDIT: 'COLLAB:CLIENT_EDIT',
-  COLLAB_SERVER_UPDATE: 'COLLAB:SERVER_UPDATE',
-}
 module.exports.uuidv4 = function () {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8)

@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import { ParsedQs } from 'qs'
 
-import { docCollabService } from './doc-collab.svc'
-import { socketIO } from '../../socket-io/socketIO'
-import { CustomError } from '../../common/error'
+import { docCollabService } from 'src/pm/collab.svc'
+import { docCollabIO } from './doc-collab.io'
+import { socketIO } from 'src/socket-io/socketIO'
 import { collabDb } from '../../db/collab.db'
+import { CustomError } from '../../common/error'
 
 import { IRequest } from '../../types/request'
 import {
@@ -35,8 +36,8 @@ export const clientJoin = async (
     const instance = docCollabService.getInstance(documentId, userId)
     instance.handleUserJoin(userId)
     const data = instance.currentDocument
-    socketIO.addUserToDocumentRoom(userId, documentId)
-    socketIO.emitCollabUsersChanged(documentId, userId, data.userCount)
+    socketIO.addUserToRoom(userId, documentId)
+    docCollabIO.emitCollabUsersChanged(documentId, userId, data.userCount)
     // Can't return the data here since the socket already sends the changes to all the clients, including sender
     // The emitting logic would otherwise have to be modified to send to all except user
     res.json(data)
@@ -56,8 +57,8 @@ export const clientLeave = async (
     collabDb.leaveDocument(userId, documentId)
     const instance = docCollabService.getInstance(documentId, userId)
     instance.handleUserLeave(userId)
-    socketIO.removeUserFromDocumentRoom(userId, documentId)
-    socketIO.emitCollabUsersChanged(documentId, userId, instance.currentDocument.userCount)
+    socketIO.removeUserFromRoom(userId, documentId)
+    docCollabIO.emitCollabUsersChanged(documentId, userId, instance.currentDocument.userCount)
     res.json(true)
   } catch (err) {
     next(err)
@@ -82,7 +83,7 @@ export const clientLeave = async (
 //   }
 // }
 
-export const saveSteps  = async (
+export const saveSteps = async (
   req: IRequest<ISaveCollabStepsParams, {}, { documentId: string }>,
   res: Response,
   next: NextFunction
@@ -109,7 +110,7 @@ export const saveSteps  = async (
       version: result.version,
       clientIDs: result.steps.map(() => clientID) // The clientID doesn't change for any of the steps so this is a bit silly
     }
-    socketIO.emitEditDocument(documentId, payload)
+    docCollabIO.emitEditDocument(documentId, payload)
     res.json(payload)
   } catch (err) {
     next(err)
