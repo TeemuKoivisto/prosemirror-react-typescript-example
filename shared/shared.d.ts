@@ -10,7 +10,7 @@ declare module '@pm-react-example/shared' {
   }
   export class APIError extends Error implements IError {
     statusCode: number
-    constructor(message, errorCode = 500) {}
+    constructor(message: string, errorCode?: number)
   }
 
   // DBDocument

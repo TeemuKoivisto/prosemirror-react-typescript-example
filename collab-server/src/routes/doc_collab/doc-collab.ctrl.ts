@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
 import { ParsedQs } from 'qs'
 
-import { docCollabService } from 'src/pm/collab.svc'
+import { docCollabService } from 'pm/collab.svc'
 import { docCollabIO } from './doc-collab.io'
-import { socketIO } from 'src/socket-io/socketIO'
-import { collabDb } from '../../db/collab.db'
-import { CustomError } from '../../common/error'
+import { socketIO } from 'socket-io/socketIO'
+import { collabDb } from 'db/collab.db'
+import { CustomError } from 'common/error'
 
-import { IRequest } from '../../types/request'
+import { IRequest } from 'types/request'
 import {
   ISaveCollabStepsParams
 } from '@pm-react-example/shared'

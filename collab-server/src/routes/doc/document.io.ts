@@ -1,4 +1,4 @@
-import { socketIO } from 'src/socket-io/socketIO'
+import { socketIO } from 'socket-io/socketIO'
 
 import { IDBDocument, DocVisibility } from '@pm-react-example/shared'
 import {

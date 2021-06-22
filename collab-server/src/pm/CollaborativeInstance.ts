@@ -3,7 +3,7 @@ import { Node as PMNode } from 'prosemirror-model'
 
 import { PatchedStep, IJoinResponse } from '@pm-react-example/shared'
 // import { IJoinResponse } from '../shared/collab-socket'
-import type { DocHistory } from '../db/history.db'
+import type { DocHistory } from 'db/history.db'
 
 const MAX_STEP_HISTORY = 10000
 

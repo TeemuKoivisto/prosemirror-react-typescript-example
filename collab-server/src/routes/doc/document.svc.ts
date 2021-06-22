@@ -1,5 +1,5 @@
-import { docDb } from '../../db/doc.db'
-import { collabDb } from '../../db/collab.db'
+import { docDb } from 'db/doc.db'
+import { collabDb } from 'db/collab.db'
 
 import { IDBDocument, ICreateDocumentParams } from '@pm-react-example/shared'
 

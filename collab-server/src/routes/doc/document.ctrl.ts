@@ -1,11 +1,11 @@
 import { Response, NextFunction } from 'express'
 
 import { docService } from './document.svc'
-import { docCollabService } from 'src/pm/collab.svc'
+import { docCollabService } from 'pm/collab.svc'
 import { documentIO } from './document.io'
-import { CustomError } from 'src/common/error'
+import { CustomError } from 'common/error'
 
-import { IRequest } from '../../types/request'
+import { IRequest } from 'types/request'
 import {
   ICreateDocumentParams, IGetDocumentsResponse, IDBDocument
 } from '@pm-react-example/shared'

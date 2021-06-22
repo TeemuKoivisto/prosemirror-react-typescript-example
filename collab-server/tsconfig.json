@@ -9,8 +9,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react",
-    "baseUrl": ".",
-    "typeRoots": ["./node_modules/@types"],
+    "baseUrl": "src",
     "allowJs": true,
     // "skipLibCheck": true,
     "strict": false,
@@ -20,7 +19,7 @@
     "isolatedModules": true
   },
   "include": [
-    "src/**/*"
+    "src"
   ],
   "exclude": [
     "*/__tests__"

@@ -4,6 +4,7 @@
   "description": "Shared type definitions and utility code",
   "author": "Teemu Koivisto <teemukoivisto.xyz@gmail.com>",
   "license": "MIT",
+  "main": "shared.js",
   "types": "shared.d.ts",
   "files": [
     "*"

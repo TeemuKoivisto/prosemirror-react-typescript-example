@@ -5,7 +5,7 @@ import { IUser } from '@pm-react-example/shared'
 import { DocAction } from '@pm-react-example/shared/doc-socket'
 import { CollabAction } from '@pm-react-example/shared/collab-socket'
 
-import { collabDb } from '../db/collab.db'
+import { collabDb } from 'db/collab.db'
 
 import { ISocketListenEvents, ISocketEmitEvents } from './types'
 
