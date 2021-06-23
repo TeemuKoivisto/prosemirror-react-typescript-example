@@ -24,7 +24,7 @@ export class EditorStore {
 
   setCurrentDoc = (doc?: PMDoc) => {
     const pmDoc = doc ?? this.createEmptyDoc()
-    this.editorCtx?.viewProvider.replaceDocument(pmDoc)
+    this.editorCtx?.viewProvider.replaceState(pmDoc)
   }
 
   reset = () => {

@@ -39,15 +39,16 @@ export class CollabExtension extends Extension<CollabExtensionProps> {
     const { documentId, userId } = props
     const { collabProvider } = this.ctx
     const propsChanged = this.props?.documentId !== documentId || this.props?.userId !== userId
-    if (propsChanged && collabProvider.isCollaborating) {
+    if  (!propsChanged) {
+      return
+    }
+    if (collabProvider.isCollaborating) {
       collabProvider.leaveCollabSession()
       collabProvider.setConfig()
     }
     this.props = props
     if (documentId && userId) {
       collabProvider.setConfig({ documentId, userId })
-    }
-    if (propsChanged && props && documentId && userId) {
       collabProvider.joinCollabSession()
     }
   }

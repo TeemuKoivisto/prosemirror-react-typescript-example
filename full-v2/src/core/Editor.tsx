@@ -36,6 +36,8 @@ export function Editor(props: EditorProps) {
 
   function createEditorView(element: HTMLDivElement, editorProps: DirectEditorProps) {
     const view = new EditorView({ mount: element }, editorProps)
+    // @ts-ignore
+    window.editorView = view
     return view
   }
 

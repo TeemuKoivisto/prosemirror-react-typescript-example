@@ -56,7 +56,11 @@ export class EditorViewProvider {
     return { ...state, plugins: [] } as unknown as JSONEditorState
   }
 
-  replaceState(rawValue: Object) {
+  replaceState(doc: {[key: string]: any}, selection?: {[key: string]: any}) {
+    const rawValue = {
+      doc,
+      selection: selection ?? { type: "text", anchor: 1, head: 1 }
+    }
     const state = EditorState.fromJSON({
       schema: this.editorView.state.schema,
       plugins: this.editorView.state.plugins,
@@ -69,7 +73,7 @@ export class EditorViewProvider {
   }
 
   replaceDocument(
-    rawValue: Object,
+    rawValue: {[key: string]: any},
     options: {
       shouldScrollToBottom?: boolean
       shouldAddToHistory?: boolean

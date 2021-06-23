@@ -65,6 +65,7 @@ export const socketIO = {
     }
   },
   emitToAll(action: DocAction | CollabAction) {
+    // TODO 22-6-2021 fix types here or just use any instead of ISocketEmitEvents
     // @ts-ignore
     ioServer.in('all').emit(action.type, action)
   },

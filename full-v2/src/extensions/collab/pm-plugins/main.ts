@@ -7,25 +7,20 @@ import { CollabState, collabEditPluginKey, getPluginState } from './state'
 import { CollabExtensionProps } from '..'
 import { CollabParticipant } from '../types'
 
-export function collabEditPluginFactory(
+export const collabEditPluginFactory = (
   ctx: EditorContext,
   props: CollabExtensionProps,
-) {
-  return new Plugin({
+) => 
+  new Plugin<CollabState, any>({
     state: {
-      init(_, state): CollabState {
+      init(_, state) {
         return {
           decorations: DecorationSet.create(state.doc, []),
           participants: new Map<string, CollabParticipant>(),
           isCollabInitialized: false
         }
       },
-      apply(
-        tr,
-        pluginState: CollabState,
-        _oldState,
-        newState,
-      ): CollabState {
+      apply(tr, pluginState) {
         return pluginState
       },
     },

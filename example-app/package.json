@@ -23,12 +23,12 @@
     "mobx-react": "^7.1.0",
     "prop-types": "^15.7.2",
     "prosemirror-dev-tools": "^3.0.2",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-icons": "^4.1.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.1",
+    "react-scripts": "4.0.3",
     "socket.io-client": "^4.0.0",
     "styled-components": "^5.2.1",
     "tslint": "^6.1.2",
@@ -61,7 +61,6 @@
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.6",
-    "@types/socket.io-client": "^3.0.0",
     "gh-pages": "^3.1.0"
   }
 }
