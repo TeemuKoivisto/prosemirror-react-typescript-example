@@ -46,3 +46,20 @@ Contributions or comments would be appreciated.
 ## Interesting observations
 
 When compiling the editors you should not include React or styled-components as devDependencies as rollup by default seems to point to the editor's dependencies, not the example app's, thus importing them twice and causing very nasty bugs.
+
+## Similar projects & resources
+
+* https://github.com/dminkovsky/use-prosemirror
+* https://github.com/hubgit/react-prosemirror
+* https://gist.github.com/manigandham/65543a0bc2bf7006a487
+
+* https://github.com/bangle-io/bangle.dev
+* https://github.com/remirror/remirror
+* https://github.com/ueberdosis/tiptap
+* https://github.com/nib-edit/Nib
+
+* https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/
+* https://gitlab.com/mpapp-public/manuscripts-manuscript-editor
+* https://github.com/fiduswriter/fiduswriter
+* https://gitlab.coko.foundation/wax/wax-prosemirror
+* https://github.com/MO-Movia/licit
