@@ -121,11 +121,11 @@ export class DocumentStore {
       await updateDocument(id, dbDoc)
       // TODO not really how it works but a compromise for now
       this.unsyncedChanges = false
-    } catch (err) {
+    } catch (err: any) {
       // TOOO: Should probably retry or something -> needs a robust event bus
       // Redux? oh god this gets so complicated
       // Probably with a websocket this becomes easier
-      if (err.statusCode === 403) {
+      if (err?.statusCode === 403) {
         runInAction(() => {
           this.toastStore.createToast(err?.message, 'danger')
           const oldDoc = this.documentsMap.get(id)
@@ -147,7 +147,7 @@ export class DocumentStore {
   @action deleteDocument = async (id: string) => {
     try {
       await deleteDocument(id)
-    } catch (err) {
+    } catch (err: any) {
       this.toastStore.createToast(err?.message, 'danger')
       return
     }

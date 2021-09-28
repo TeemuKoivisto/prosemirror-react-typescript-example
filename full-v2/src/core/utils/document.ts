@@ -39,10 +39,10 @@ export function parseRawValue(
 
     return parsedDoc
   }
-  catch (err) {
+  catch (err: any) {
     // eslint-disable-next-line no-console
     console.error(
-      `Error processing document:\n${err.message}\n\n`,
+      `Error processing document:\n${err?.message}\n\n`,
       JSON.stringify(parsedNode),
     )
     return

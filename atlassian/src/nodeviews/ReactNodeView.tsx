@@ -1,5 +1,5 @@
 import React from 'react';
-import { NodeView, EditorView, Decoration } from 'prosemirror-view';
+import { NodeView, EditorView, Decoration, DecorationSet } from 'prosemirror-view';
 import { Node as PMNode } from 'prosemirror-model';
 
 import { PortalProviderAPI } from '../react-portals';
@@ -138,12 +138,13 @@ export class ReactNodeView<P = ReactComponentProps> implements NodeView {
 
   update(
     node: PMNode,
-    _decorations: Array<Decoration>,
-    validUpdate: (currentNode: PMNode, newNode: PMNode) => boolean = () => true,
+    _decorations: Decoration<{ [key: string]: any; }>[],
+    _innerDecorations: DecorationSet<any>
   ) {
     // @see https://github.com/ProseMirror/prosemirror/issues/648
     const isValidUpdate =
-      this.node.type === node.type && validUpdate(this.node, node);
+      this.node.type === node.type // && validUpdate(this.node, node);
+    // Note: validUpdate was removed when upgrading prosemirror-view from 1.17.3 to 1.20.1
 
     if (!isValidUpdate) {
       return false;
