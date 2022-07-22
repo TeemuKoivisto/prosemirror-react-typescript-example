@@ -1,21 +1,19 @@
 # [ProseMirror + React + TypeScript example editor](https://teemukoivisto.github.io/prosemirror-react-typescript-example/)
 
-Just the basic boilerplate needed to get going with this combo.
+**UPDATE 22.7.2022**: Deprecated but still works (with all packages updated)! The atlassian editor is a cool insight into how they build their editor and one can learn a few things from it. However, there is a bit too much boilerplate here to really understand how to architect a ProseMirror editor combined with React so I rather advise people to use a framework to get started. I might at some point publish something out of this as separate packages but in much smaller scope.
 
 This repository shows three example editors: `atlassian`, `full` and `minimal` which are imported as their own modules in three separate example apps: `example-app`, `example-ssr-app` and `example-nextjs-app`. The previous linking mess is now managed through Yarn workspaces.
 
 ## How to install
 
-You should have Yarn installed globally.
+You need `pnpm` >=7.
 
-1. Run: `yarn` to install all the dependencies using Yarn workspaces (no need to install them individually for each project).
-2. Then you can simply run: `yarn start` (31-5-2021: might have to run it twice, some problem with full-v2's type generation) to start the `example-app` in http://localhost:3000
-
-The other examples can be executed with `yarn nextjs` and `yarn ssr`. Note: you should probably run only one example at the time since each commands starts the Rollup compilers in the editor subfolders.
+1. `pnpm i`
+2. `pnpm start` should start the CRA app at http://localhost:3000 Might have to run it a few times incase the packages were created out of order.
 
 ### Collab server
 
-It's still WIP but to run it locally you can just execute `yarn collab` to start the server. There few bugs left that I haven't gotten around to fix before deploying it.
+Cool example how to use `prosemirror-collab`. There are some advantages over using it compared to Yjs, simplicity at the front. However, there is still a lot of work to create a fully-fledged websocket server to do that.
 
 ## Background
 
