@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "esnext",
+    "lib": ["esnext"],
+    "target": "es2018",
+    "declaration": true,
+    "declarationDir": "./dist",
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "../../.eslintrc.json"
+  ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  }
+}
