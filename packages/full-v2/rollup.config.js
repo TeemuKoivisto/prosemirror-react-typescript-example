@@ -19,10 +19,7 @@ export default {
       format: 'es',
     },
   ],
-  external: [
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.peerDependencies || {}),
-  ],
+  external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
   plugins: [
     alias({
       entries: [
@@ -30,10 +27,10 @@ export default {
         { find: '@core', replacement: path.resolve(__dirname, 'src/core') },
         { find: '@extensions', replacement: path.resolve(__dirname, 'src/extensions') },
         { find: '@react', replacement: path.resolve(__dirname, 'src/react') },
-      ]
+      ],
     }),
     typescript({
-      typescript: ttypescript
+      typescript: ttypescript,
     }),
     postcss(),
   ],

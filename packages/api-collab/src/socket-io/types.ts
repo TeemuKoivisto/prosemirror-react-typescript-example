@@ -1,14 +1,18 @@
 import { Socket } from 'socket.io'
 import {
-  ECollabAction, ICollabUsersChangedAction, ICollabEditAction,
-  EDocAction, IDocCreateAction, IDocDeleteAction, IDocVisibilityAction,
-  ICollabServerUpdateAction
+  ECollabAction,
+  ICollabUsersChangedAction,
+  ICollabEditAction,
+  EDocAction,
+  IDocCreateAction,
+  IDocDeleteAction,
+  IDocVisibilityAction,
+  ICollabServerUpdateAction,
 } from '@example/types'
 
 export type ExampleAppSocket = Socket<ISocketListenEvents, ISocketEmitEvents>
 
-export interface ISocketListenEvents {
-}
+export interface ISocketListenEvents {}
 
 export interface ISocketEmitEvents {
   [EDocAction.DOC_CREATE]: (action: IDocCreateAction) => void

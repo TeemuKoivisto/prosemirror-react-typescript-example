@@ -19,7 +19,7 @@ export class BlockQuoteView implements NodeView {
   node: Node
   view: EditorView
   getPos: () => number
-  attrs: { [key: string]: string | number}
+  attrs: { [key: string]: string | number }
 
   constructor(node: Node, view: EditorView, getPos: () => number) {
     this.attrs = node.attrs
@@ -27,7 +27,7 @@ export class BlockQuoteView implements NodeView {
     this.view = view
     this.getPos = getPos
 
-    // We'll use this to access our Underlined component's 
+    // We'll use this to access our Underlined component's
     // instance methods.
     //
     this.ref = React.createRef()
@@ -52,11 +52,7 @@ export class BlockQuoteView implements NodeView {
     this.contentDOM.classList.add('node__content-dom')
 
     // Better way of doing this would be portals https://reactjs.org/docs/portals.html
-    ReactDOM.render(
-      <BlockQuote ref={this.ref} />,
-      this.dom,
-      this.putContentDomInRef
-    )
+    ReactDOM.render(<BlockQuote ref={this.ref} />, this.dom, this.putContentDomInRef)
   }
 
   update(node: Node) {

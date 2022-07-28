@@ -12,22 +12,20 @@ import { BlockQuoteOptions } from '../'
 
 export interface IProps {
   // providerFactory: ProviderFactory;
-  options?: BlockQuoteOptions;
+  options?: BlockQuoteOptions
 }
 
 export class BlockQuoteView extends ReactNodeView<IProps> {
   getContentDOM() {
     const dom = document.createElement('div')
-    dom.classList.add(`${this.node.type.name}-dom-wrapper`);
+    dom.classList.add(`${this.node.type.name}-dom-wrapper`)
     return {
-      dom
+      dom,
     }
   }
 
   render(_props: {}, forwardRef: ForwardRef) {
-    return (
-      <BlockQuote ref={forwardRef}/>
-    )
+    return <BlockQuote ref={forwardRef} />
   }
 }
 
@@ -35,18 +33,11 @@ export function blockQuoteNodeView(
   portalProviderAPI: PortalProviderAPI,
   eventDispatcher: EventDispatcher,
   // providerFactory: ProviderFactory,
-  options?: BlockQuoteOptions,
+  options?: BlockQuoteOptions
 ) {
   return (node: PMNode, view: EditorView, getPos: getPosHandler): NodeView =>
-    new BlockQuoteView(
-      node,
-      view,
-      getPos,
-      portalProviderAPI,
-      eventDispatcher,
-      {
-        // providerFactory,
-        options,
-      },
-    ).init()
+    new BlockQuoteView(node, view, getPos, portalProviderAPI, eventDispatcher, {
+      // providerFactory,
+      options,
+    }).init()
 }

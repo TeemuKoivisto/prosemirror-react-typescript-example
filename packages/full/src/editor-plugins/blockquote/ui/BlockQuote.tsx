@@ -5,7 +5,7 @@ import { UIProps } from '../'
 
 interface IProps {
   className?: string
-  initialProps: UIProps,
+  initialProps: UIProps
   useListenProps: (cb: (newProps: UIProps) => void) => void
 }
 
@@ -17,9 +17,7 @@ export const BlockQuote = forwardRef((props: IProps, ref: any) => {
   function handlePropsUpdate(newProps: any) {
     // console.log(newProps)
   }
-  return (
-    <StyledBlockQuote className={className} ref={ref}/>
-  )
+  return <StyledBlockQuote className={className} ref={ref} />
 })
 
 export const StyledBlockQuote = styled.blockquote`

@@ -20,5 +20,4 @@ export function MinimalPage(props: IProps) {
   )
 }
 
-const Container = styled.div`
-`
+const Container = styled.div``

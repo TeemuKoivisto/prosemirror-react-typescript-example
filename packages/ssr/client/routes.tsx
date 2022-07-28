@@ -10,9 +10,30 @@ import { AtlassianPage } from './pages/AtlassianPage'
 
 const Routes = () => (
   <RouterRoutes>
-    <Route path="/" element={<DefaultLayout><FrontPage /></DefaultLayout>}/>
-    <Route path="/minimal" element={<DefaultLayout><MinimalPage /></DefaultLayout>}/>
-    <Route path="/atlassian" element={<DefaultLayout><AtlassianPage /></DefaultLayout>}/>
+    <Route
+      path="/"
+      element={
+        <DefaultLayout>
+          <FrontPage />
+        </DefaultLayout>
+      }
+    />
+    <Route
+      path="/minimal"
+      element={
+        <DefaultLayout>
+          <MinimalPage />
+        </DefaultLayout>
+      }
+    />
+    <Route
+      path="/atlassian"
+      element={
+        <DefaultLayout>
+          <AtlassianPage />
+        </DefaultLayout>
+      }
+    />
     <Route path="*" element={<Navigate replace to="/" />} />
   </RouterRoutes>
 )
@@ -23,7 +44,7 @@ export const ClientRoutes = () => (
   </BrowserRouter>
 )
 
-export const ServerRoutes = (props: { url: string}) => (
+export const ServerRoutes = (props: { url: string }) => (
   <StaticRouter location={props.url}>
     <Routes />
   </StaticRouter>

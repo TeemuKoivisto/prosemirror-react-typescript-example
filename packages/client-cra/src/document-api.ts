@@ -2,8 +2,7 @@ import { IDBDocument, IGetDocumentsResponse, ICreateDocumentParams } from '@exam
 
 import { get, post, put, del } from './api'
 
-export const getDocuments = () =>
-  get<IGetDocumentsResponse>('docs', 'Fetching documents failed')
+export const getDocuments = () => get<IGetDocumentsResponse>('docs', 'Fetching documents failed')
 
 export const createDocument = (payload: ICreateDocumentParams) =>
   post<IDBDocument>('doc', payload, 'Document create failed')

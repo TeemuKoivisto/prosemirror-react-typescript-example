@@ -53,7 +53,7 @@ export function Editor(props: EditorProps) {
         }
       },
       // Disables the contentEditable attribute of the editor if the editor is disabled
-      editable: _state => !props.disabled,
+      editable: (_state) => !props.disabled,
       attributes: { 'data-gramm': 'false' },
     }
   }
@@ -100,9 +100,5 @@ export function Editor(props: EditorProps) {
     }
   }
 
-  return (
-    <div ref={editorViewRef}>
-      {props.children}
-    </div>
-  )
+  return <div ref={editorViewRef}>{props.children}</div>
 }

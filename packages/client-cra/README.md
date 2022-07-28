@@ -10,5 +10,5 @@ This project uses Yarn workspaces so you don't really have to install anything. 
 
 ## Commands
 
-* `yarn start` to start the example app
-* `yarn lint` to run ESLint
+- `yarn start` to start the example app
+- `yarn lint` to run ESLint

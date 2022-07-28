@@ -7,11 +7,9 @@ import { Editor, EditorViewProvider, JSONEditorState } from '@example/full'
 import { Layout } from '../components/Layout'
 import { PageHeader } from '../components/PageHeader'
 
-interface IProps {
-}
+interface IProps {}
 
 class EditorStore {
-
   viewProvider?: EditorViewProvider
   currentEditorState?: JSONEditorState
   STORAGE_KEY = 'full-editor-state'
@@ -20,7 +18,7 @@ class EditorStore {
     if (typeof window !== 'undefined') {
       const existing = localStorage.getItem(this.STORAGE_KEY)
       if (existing && existing !== null && existing.length > 0) {
-        let stored = JSON.parse(existing)
+        const stored = JSON.parse(existing)
         this.currentEditorState = stored
       }
     }
@@ -52,15 +50,15 @@ export default function FrontPage(props: IProps) {
   return (
     <Layout>
       <PageHeader>
-      <Editor
-        analytics={{
-          shouldTrack: true,
-          logLevel: 'debug',
-          logToConsole: true,
-        }}
-        onDocumentEdit={handleDocumentEdit}
-        onEditorReady={handleEditorReady}
-      />
+        <Editor
+          analytics={{
+            shouldTrack: true,
+            logLevel: 'debug',
+            logToConsole: true,
+          }}
+          onDocumentEdit={handleDocumentEdit}
+          onEditorReady={handleEditorReady}
+        />
       </PageHeader>
     </Layout>
   )

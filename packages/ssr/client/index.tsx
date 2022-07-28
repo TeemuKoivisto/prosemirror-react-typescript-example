@@ -3,7 +3,4 @@ import { hydrate } from 'react-dom'
 
 import { ClientRoutes } from './routes'
 
-hydrate(
-  <ClientRoutes/>,
-  document.getElementById('root')
-)
+hydrate(<ClientRoutes />, document.getElementById('root'))

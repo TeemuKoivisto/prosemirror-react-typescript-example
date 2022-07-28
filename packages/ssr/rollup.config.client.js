@@ -22,12 +22,12 @@ export default {
     typescript(),
     postcss(),
     commonjs(),
-    injectProcessEnv({ 
+    injectProcessEnv({
       NODE_ENV: 'production',
     }),
     nodePolyfills(),
     nodeResolve({
-      browser: true
+      browser: true,
     }),
   ],
 }

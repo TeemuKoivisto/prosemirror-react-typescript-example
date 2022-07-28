@@ -1,12 +1,8 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React from 'react'
 // import textContent from 'react-addons-text-content';
 
-import {
-  GroupTitle,
-  GroupTitleText,
-  GroupTitleAfter,
-} from './styled/ItemGroup';
+import { GroupTitle, GroupTitleText, GroupTitleAfter } from './styled/ItemGroup'
 
 interface ItemGroupProps {
   /** Items to be shown inside the item group. */
@@ -28,18 +24,10 @@ interface ItemGroupProps {
 export default class ItemGroup extends React.Component<ItemGroupProps> {
   static defaultProps = {
     role: 'group',
-  };
+  }
 
   render() {
-    const {
-      children,
-      elemAfter,
-      isCompact,
-      title,
-      label,
-      innerRef,
-      role,
-    } = this.props;
+    const { children, elemAfter, isCompact, title, label, innerRef, role } = this.props
 
     const ariaLabel = label ?? title ?? ''
     return (
@@ -47,15 +35,11 @@ export default class ItemGroup extends React.Component<ItemGroupProps> {
         {title ? (
           <GroupTitle aria-hidden="true" isCompact={isCompact}>
             <GroupTitleText>{title}</GroupTitleText>
-            {elemAfter ? (
-              <GroupTitleAfter>
-                {elemAfter}
-              </GroupTitleAfter>
-            ) : null}
+            {elemAfter ? <GroupTitleAfter>{elemAfter}</GroupTitleAfter> : null}
           </GroupTitle>
         ) : null}
         {children}
       </div>
-    );
+    )
   }
 }

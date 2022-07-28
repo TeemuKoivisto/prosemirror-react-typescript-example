@@ -14,10 +14,9 @@ export function AtlassianPage(props: IProps) {
   return (
     <Container className={className}>
       <PageHeader />
-      <Editor performanceTracking/>
+      <Editor performanceTracking />
     </Container>
   )
 }
 
-const Container = styled.div`
-`
+const Container = styled.div``

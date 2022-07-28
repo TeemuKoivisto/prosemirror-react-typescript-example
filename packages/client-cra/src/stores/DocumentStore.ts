@@ -6,7 +6,12 @@ import { ToastStore } from './ToastStore'
 import { getDocuments, createDocument, updateDocument, deleteDocument } from '../document-api'
 
 import {
-  EDocAction, DocAction, IDBDocument, PMDoc, uuidv4, ICreateDocumentParams,
+  EDocAction,
+  DocAction,
+  IDBDocument,
+  PMDoc,
+  uuidv4,
+  ICreateDocumentParams,
 } from '@example/types'
 
 interface IProps {
@@ -16,7 +21,6 @@ interface IProps {
 }
 
 export class DocumentStore {
-
   @observable documentsMap: Map<string, IDBDocument> = new Map()
   @observable currentDocument: IDBDocument | null = null
   @observable unsyncedChanges: boolean = false
@@ -31,7 +35,7 @@ export class DocumentStore {
     this.authStore = props.authStore
     this.editorStore = props.editorStore
     this.toastStore = props.toastStore
-    
+
     if (typeof window === 'undefined') return
     const existing = localStorage.getItem(this.STORAGE_KEY)
     if (existing && existing !== null && existing.length > 0) {
@@ -46,9 +50,7 @@ export class DocumentStore {
   }
 
   @computed get documents(): IDBDocument[] {
-    return Array.from(this.documentsMap.entries()).map(
-      ([_id, doc]) => doc
-    )
+    return Array.from(this.documentsMap.entries()).map(([_id, doc]) => doc)
   }
 
   @computed get collabEnabled() {
@@ -67,7 +69,7 @@ export class DocumentStore {
     // (this is done through the editor collab sync)
     runInAction(() => {
       const currentDocsIds = Array.from(this.documentsMap.entries()).map(([id, _doc]) => id)
-      docs.forEach(d => {
+      docs.forEach((d) => {
         const idx = currentDocsIds.indexOf(d.id)
         if (idx === -1) {
           this.documentsMap.set(d.id, d)
@@ -82,9 +84,9 @@ export class DocumentStore {
   @action setCurrentDocument = (id: string) => {
     // const { doc } = this.editorStore.getEditorState()
     // if (this.currentDocument) {
-      // There might be unsaved changes as the debouncing takes a half sec after
-      // user has stopped typing. Could probably set it to lower and just omit this 🤔
-      // this.updateDocument(this.currentDocument.id, { ...this.currentDocument, doc })
+    // There might be unsaved changes as the debouncing takes a half sec after
+    // user has stopped typing. Could probably set it to lower and just omit this 🤔
+    // this.updateDocument(this.currentDocument.id, { ...this.currentDocument, doc })
     // }
     this.currentDocument = this.documentsMap.get(id) ?? null
     this.editorStore.setCurrentDoc(this.currentDocument?.doc)
@@ -176,7 +178,8 @@ export class DocumentStore {
       if (this.currentDocument?.id === documentId) {
         this.currentDocument = { ...prevDoc, visibility }
       }
-      const msg = visibility === 'global' ? 'Document has been made public' : 'Document has been made private'
+      const msg =
+        visibility === 'global' ? 'Document has been made public' : 'Document has been made private'
       const type = visibility === 'global' ? 'success' : 'danger'
       this.toastStore.createToast(msg, type)
     }
@@ -196,7 +199,7 @@ export class DocumentStore {
       const visibility = this.currentDocument.visibility === 'private' ? 'global' : 'private'
       const payload: IDBDocument = {
         ...this.currentDocument,
-        visibility
+        visibility,
       }
       this.updateDocument(payload.id, payload)
     }

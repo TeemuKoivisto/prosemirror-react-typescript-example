@@ -4,14 +4,9 @@ import { config } from './config'
 let logFormat
 // Add colors in local environment
 if (config.ENV === 'production') {
-  logFormat = winston.format.combine(
-    winston.format.json()
-  )
+  logFormat = winston.format.combine(winston.format.json())
 } else {
-  logFormat = winston.format.combine(
-    winston.format.colorize(),
-    winston.format.simple(),
-  )
+  logFormat = winston.format.combine(winston.format.colorize(), winston.format.simple())
 }
 
 export const log: winston.Logger = winston.createLogger({
@@ -22,9 +17,11 @@ export const log: winston.Logger = winston.createLogger({
       level: config.LOG.LEVEL,
     }),
   ],
-  exitOnError: false
+  exitOnError: false,
 })
 
 export const logStream = {
-  write: (message: string) => { log.info(message) }
+  write: (message: string) => {
+    log.info(message)
+  },
 }

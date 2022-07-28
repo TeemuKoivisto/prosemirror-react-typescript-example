@@ -1,7 +1,7 @@
 import { EditorState, Selection } from 'prosemirror-state'
 
 // From https://github.com/PierBover/prosemirror-cookbook
-export function getActiveMarks(state: EditorState) : string[] {
+export function getActiveMarks(state: EditorState): string[] {
   const isEmpty = state.selection.empty
   if (isEmpty) {
     const $from = state.selection.$from

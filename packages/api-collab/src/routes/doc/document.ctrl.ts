@@ -6,15 +6,9 @@ import { documentIO } from './document.io'
 import { CustomError } from 'common/error'
 
 import { IRequest } from 'types/request'
-import {
-  ICreateDocumentParams, IGetDocumentsResponse, IDBDocument
-} from '@example/types'
+import { ICreateDocumentParams, IGetDocumentsResponse, IDBDocument } from '@example/types'
 
-export const getDocuments = async (
-  req: IRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const getDocuments = async (req: IRequest, res: Response, next: NextFunction) => {
   try {
     const docs = docService.getDocuments()
     const result: IGetDocumentsResponse = { docs }

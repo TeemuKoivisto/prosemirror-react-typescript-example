@@ -27,27 +27,24 @@ const components = {
 }
 
 export function Editor(props: EditorProps) {
-  const {
-    appearance = 'full-page',
-  } = props
+  const { appearance = 'full-page' } = props
   // These three have to be inside useMemos for SSR compatibility
-  const viewProvider = useMemo(() => new EditorViewProvider, [])
-  const portalProvider = useMemo(() => new PortalProvider, [])
-  const pluginsProvider = useMemo(() => new PluginsProvider, [])
+  const viewProvider = useMemo(() => new EditorViewProvider(), [])
+  const portalProvider = useMemo(() => new PortalProvider(), [])
+  const pluginsProvider = useMemo(() => new PluginsProvider(), [])
   const analyticsProvider = useMemo(() => new AnalyticsProvider(props.analytics), [])
   const Component = useMemo(() => components[appearance], [appearance])
 
   return (
-    <EditorContext.Provider value={{
-      viewProvider,
-      portalProvider,
-      pluginsProvider,
-      analyticsProvider
-    }}>
-      <ReactEditorView
-        editorProps={props}
-        EditorLayoutComponent={Component}
-      />
+    <EditorContext.Provider
+      value={{
+        viewProvider,
+        portalProvider,
+        pluginsProvider,
+        analyticsProvider,
+      }}
+    >
+      <ReactEditorView editorProps={props} EditorLayoutComponent={Component} />
       <PortalRenderer />
     </EditorContext.Provider>
   )

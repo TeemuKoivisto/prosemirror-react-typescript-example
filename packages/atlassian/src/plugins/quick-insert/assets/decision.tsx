@@ -1,5 +1,5 @@
-import React from 'react';
-import { IconProps } from '../types';
+import React from 'react'
+import { IconProps } from '../types'
 
 export default function IconDecision({ label = '' }: IconProps) {
   return (
@@ -14,5 +14,5 @@ export default function IconDecision({ label = '' }: IconProps) {
         <path d="M27 19h12v2H27a1 1 0 010-2z" fill="#C1C7D0" />
       </g>
     </svg>
-  );
+  )
 }

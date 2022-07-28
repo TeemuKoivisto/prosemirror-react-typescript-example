@@ -12,7 +12,7 @@ export function isPerformanceAPIAvailable(): boolean {
         'getEntriesByName',
         'getEntriesByType',
         'now',
-      ].every(api => !!(performance as any)[api])
+      ].every((api) => !!(performance as any)[api])
   }
 
   return hasRequiredPerformanceAPIs

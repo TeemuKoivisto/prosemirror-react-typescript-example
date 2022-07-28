@@ -10,5 +10,5 @@ This project uses Yarn workspaces so you don't really have to install anything. 
 
 ## Commands
 
-* `yarn watch` starts the Rollup compiler and watches changes to the editor
-* `yarn build` compiles the code as both CommonJS and ES module.
+- `yarn watch` starts the Rollup compiler and watches changes to the editor
+- `yarn build` compiles the code as both CommonJS and ES module.

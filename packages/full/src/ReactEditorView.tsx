@@ -3,9 +3,7 @@ import { DirectEditorProps, EditorView } from 'prosemirror-view'
 import { EditorState, Transaction } from 'prosemirror-state'
 import { Node as PMNode } from 'prosemirror-model'
 import { applyDevTools } from 'prosemirror-dev-toolkit'
-import {
-  collab, receiveTransaction, sendableSteps, getVersion
-} from 'prosemirror-collab'
+import { collab, receiveTransaction, sendableSteps, getVersion } from 'prosemirror-collab'
 import { Step } from 'prosemirror-transform'
 
 import { INewStepsResponse } from '@example/types'
@@ -15,17 +13,9 @@ import { useEditorContext } from './core/EditorContext'
 import { createDefaultEditorPlugins } from './create-defaults'
 import { createSchema } from './core/create/create-schema'
 import { createPMPlugins, processPluginsList } from './core/create/create-plugins'
-import {
-  findChangedNodesFromTransaction,
-  validateNodes,
-  validNode,
-} from './utils/nodes'
+import { findChangedNodesFromTransaction, validateNodes, validNode } from './utils/nodes'
 import { getDocStructure, SimplifiedNode } from './utils/document-logger'
-import {
-  sendSteps,
-  getDocument,
-  fetchEvents,
-} from './collab-api'
+import { sendSteps, getDocument, fetchEvents } from './collab-api'
 
 import useSsrLayoutEffect from './react/hooks/useSsrLayoutEffect'
 
@@ -54,7 +44,7 @@ export function ReactEditorView(props: IProps) {
       viewProvider.init(view)
       editorProps.onEditorReady && editorProps.onEditorReady(viewProvider)
       if (editorProps.collab) {
-        getDocument().then(data => {
+        getDocument().then((data) => {
           viewProvider.replaceDocument(data.doc)
           collabVersion = data.version
           subscribeToCollab()
@@ -68,7 +58,7 @@ export function ReactEditorView(props: IProps) {
 
   useEffect(() => {
     if (editorProps.collab?.documentId) {
-      getDocument().then(data => {
+      getDocument().then((data) => {
         viewProvider.replaceDocument(data.doc)
         collabVersion = data.version
         subscribeToCollab()
@@ -86,9 +76,9 @@ export function ReactEditorView(props: IProps) {
       editorConfig: config,
       ctx,
     })
-    
+
     if (editorProps.collab) plugins.push(collab())
-    
+
     return EditorState.create({
       schema,
       plugins,
@@ -113,7 +103,7 @@ export function ReactEditorView(props: IProps) {
         }
       },
       // Disables the contentEditable attribute of the editor if the editor is disabled
-      editable: _state => !editorProps.disabled,
+      editable: (_state) => !editorProps.disabled,
       attributes: { 'data-gramm': 'false' },
     }
   }
@@ -155,8 +145,8 @@ export function ReactEditorView(props: IProps) {
       }
     } else {
       const invalidNodes = nodes
-        .filter(node => !validNode(node))
-        .map<SimplifiedNode | string>(node => getDocStructure(node))
+        .filter((node) => !validNode(node))
+        .map<SimplifiedNode | string>((node) => getDocStructure(node))
 
       if (shouldTrack) {
         console.error('Invalid nodes in transaction')
@@ -179,7 +169,7 @@ export function ReactEditorView(props: IProps) {
       await subscribeToCollab()
     } else if (response.status != 200) {
       // Reconnect in one second
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       await subscribeToCollab()
     } else {
       // Get and show the message
@@ -191,9 +181,9 @@ export function ReactEditorView(props: IProps) {
 
   function handleCollabEvents(data: INewStepsResponse) {
     const { editorView } = viewProvider
-    let tr = receiveTransaction(
+    const tr = receiveTransaction(
       editorView.state,
-      data.steps.map(j => Step.fromJSON(editorView.state.schema, j)),
+      data.steps.map((j) => Step.fromJSON(editorView.state.schema, j)),
       data.clientIDs
     )
     editorView.dispatch(tr)
@@ -209,7 +199,7 @@ export function ReactEditorView(props: IProps) {
         steps: sendable.steps as Step[],
         origins: sendable.origins,
         clientID,
-        version: collabVersion
+        version: collabVersion,
       })
       if (version) collabVersion = version
     }
@@ -217,7 +207,7 @@ export function ReactEditorView(props: IProps) {
 
   return (
     <EditorLayoutComponent>
-      <div ref={editorViewRef}/>
+      <div ref={editorViewRef} />
     </EditorLayoutComponent>
   )
 }

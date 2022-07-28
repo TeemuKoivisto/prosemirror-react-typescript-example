@@ -1,4 +1,4 @@
-import { EditorState} from 'prosemirror-state'
+import { EditorState } from 'prosemirror-state'
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { PluginKey, CommandDispatch } from '@core'
 
@@ -15,16 +15,15 @@ export const collabEditPluginKey = new PluginKey('collabEditPlugin')
 export const getPluginState = (state: EditorState): CollabState =>
   collabEditPluginKey.getState(state)
 
-export const setPluginState = (stateProps: Object) => (
-  state: EditorState,
-  dispatch: CommandDispatch,
-): boolean => {
-  const pluginState = getPluginState(state)
-  dispatch(
-    state.tr.setMeta(collabEditPluginKey, {
-      ...pluginState,
-      ...stateProps,
-    }),
-  )
-  return true
-}
+export const setPluginState =
+  (stateProps: Object) =>
+  (state: EditorState, dispatch: CommandDispatch): boolean => {
+    const pluginState = getPluginState(state)
+    dispatch(
+      state.tr.setMeta(collabEditPluginKey, {
+        ...pluginState,
+        ...stateProps,
+      })
+    )
+    return true
+  }

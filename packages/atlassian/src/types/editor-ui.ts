@@ -1,7 +1,7 @@
-import React from 'react';
-import { EditorView } from 'prosemirror-view';
-import { EditorActions } from '../EditorActions';
-import { EventDispatcher } from '../utils/event-dispatcher';
+import React from 'react'
+import { EditorView } from 'prosemirror-view'
+import { EditorActions } from '../EditorActions'
+import { EventDispatcher } from '../utils/event-dispatcher'
 import { ProviderFactory } from '../provider-factory'
 
 export type EditorAppearance = 'full-page'
@@ -16,26 +16,26 @@ export enum ToolbarSize {
 }
 
 export type ToolbarUiComponentFactoryParams = UiComponentFactoryParams & {
-  toolbarSize: ToolbarSize;
-  isToolbarReducedSpacing: boolean;
-  isLastItem?: boolean;
-};
+  toolbarSize: ToolbarSize
+  isToolbarReducedSpacing: boolean
+  isLastItem?: boolean
+}
 export type ToolbarUIComponentFactory = (
-  params: ToolbarUiComponentFactoryParams,
-) => React.ReactElement<any> | null;
+  params: ToolbarUiComponentFactoryParams
+) => React.ReactElement<any> | null
 
 export type UiComponentFactoryParams = {
-  editorView: EditorView;
-  editorActions: EditorActions;
-  eventDispatcher: EventDispatcher;
-  providerFactory: ProviderFactory;
-  appearance: EditorAppearance;
-  popupsMountPoint?: HTMLElement;
-  popupsBoundariesElement?: HTMLElement;
-  popupsScrollableElement?: HTMLElement;
-  containerElement: HTMLElement | null;
-  disabled: boolean;
-};
+  editorView: EditorView
+  editorActions: EditorActions
+  eventDispatcher: EventDispatcher
+  providerFactory: ProviderFactory
+  appearance: EditorAppearance
+  popupsMountPoint?: HTMLElement
+  popupsBoundariesElement?: HTMLElement
+  popupsScrollableElement?: HTMLElement
+  containerElement: HTMLElement | null
+  disabled: boolean
+}
 export type UIComponentFactory = (
-  params: UiComponentFactoryParams,
-) => React.ReactElement<any> | null;
+  params: UiComponentFactoryParams
+) => React.ReactElement<any> | null

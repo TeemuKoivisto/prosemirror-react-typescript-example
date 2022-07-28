@@ -7,12 +7,13 @@ import { ToastStore } from './ToastStore'
 
 import { APIProvider } from '@example/full-v2'
 import {
-  EDocAction, IDocCreateAction, IDocDeleteAction, IDocVisibilityAction
+  EDocAction,
+  IDocCreateAction,
+  IDocDeleteAction,
+  IDocVisibilityAction,
 } from '@example/types'
 
-const {
-  REACT_APP_API_URL = 'http://localhost:3400'
-} = process.env
+const { REACT_APP_API_URL = 'http://localhost:3400' } = process.env
 
 interface IProps {
   authStore: AuthStore
@@ -21,7 +22,6 @@ interface IProps {
 }
 
 export class SyncStore {
-
   @observable socket: Socket | null = null
   @observable syncEnabled: boolean = false
 
@@ -55,7 +55,7 @@ export class SyncStore {
     this.apiProvider?.init({
       API_URL: REACT_APP_API_URL,
       getAuthorization: () => `User ${this.authStore.user?.id}`,
-      socket: this.socket
+      socket: this.socket,
     })
   }
 
@@ -82,8 +82,8 @@ export class SyncStore {
         // add JWT here for real authentication
       },
       query: {
-        documentId
-      }
+        documentId,
+      },
     })
     this.initAPIProvider()
     this.socket.on(EDocAction.DOC_CREATE, (action: IDocCreateAction) => {

@@ -1,5 +1,5 @@
-import React from 'react';
-import { IconProps } from '../types';
+import React from 'react'
+import { IconProps } from '../types'
 
 export default function IconAction({ label = '' }: IconProps) {
   return (
@@ -17,5 +17,5 @@ export default function IconAction({ label = '' }: IconProps) {
         </g>
       </g>
     </svg>
-  );
+  )
 }

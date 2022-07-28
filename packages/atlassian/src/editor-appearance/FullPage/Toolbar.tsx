@@ -15,20 +15,19 @@ import { EditorAppearance, ToolbarUIComponentFactory } from '../../types'
 
 interface IProps {
   className?: string
-  appearance?: EditorAppearance;
-  editorActions?: EditorActions;
+  appearance?: EditorAppearance
+  editorActions?: EditorActions
   // editorDOMElement: JSX.Element;
-  editorView?: EditorView;
-  eventDispatcher?: EventDispatcher;
-  primaryToolbarComponents?: ToolbarUIComponentFactory[];
+  editorView?: EditorView
+  eventDispatcher?: EventDispatcher
+  primaryToolbarComponents?: ToolbarUIComponentFactory[]
 }
 
 export function Toolbar(props: IProps) {
   // Iterate over primaryToolbarComponents here
   return (
     <Container>
-      <TopRow>
-      </TopRow>
+      <TopRow></TopRow>
     </Container>
   )
 }
@@ -45,4 +44,3 @@ const Container = styled.div`
 const TopRow = styled.div`
   display: flex;
 `
-

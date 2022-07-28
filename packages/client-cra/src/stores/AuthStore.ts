@@ -3,7 +3,6 @@ import { action, observable } from 'mobx'
 import { IUser, uuidv4 } from '@example/types'
 
 export class AuthStore {
-
   @observable user?: IUser = undefined
   resetAllStores: () => void
   STORAGE_KEY = 'full-user'
@@ -18,7 +17,7 @@ export class AuthStore {
       const id = uuidv4()
       this.user = {
         id,
-        name: `User ${id.substring(0, 5)}`
+        name: `User ${id.substring(0, 5)}`,
       }
       sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.user))
     }

@@ -15,27 +15,22 @@ export interface BaseState {
 
 export const basePluginKey = new PluginKey('basePlugin')
 
-export const getPluginState = (state: EditorState): BaseState =>
-  basePluginKey.getState(state)
+export const getPluginState = (state: EditorState): BaseState => basePluginKey.getState(state)
 
-export const setPluginState = (stateProps: Object) => (
-  state: EditorState,
-  dispatch: CommandDispatch,
-): boolean => {
-  const pluginState = getPluginState(state)
-  dispatch(
-    state.tr.setMeta(basePluginKey, {
-      ...pluginState,
-      ...stateProps,
-    }),
-  )
-  return true
-}
+export const setPluginState =
+  (stateProps: Object) =>
+  (state: EditorState, dispatch: CommandDispatch): boolean => {
+    const pluginState = getPluginState(state)
+    dispatch(
+      state.tr.setMeta(basePluginKey, {
+        ...pluginState,
+        ...stateProps,
+      })
+    )
+    return true
+  }
 
-export function basePluginFactory(
-  ctx: EditorContext,
-  options?: {},
-) {
+export function basePluginFactory(ctx: EditorContext, options?: {}) {
   return new Plugin({
     state: {
       init(_, state): BaseState {
@@ -44,15 +39,12 @@ export function basePluginFactory(
           activeMarks: [],
         }
       },
-      apply(
-        tr,
-        pluginState: BaseState,
-        _oldState,
-        newState,
-      ): BaseState {
+      apply(tr, pluginState: BaseState, _oldState, newState): BaseState {
         if (tr.docChanged || tr.selectionSet) {
           const marks = getActiveMarks(newState)
-          const eqMarks = marks.every(m => pluginState.activeMarks.includes(m)) && marks.length === pluginState.activeMarks.length
+          const eqMarks =
+            marks.every((m) => pluginState.activeMarks.includes(m)) &&
+            marks.length === pluginState.activeMarks.length
           if (!eqMarks) {
             const nextPluginState = {
               ...pluginState,
@@ -67,7 +59,6 @@ export function basePluginFactory(
       },
     },
     key: basePluginKey,
-    props: {
-    },
+    props: {},
   })
 }

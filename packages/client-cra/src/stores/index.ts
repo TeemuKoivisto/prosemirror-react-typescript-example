@@ -5,7 +5,6 @@ import { SyncStore } from './SyncStore'
 import { ToastStore } from './ToastStore'
 
 export class Stores {
-
   authStore: AuthStore
   documentStore: DocumentStore
   editorStore: EditorStore
@@ -19,12 +18,12 @@ export class Stores {
     this.documentStore = new DocumentStore({
       authStore: this.authStore,
       editorStore: this.editorStore,
-      toastStore: this.toastStore
+      toastStore: this.toastStore,
     })
     this.syncStore = new SyncStore({
       authStore: this.authStore,
       documentStore: this.documentStore,
-      toastStore: this.toastStore
+      toastStore: this.toastStore,
     })
   }
 

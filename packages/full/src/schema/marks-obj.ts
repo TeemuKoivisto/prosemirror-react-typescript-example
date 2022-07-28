@@ -2,7 +2,7 @@
  * @additionalProperties true
  */
 export interface MarksObject<T> {
-  marks?: Array<T>;
+  marks?: Array<T>
 }
 
 /**
@@ -12,5 +12,5 @@ export interface NoMark {
   /**
    * @maxItems 0
    */
-  marks?: Array<any>;
+  marks?: Array<any>
 }

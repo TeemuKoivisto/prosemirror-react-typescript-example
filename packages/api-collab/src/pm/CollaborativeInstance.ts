@@ -8,11 +8,10 @@ import type { DocHistory } from 'db/history.db'
 const MAX_STEP_HISTORY = 10000
 
 export class CollaborativeInstance {
-
   doc: PMNode
   documentId: string
   steps: PatchedStep[] = []
-  currentVersion: number = 0
+  currentVersion = 0
   lastActive: number = Date.now()
   users: Set<string> = new Set()
 
@@ -25,7 +24,7 @@ export class CollaborativeInstance {
     }
   }
 
-  get currentDocument() : IJoinResponse {
+  get currentDocument(): IJoinResponse {
     return {
       doc: this.doc.toJSON(),
       steps: this.steps,
@@ -63,7 +62,8 @@ export class CollaborativeInstance {
   }
 
   handleReceiveSteps(version: number, steps: Step[], clientID: number) {
-    if (!this.isValidVersion(version)) throw Error(`Invalid version: ${version} with currentVersion ${this.currentVersion}`)
+    if (!this.isValidVersion(version))
+      throw Error(`Invalid version: ${version} with currentVersion ${this.currentVersion}`)
     if (this.currentVersion !== version) return false
     const appliedSteps = this.applySteps(steps, clientID)
     return {

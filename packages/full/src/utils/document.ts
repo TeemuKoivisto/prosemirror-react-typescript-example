@@ -1,9 +1,6 @@
 import { Node as PMNode, Schema } from 'prosemirror-model'
 
-export function parseRawValue(
-  value: Object | string,
-  schema: Schema,
-  ) {
+export function parseRawValue(value: Object | string, schema: Schema) {
   let parsedNode
   if (typeof value === 'string') {
     try {
@@ -38,13 +35,9 @@ export function parseRawValue(
     parsedDoc.check()
 
     return parsedDoc
-  }
-  catch (err: any) {
+  } catch (err: any) {
     // eslint-disable-next-line no-console
-    console.error(
-      `Error processing document:\n${err.message}\n\n`,
-      JSON.stringify(parsedNode),
-    )
+    console.error(`Error processing document:\n${err.message}\n\n`, JSON.stringify(parsedNode))
     return
   }
 }

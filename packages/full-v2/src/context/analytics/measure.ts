@@ -12,7 +12,7 @@ export function startMeasure(measureName: string) {
 
 export function stopMeasure(
   measureName: string,
-  onMeasureComplete?: (duration: number, startTime: number) => void,
+  onMeasureComplete?: (duration: number, startTime: number) => void
 ) {
   if (!isPerformanceAPIAvailable()) {
     return
@@ -20,11 +20,7 @@ export function stopMeasure(
   performance.mark(`${measureName}::end`)
   const start = onMeasureComplete ? measureMap.get(measureName) : undefined
   try {
-    performance.measure(
-      measureName,
-      `${measureName}::start`,
-      `${measureName}::end`,
-    )
+    performance.measure(measureName, `${measureName}::start`, `${measureName}::end`)
   } catch (error) {
   } finally {
     if (onMeasureComplete) {

@@ -2,14 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { toggleMark } from 'prosemirror-commands'
 import styled from 'styled-components'
 
-import {
-  MdFormatBold, MdFormatItalic
-} from 'react-icons/md/index.js'
+import { MdFormatBold, MdFormatItalic } from 'react-icons/md/index.js'
 
-import {
-  basePluginKey,
-  BaseState,
-} from '../editor-plugins/base'
+import { basePluginKey, BaseState } from '../editor-plugins/base'
 
 import { useEditorContext } from '../core/EditorContext'
 
@@ -54,13 +49,13 @@ export function Toolbar(props: IProps) {
         <MarkButton
           active={currentMarks.includes('strong')}
           name="bold"
-          icon={<MdFormatBold size={24}/>}
+          icon={<MdFormatBold size={24} />}
           onClick={toggleBold}
         />
         <MarkButton
           active={currentMarks.includes('em')}
           name="italics"
-          icon={<MdFormatItalic size={24}/>}
+          icon={<MdFormatItalic size={24} />}
           onClick={toggleItalics}
         />
       </TopRow>

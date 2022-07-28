@@ -1,5 +1,5 @@
-import React from 'react';
-import { IconProps } from '../types';
+import React from 'react'
+import { IconProps } from '../types'
 
 export default function IconCode({ label = '' }: IconProps) {
   return (
@@ -29,5 +29,5 @@ export default function IconCode({ label = '' }: IconProps) {
         <rect x={9} y={29} width={2} height={1} rx={0.5} />
       </g>
     </svg>
-  );
+  )
 }

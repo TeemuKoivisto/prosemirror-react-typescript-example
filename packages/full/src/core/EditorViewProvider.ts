@@ -8,25 +8,24 @@ import { Command } from './types'
 import { JSONEditorState } from './types/editor-view'
 
 export class EditorViewProvider {
-  
   _editorView?: EditorView
 
   init(view: EditorView) {
     this._editorView = view
   }
 
-  get editorView() : EditorView {
+  get editorView(): EditorView {
     if (!this._editorView) {
       throw Error('EditorViewProvider editorView accessed without editorView instance')
     }
     return this._editorView
   }
 
-  getMarks() : { [key: string]: MarkType } {
+  getMarks(): { [key: string]: MarkType } {
     return this.editorView.state.schema.marks
   }
 
-  getNodes() : { [key: string]: NodeType } {
+  getNodes(): { [key: string]: NodeType } {
     return this.editorView.state.schema.nodes
   }
 
@@ -50,7 +49,7 @@ export class EditorViewProvider {
       return false
     }
 
-    (this._editorView.dom as HTMLElement).blur()
+    ;(this._editorView.dom as HTMLElement).blur()
     return true
   }
 
@@ -60,14 +59,17 @@ export class EditorViewProvider {
   }
 
   replaceState(rawValue: Object) {
-    const state = EditorState.fromJSON({
-      schema: this.editorView.state.schema,
-      plugins: this.editorView.state.plugins,
-    }, rawValue)
+    const state = EditorState.fromJSON(
+      {
+        schema: this.editorView.state.schema,
+        plugins: this.editorView.state.plugins,
+      },
+      rawValue
+    )
     this.editorView.updateState(state)
 
     // Fire an empty transaction to trigger PortalProvider to flush the created nodeViews
-    let tr = this.editorView.state.tr
+    const tr = this.editorView.state.tr
     this.editorView.dispatch(tr)
   }
 
@@ -85,14 +87,9 @@ export class EditorViewProvider {
 
     const { state } = this.editorView
     const { schema } = state
-    const {
-      shouldScrollToBottom, shouldAddToHistory, shouldTriggerOnDocumentEdit
-    } = options
+    const { shouldScrollToBottom, shouldAddToHistory, shouldTriggerOnDocumentEdit } = options
 
-    const content = parseRawValue(
-      rawValue,
-      schema,
-    )
+    const content = parseRawValue(rawValue, schema)
 
     if (!content) {
       return false

@@ -12,7 +12,6 @@ export type CollabExtensionProps = {
 }
 
 export class CollabExtension extends Extension<CollabExtensionProps> {
-
   get name() {
     return 'collab' as const
   }
@@ -39,7 +38,7 @@ export class CollabExtension extends Extension<CollabExtensionProps> {
     const { documentId, userId } = props
     const { collabProvider } = this.ctx
     const propsChanged = this.props?.documentId !== documentId || this.props?.userId !== userId
-    if  (!propsChanged) {
+    if (!propsChanged) {
       return
     }
     if (collabProvider.isCollaborating) {

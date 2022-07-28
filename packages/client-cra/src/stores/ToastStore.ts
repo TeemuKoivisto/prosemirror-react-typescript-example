@@ -28,7 +28,7 @@ export class ToastStore {
       id: this.idCounter,
       message,
       type,
-      duration
+      duration,
     }
     this.idCounter += 1
     this.toasts.push(newToast)
@@ -36,8 +36,8 @@ export class ToastStore {
       this.toasts = this.toasts.slice(-2)
     }
   }
- 
+
   @action removeToast = (id: number) => {
-    this.toasts = this.toasts.filter(t => t.id !== id)
+    this.toasts = this.toasts.filter((t) => t.id !== id)
   }
 }

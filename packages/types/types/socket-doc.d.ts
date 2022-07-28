@@ -8,7 +8,7 @@ export { EDocAction } from '../src'
 export enum EDocAction {
   DOC_CREATE = 'doc:create',
   DOC_DELETE = 'doc:delete',
-  DOC_VISIBILITY = 'doc:visibility'
+  DOC_VISIBILITY = 'doc:visibility',
 }
 export type DocAction = IDocCreateAction | IDocDeleteAction | IDocVisibilityAction
 export interface IDocCreateAction {

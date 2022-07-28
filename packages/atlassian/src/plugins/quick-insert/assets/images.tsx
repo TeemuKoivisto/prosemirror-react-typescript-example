@@ -1,27 +1,15 @@
-import React from 'react';
-import { IconProps } from '../types';
+import React from 'react'
+import { IconProps } from '../types'
 
 export default function IconImages({ label = '' }: IconProps) {
   return (
     <svg aria-label={label} width={40} height={40}>
       <defs>
-        <linearGradient
-          x1="46.315%"
-          y1="-31.529%"
-          x2="50%"
-          y2="100%"
-          id="images-a"
-        >
+        <linearGradient x1="46.315%" y1="-31.529%" x2="50%" y2="100%" id="images-a">
           <stop stopColor="#FFD500" offset="0%" />
           <stop stopColor="#FFAB00" offset="100%" />
         </linearGradient>
-        <linearGradient
-          x1="100.699%"
-          y1="50%"
-          x2="-14.52%"
-          y2="50%"
-          id="images-b"
-        >
+        <linearGradient x1="100.699%" y1="50%" x2="-14.52%" y2="50%" id="images-b">
           <stop stopColor="#FAFBFC" offset="0%" />
           <stop stopColor="#F4F6F8" stopOpacity={0.859} offset="12.52%" />
           <stop stopColor="#E3E6EA" stopOpacity={0.402} offset="54.65%" />
@@ -48,5 +36,5 @@ export default function IconImages({ label = '' }: IconProps) {
         </g>
       </g>
     </svg>
-  );
+  )
 }

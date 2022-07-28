@@ -4,9 +4,11 @@ import { Node as PMNode } from 'prosemirror-model'
 
 import { createListenProps } from './hooks/createListenProps'
 
-import type { EditorContext } from '../core/EditorContext' 
+import type { EditorContext } from '../core/EditorContext'
 
-export interface Attrs { [key: string]: any }
+export interface Attrs {
+  [key: string]: any
+}
 export type ForwardRef = (node: HTMLElement | null) => void
 
 export interface NodeViewProps<P extends any = {}, A extends Attrs = {}> {
@@ -96,7 +98,7 @@ export class ReactNodeView<P extends any = {}, A extends Attrs = {}> implements 
     // Finally, we provide an element to render content into.
     // We will be moving this node around as we need to.
     this.contentDOM = this.createContentDOM()
-    
+
     if (this.contentDOM) {
       // This contentDOM is thrown out by the reactComponent once it renders
       // but which is then re-added with the handleRef
@@ -104,16 +106,14 @@ export class ReactNodeView<P extends any = {}, A extends Attrs = {}> implements 
     }
 
     const useListenProps = createListenProps<NodeViewProps<P, A>>(this.dom, this.ctx.portalProvider)
-    this.renderReactComponent(this.render(
-      this.createProps(this.node),
-      this.handleRef,
-      useListenProps
-    ))
+    this.renderReactComponent(
+      this.render(this.createProps(this.node), this.handleRef, useListenProps)
+    )
 
     return this
   }
 
-  createProps(node: PMNode) : NodeViewProps<P, A> {
+  createProps(node: PMNode): NodeViewProps<P, A> {
     return {
       componentProps: this.props,
       attrs: node.attrs as A,
@@ -164,7 +164,7 @@ export class ReactNodeView<P extends any = {}, A extends Attrs = {}> implements 
     ) : null
   }
 
-  update(node: PMNode) {    
+  update(node: PMNode) {
     if (!this.dom) return false
     // Sometimes it might happen that the current transaction transforms/splits a node
     // into entirely different node (eg block nodes becoming paragraphs all of sudden)
@@ -186,7 +186,7 @@ export class ReactNodeView<P extends any = {}, A extends Attrs = {}> implements 
    * @param node The Prosemirror Node from which to source the attributes
    */
   setDomAttrs(node: PMNode, element: HTMLElement) {
-    Object.keys(node.attrs || {}).forEach(attr => {
+    Object.keys(node.attrs || {}).forEach((attr) => {
       element.setAttribute(attr, node.attrs[attr])
     })
   }
@@ -197,10 +197,14 @@ export class ReactNodeView<P extends any = {}, A extends Attrs = {}> implements 
    * https://github.com/remirror/remirror/blob/a2fa2c2b935a6fce99e3f79aad8a207c920e236e/packages/%40remirror/extension-react-component/src/react-node-view.tsx
    * @param mutation
    */
-  ignoreMutation(mutation: MutationRecord | {
-    type: 'selection'
-    target: Element
-  }): boolean {
+  ignoreMutation(
+    mutation:
+      | MutationRecord
+      | {
+          type: 'selection'
+          target: Element
+        }
+  ): boolean {
     if (mutation.type === 'selection') {
       return false
     } else if (!this.contentDOM) {

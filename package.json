@@ -10,6 +10,8 @@
   },
   "homepage": "https://github.com/TeemuKoivisto/prosemirror-react-typescript-example#readme",
   "scripts": {
+    "format": "prettier --write \"*.+(js|json|yml|yaml|ts|md|graphql|mdx)\" .",
+    "lint:fix": "eslint --ignore-path .gitignore --fix --ext .js,.cjs,.ts,.tsx .",
     "build": "pnpm -r build",
     "dev:editors": "concurrently 'pnpm --filter atlassian watch' 'pnpm --filter full watch' 'pnpm --filter full-v2 watch' 'pnpm --filter minimal watch'",
     "dev:client": "pnpm --filter client-cra start",
@@ -24,6 +26,16 @@
     "pnpm": "^7.0.0"
   },
   "devDependencies": {
-    "concurrently": "^7.2.2"
+    "concurrently": "^7.3.0",
+    "eslint": "8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.7.1"
   }
 }

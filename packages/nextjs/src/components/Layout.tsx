@@ -12,9 +12,7 @@ interface IProps {
 export const Layout = ({ children }: IProps) => (
   <MainWrapper>
     <NavBar />
-    <MainContainer>
-    { children }
-    </MainContainer>
+    <MainContainer>{children}</MainContainer>
   </MainWrapper>
 )
 

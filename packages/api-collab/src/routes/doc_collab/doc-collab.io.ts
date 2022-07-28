@@ -1,7 +1,10 @@
 import { socketIO } from 'socket-io/socketIO'
 
 import {
-  ECollabAction, ICollabUsersChangedAction, ICollabEditAction, ICollabEditPayload,
+  ECollabAction,
+  ICollabUsersChangedAction,
+  ICollabEditAction,
+  ICollabEditPayload,
 } from '@example/types'
 
 export const docCollabIO = {
@@ -11,7 +14,7 @@ export const docCollabIO = {
       payload: {
         documentId,
         userId,
-        userCount
+        userCount,
       },
     }
     socketIO.emitToRoom(action, documentId)

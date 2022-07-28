@@ -1,10 +1,5 @@
 const ranks = {
-  plugins: [
-    'underline',
-    'blockquote',
-    'quickInsert',
-    'typeAhead',
-  ],
+  plugins: ['underline', 'blockquote', 'quickInsert', 'typeAhead'],
   nodes: [
     'doc',
     'paragraph',
@@ -42,6 +37,6 @@ const ranks = {
 
 export function sortByOrder(item: 'plugins' | 'nodes' | 'marks') {
   return function (a: { name: string }, b: { name: string }): number {
-    return ranks[item].indexOf(a.name) - ranks[item].indexOf(b.name);
-  };
+    return ranks[item].indexOf(a.name) - ranks[item].indexOf(b.name)
+  }
 }

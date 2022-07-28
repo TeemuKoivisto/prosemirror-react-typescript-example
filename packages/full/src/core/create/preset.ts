@@ -1,36 +1,36 @@
 export class Preset<T extends { name: string }> {
-  private plugins: PluginsPreset;
+  private plugins: PluginsPreset
 
   constructor() {
-    this.plugins = [];
+    this.plugins = []
   }
 
   add<PluginFactory>(plugin: PluginConfig<PluginFactory, T>): this {
-    this.plugins.push(plugin);
-    return this;
+    this.plugins.push(plugin)
+    return this
   }
 
   has(plugin: () => T): boolean {
-    return this.plugins.some(pluginPreset => {
+    return this.plugins.some((pluginPreset) => {
       if (Array.isArray(pluginPreset)) {
-        return pluginPreset[0] === plugin;
+        return pluginPreset[0] === plugin
       }
 
-      return pluginPreset === plugin;
-    });
+      return pluginPreset === plugin
+    })
   }
 
   getEditorPlugins(excludes?: Set<string>) {
-    const editorPlugins = this.processEditorPlugins();
-    return this.removeExcludedPlugins(editorPlugins, excludes);
+    const editorPlugins = this.processEditorPlugins()
+    return this.removeExcludedPlugins(editorPlugins, excludes)
   }
 
   private processEditorPlugins() {
-    const cache = new Map();
-    this.plugins.forEach(pluginEntry => {
+    const cache = new Map()
+    this.plugins.forEach((pluginEntry) => {
       if (Array.isArray(pluginEntry)) {
-        const [fn, options] = pluginEntry;
-        cache.set(fn, options);
+        const [fn, options] = pluginEntry
+        cache.set(fn, options)
       } else {
         /**
          * Prevent usage of same plugin twice without override.
@@ -41,29 +41,29 @@ export class Preset<T extends { name: string }> {
          * ]
          */
         if (cache.has(pluginEntry) && cache.get(pluginEntry) === undefined) {
-          throw new Error(`${pluginEntry} is already included!`);
+          throw new Error(`${pluginEntry} is already included!`)
         }
-        cache.set(pluginEntry, undefined);
+        cache.set(pluginEntry, undefined)
       }
-    });
+    })
 
-    let plugins: Array<T> = [];
+    const plugins: Array<T> = []
     cache.forEach((options, fn) => {
-      plugins.push(fn(options));
-    });
+      plugins.push(fn(options))
+    })
 
-    return plugins;
+    return plugins
   }
 
   private removeExcludedPlugins(plugins: Array<T>, excludes?: Set<string>) {
     if (excludes) {
-      return plugins.filter(plugin => !plugin || !excludes.has(plugin.name));
+      return plugins.filter((plugin) => !plugin || !excludes.has(plugin.name))
     }
-    return plugins;
+    return plugins
   }
 }
 
-export type PluginsPreset = Array<PluginConfig<any, any>>;
+export type PluginsPreset = Array<PluginConfig<any, any>>
 
 /**
  * Type for Editor Preset's plugin configuration.
@@ -94,12 +94,10 @@ export type PluginsPreset = Array<PluginConfig<any, any>>;
  * ELSE
  *   never
  */
-export type PluginConfig<PluginFactory, T> = PluginFactory extends (
-  args: infer Args,
-) => T
+export type PluginConfig<PluginFactory, T> = PluginFactory extends (args: infer Args) => T
   ? Exclude<unknown, Args> extends never
     ? PluginFactory | [PluginFactory]
     : Exclude<Args, Exclude<Args, undefined>> extends never
     ? [PluginFactory, Args]
     : PluginFactory | [PluginFactory] | [PluginFactory, Args]
-  : never;
+  : never

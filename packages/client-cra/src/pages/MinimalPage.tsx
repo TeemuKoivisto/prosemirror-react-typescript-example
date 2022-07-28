@@ -13,11 +13,10 @@ export function MinimalPage(props: IProps) {
   const { className } = props
   return (
     <Container className={className}>
-      <PageHeader/>
+      <PageHeader />
       <Editor />
     </Container>
   )
 }
 
-const Container = styled.div`
-`
+const Container = styled.div``

@@ -16,10 +16,7 @@ export class BlockQuoteView extends ReactNodeView<IViewProps, IBlockQuoteAttrs> 
   }
 }
 
-export function blockQuoteNodeView(
-  ctx: EditorContext,
-  options?: BlockQuoteOptions,
-) {
+export function blockQuoteNodeView(ctx: EditorContext, options?: BlockQuoteOptions) {
   return (
     node: PMNode,
     view: EditorView,

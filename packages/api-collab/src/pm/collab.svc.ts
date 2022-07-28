@@ -16,7 +16,9 @@ let savedInstances = new Set<CollaborativeInstance>()
 export const docCollabService = {
   createEmptyDoc() {
     return schema.nodeFromJSON(
-      JSON.parse('{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"This is a collaborative document!"}]}]}')
+      JSON.parse(
+        '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"This is a collaborative document!"}]}]}'
+      )
     )
   },
   evictInstance(docId: string) {
@@ -47,7 +49,7 @@ export const docCollabService = {
     if (!savedInstances.has(inst)) savedInstances.add(inst)
     if (savingTimeout) return
     savingTimeout = setTimeout(() => {
-      savedInstances.forEach(ins => {
+      savedInstances.forEach((ins) => {
         const data = { doc: ins.doc.toJSON() }
         docDb.update(ins.documentId, data)
       })
@@ -56,6 +58,6 @@ export const docCollabService = {
     }, 2000)
   },
   parseSteps(steps: Step[]) {
-    return steps.map(s => Step.fromJSON(schema, s))
+    return steps.map((s) => Step.fromJSON(schema, s))
   },
 }

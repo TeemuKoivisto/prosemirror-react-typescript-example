@@ -12,10 +12,8 @@ export function DesktopLayout(props: IProps) {
   const { className, children } = props
   return (
     <Container className={className}>
-      <Toolbar/>
-      <ContentArea>
-        {children}
-      </ContentArea>
+      <Toolbar />
+      <ContentArea>{children}</ContentArea>
     </Container>
   )
 }

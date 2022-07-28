@@ -34,5 +34,5 @@ export const docService = {
     }
     docDb.delete(documentId)
     return true
-  }
+  },
 }

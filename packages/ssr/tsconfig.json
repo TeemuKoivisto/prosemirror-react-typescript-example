@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "node",
     "jsx": "react",
@@ -19,10 +15,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": [
-    "server/**/*"
-  ],
-  "exclude": [
-    "*/__tests__"
-  ]
+  "include": ["server/**/*"],
+  "exclude": ["*/__tests__"]
 }

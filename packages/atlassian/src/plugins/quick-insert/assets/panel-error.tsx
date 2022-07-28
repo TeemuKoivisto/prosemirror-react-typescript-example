@@ -1,5 +1,5 @@
-import React from 'react';
-import { IconProps } from '../types';
+import React from 'react'
+import { IconProps } from '../types'
 
 export default function IconPanelError({ label = '' }: IconProps) {
   return (
@@ -13,5 +13,5 @@ export default function IconPanelError({ label = '' }: IconProps) {
         />
       </g>
     </svg>
-  );
+  )
 }

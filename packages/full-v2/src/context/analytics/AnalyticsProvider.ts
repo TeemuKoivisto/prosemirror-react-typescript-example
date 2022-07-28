@@ -13,16 +13,15 @@ export enum LOG_LEVEL {
 }
 
 export class AnalyticsProvider {
-
-  shouldTrack: boolean = false
-  logToConsole: boolean = false
+  shouldTrack = false
+  logToConsole = false
   logLevel: LOG_LEVEL = LOG_LEVEL.error
 
   logs: {
     [namespace: string]: {
       [key: string]: {
-        logs: string[],
-        level: LOG_LEVEL,
+        logs: string[]
+        level: LOG_LEVEL
         pending: boolean
       }
     }
@@ -49,9 +48,9 @@ export class AnalyticsProvider {
         this.measure(namespace, method, LOG_LEVEL.error)
       }
     },
-    stop: (namespace: string, method: string, durationThreshold: number = 0) => {
+    stop: (namespace: string, method: string, durationThreshold = 0) => {
       this.stopMeasure(namespace, method, durationThreshold)
-    }
+    },
   }
 
   constructor(props: AnalyticsProps = {}) {
@@ -90,7 +89,7 @@ export class AnalyticsProvider {
         this.logs[namespace][method] = {
           logs: [],
           level,
-          pending: true
+          pending: true,
         }
       }
     } else {
@@ -98,8 +97,8 @@ export class AnalyticsProvider {
         [method]: {
           logs: [],
           level,
-          pending: true
-        }
+          pending: true,
+        },
       }
     }
   }
@@ -115,7 +114,9 @@ export class AnalyticsProvider {
         else if (lvl === 'warn') console.warn(msg)
         else if (lvl === 'error') console.error(msg)
       } else {
-        throw Error(`Stopping measurement for namespace '${namespace}' with non-existent method: ${method}`)
+        throw Error(
+          `Stopping measurement for namespace '${namespace}' with non-existent method: ${method}`
+        )
       }
     } else {
       throw Error(`Stopping measurement for non-existent namespace: ${namespace}`)
@@ -133,7 +134,7 @@ export class AnalyticsProvider {
     }
   }
 
-  stopMeasure(namespace: string, method: string, durationThreshold: number = 0) {
+  stopMeasure(namespace: string, method: string, durationThreshold = 0) {
     stopMeasure(this.getName(namespace, method), (duration, start) => {
       if (this.shouldTrack && this.logToConsole && durationThreshold <= duration) {
         const msg = `${this.getName(namespace, method)} took ${Math.round(duration)} ms`

@@ -8,11 +8,7 @@ const { bindKeymapWithCommand, toggleBlockQuote } = keymaps
 export function keymapPlugin(): Plugin {
   const keymapObj = {}
 
-  bindKeymapWithCommand(
-    toggleBlockQuote.common!,
-    createNewBlockQuote(),
-    keymapObj,
-  )
+  bindKeymapWithCommand(toggleBlockQuote.common!, createNewBlockQuote(), keymapObj)
 
   return keymap(keymapObj)
 }

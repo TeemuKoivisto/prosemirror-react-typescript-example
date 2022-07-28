@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "declaration": true,
     "declarationDir": "./dist",
@@ -25,11 +21,9 @@
       "@context": ["src/context"],
       "@core": ["src/core"],
       "@extensions": ["src/extensions"],
-      "@react": ["src/react"],
+      "@react": ["src/react"]
     },
     "plugins": [{ "transform": "@zerollup/ts-transform-paths" }]
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

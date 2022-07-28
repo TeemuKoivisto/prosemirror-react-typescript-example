@@ -7,5 +7,5 @@ export enum ECollabAction {
 export enum EDocAction {
   DOC_CREATE = 'doc:create',
   DOC_DELETE = 'doc:delete',
-  DOC_VISIBILITY = 'doc:visibility'
+  DOC_VISIBILITY = 'doc:visibility',
 }

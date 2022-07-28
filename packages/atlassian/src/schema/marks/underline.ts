@@ -1,11 +1,11 @@
-import { MarkSpec } from 'prosemirror-model';
-import { FONT_STYLE } from './groups';
+import { MarkSpec } from 'prosemirror-model'
+import { FONT_STYLE } from './groups'
 
 /**
  * @name underline_mark
  */
 export interface UnderlineDefinition {
-  type: 'underline';
+  type: 'underline'
 }
 
 export const underline: MarkSpec = {
@@ -15,10 +15,10 @@ export const underline: MarkSpec = {
     { tag: 'u' },
     {
       style: 'text-decoration',
-      getAttrs: value => value === 'underline' && null,
+      getAttrs: (value) => value === 'underline' && null,
     },
   ],
   toDOM(): [string] {
-    return ['u'];
+    return ['u']
   },
-};
+}

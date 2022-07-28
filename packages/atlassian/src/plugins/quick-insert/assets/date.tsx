@@ -1,17 +1,11 @@
-import React from 'react';
-import { IconProps } from '../types';
+import React from 'react'
+import { IconProps } from '../types'
 
 export default function IconDate({ label = '' }: IconProps) {
   return (
     <svg aria-label={label} width={40} height={40}>
       <defs>
-        <linearGradient
-          x1="100.699%"
-          y1="50%"
-          x2="-14.52%"
-          y2="50%"
-          id="date-a"
-        >
+        <linearGradient x1="100.699%" y1="50%" x2="-14.52%" y2="50%" id="date-a">
           <stop stopColor="#FAFBFC" offset="0%" />
           <stop stopColor="#F4F6F8" stopOpacity={0.859} offset="12.52%" />
           <stop stopColor="#E3E6EA" stopOpacity={0.402} offset="54.65%" />
@@ -36,10 +30,7 @@ export default function IconDate({ label = '' }: IconProps) {
               mixBlendMode: 'screen',
             }}
           />
-          <path
-            d="M1 2h22a1 1 0 011 1v7H0V3a1 1 0 011-1z"
-            fill="url(#date-b)"
-          />
+          <path d="M1 2h22a1 1 0 011 1v7H0V3a1 1 0 011-1z" fill="url(#date-b)" />
           <rect fill="#0065FF" x={5} width={2} height={6} rx={1} />
           <rect fill="#0065FF" x={17} width={2} height={6} rx={1} />
           <path
@@ -49,5 +40,5 @@ export default function IconDate({ label = '' }: IconProps) {
         </g>
       </g>
     </svg>
-  );
+  )
 }

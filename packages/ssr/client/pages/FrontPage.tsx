@@ -11,7 +11,6 @@ interface IProps {
 }
 
 class EditorStore {
-
   viewProvider?: EditorViewProvider
   currentEditorState?: JSONEditorState
   STORAGE_KEY = 'full-editor-state'
@@ -20,7 +19,7 @@ class EditorStore {
     if (typeof window !== 'undefined') {
       const existing = localStorage.getItem(this.STORAGE_KEY)
       if (existing && existing !== null && existing.length > 0) {
-        let stored = JSON.parse(existing)
+        const stored = JSON.parse(existing)
         this.currentEditorState = stored
       }
     }
@@ -67,5 +66,4 @@ export function FrontPage(props: IProps) {
   )
 }
 
-const Container = styled.div`
-`
+const Container = styled.div``

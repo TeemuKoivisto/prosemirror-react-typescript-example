@@ -1,4 +1,4 @@
-let hasRequiredPerformanceAPIs: boolean | undefined;
+let hasRequiredPerformanceAPIs: boolean | undefined
 
 export function isPerformanceAPIAvailable(): boolean {
   if (hasRequiredPerformanceAPIs === undefined) {
@@ -12,14 +12,14 @@ export function isPerformanceAPIAvailable(): boolean {
         'getEntriesByName',
         'getEntriesByType',
         'now',
-      ].every(api => !!(performance as any)[api]);
+      ].every((api) => !!(performance as any)[api])
   }
 
-  return hasRequiredPerformanceAPIs;
+  return hasRequiredPerformanceAPIs
 }
 
 export function isPerformanceObserverAvailable(): boolean {
-  return !!(typeof window !== 'undefined' && 'PerformanceObserver' in window);
+  return !!(typeof window !== 'undefined' && 'PerformanceObserver' in window)
 }
 
 export function isPerformanceObserverLongTaskAvailable(): boolean {
@@ -27,5 +27,5 @@ export function isPerformanceObserverLongTaskAvailable(): boolean {
     isPerformanceObserverAvailable() &&
     PerformanceObserver.supportedEntryTypes &&
     PerformanceObserver.supportedEntryTypes.includes('longtask')
-  );
+  )
 }

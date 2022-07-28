@@ -9,19 +9,17 @@ export interface BaseState {
 
 export const basePluginKey = new PluginKey('basePlugin')
 
-export const getPluginState = (state: EditorState): BaseState =>
-  basePluginKey.getState(state)
+export const getPluginState = (state: EditorState): BaseState => basePluginKey.getState(state)
 
-export const setPluginState = (stateProps: Object) => (
-  state: EditorState,
-  dispatch: CommandDispatch,
-): boolean => {
-  const pluginState = getPluginState(state)
-  dispatch(
-    state.tr.setMeta(basePluginKey, {
-      ...pluginState,
-      ...stateProps,
-    }),
-  )
-  return true
-}
+export const setPluginState =
+  (stateProps: Object) =>
+  (state: EditorState, dispatch: CommandDispatch): boolean => {
+    const pluginState = getPluginState(state)
+    dispatch(
+      state.tr.setMeta(basePluginKey, {
+        ...pluginState,
+        ...stateProps,
+      })
+    )
+    return true
+  }

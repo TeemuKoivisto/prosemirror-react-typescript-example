@@ -1,10 +1,10 @@
-import { PMPlugin } from './pm-plugin';
-import { MarkConfig, NodeConfig } from './editor-config';
+import { PMPlugin } from './pm-plugin'
+import { MarkConfig, NodeConfig } from './editor-config'
 
 export interface PluginsOptions {
-  [pluginName: string]: any;
+  [pluginName: string]: any
   // blockQuote?: BlockQuoteHandler;
-};
+}
 
 export interface EditorPlugin {
   /**

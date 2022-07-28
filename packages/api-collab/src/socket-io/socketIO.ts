@@ -15,11 +15,10 @@ export const socketIO = {
     ioServer = new io.Server<ISocketListenEvents, ISocketEmitEvents>(server, {
       cors: {
         origin: '*',
-      }
+      },
     })
-    
+
     ioServer.on('connection', async (socket) => {
-  
       const user: IUser = socket.handshake.auth.user
       socket['_user'] = user
       usersMap.set(user.id, user)
@@ -29,7 +28,7 @@ export const socketIO = {
         socket.join(documentId)
       }
       socket.join('all')
-  
+
       // docEvents(socket)
 
       socket.on('disconnect', () => {

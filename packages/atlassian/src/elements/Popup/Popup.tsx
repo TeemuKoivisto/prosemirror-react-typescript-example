@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 
-import rafSchedule from 'raf-schd';
-import { createPortal } from 'react-dom';
+import rafSchedule from 'raf-schd'
+import { createPortal } from 'react-dom'
 
 // import { akEditorFloatingPanelZIndex } from '@atlaskit/editor-shared-styles';
 const akEditorFloatingPanelZIndex = 10
@@ -12,59 +12,59 @@ import {
   findOverflowScrollParent,
   Position,
   validatePosition,
-} from './utils';
+} from './utils'
 
 export interface Props {
-  children: React.ReactNode;
-  zIndex?: number;
+  children: React.ReactNode
+  zIndex?: number
   // The alignments are using the same placements from Popper
   // https://popper.js.org/popper-documentation.html#Popper.placements
-  alignX?: 'left' | 'right' | 'center' | 'end';
-  alignY?: 'top' | 'bottom' | 'start';
-  target?: HTMLElement;
-  fitHeight?: number;
-  fitWidth?: number;
-  boundariesElement?: HTMLElement;
-  mountTo?: HTMLElement;
+  alignX?: 'left' | 'right' | 'center' | 'end'
+  alignY?: 'top' | 'bottom' | 'start'
+  target?: HTMLElement
+  fitHeight?: number
+  fitWidth?: number
+  boundariesElement?: HTMLElement
+  mountTo?: HTMLElement
   // horizontal offset, vertical offset
-  offset?: number[];
-  onPositionCalculated?: (position: Position) => Position;
-  onPlacementChanged?: (placement: [string, string]) => void;
-  shouldRenderPopup?: (position: Position) => boolean;
-  scrollableElement?: HTMLElement;
-  stick?: boolean;
-  ariaLabel?: string;
-  forcePlacement?: boolean;
-  allowOutOfBounds?: boolean; // Allow to correct position elements inside table: https://product-fabric.atlassian.net/browse/ED-7191
-  rect?: DOMRect;
+  offset?: number[]
+  onPositionCalculated?: (position: Position) => Position
+  onPlacementChanged?: (placement: [string, string]) => void
+  shouldRenderPopup?: (position: Position) => boolean
+  scrollableElement?: HTMLElement
+  stick?: boolean
+  ariaLabel?: string
+  forcePlacement?: boolean
+  allowOutOfBounds?: boolean // Allow to correct position elements inside table: https://product-fabric.atlassian.net/browse/ED-7191
+  rect?: DOMRect
 }
 
 export interface State {
   // Popup Html element reference
-  popup?: HTMLElement;
+  popup?: HTMLElement
 
-  position?: Position;
+  position?: Position
 
-  overflowScrollParent: HTMLElement | false;
-  validPosition: boolean;
+  overflowScrollParent: HTMLElement | false
+  validPosition: boolean
 }
 
-export { findOverflowScrollParent } from './utils';
-export type { Position } from './utils';
+export { findOverflowScrollParent } from './utils'
+export type { Position } from './utils'
 
 export class Popup extends React.Component<Props, State> {
-  scrollElement: undefined | false | HTMLElement;
+  scrollElement: undefined | false | HTMLElement
   static defaultProps = {
     offset: [0, 0],
     allowOutOfBound: false,
-  };
+  }
 
   state: State = {
     overflowScrollParent: false,
     validPosition: true,
-  };
+  }
 
-  private placement: [string, string] = ['', ''];
+  private placement: [string, string] = ['', '']
 
   /**
    * Calculates new popup position
@@ -84,11 +84,11 @@ export class Popup extends React.Component<Props, State> {
       forcePlacement,
       allowOutOfBounds,
       rect,
-    } = props;
-    const { popup } = state;
+    } = props
+    const { popup } = state
 
     if (!target || !popup) {
-      return;
+      return
     }
 
     const placement = calculatePlacement(
@@ -98,12 +98,12 @@ export class Popup extends React.Component<Props, State> {
       fitHeight,
       alignX,
       alignY,
-      forcePlacement,
-    );
+      forcePlacement
+    )
 
     if (onPlacementChanged && this.placement.join('') !== placement.join('')) {
-      onPlacementChanged(placement);
-      this.placement = placement;
+      onPlacementChanged(placement)
+      this.placement = placement
     }
 
     let position = calculatePosition({
@@ -114,19 +114,19 @@ export class Popup extends React.Component<Props, State> {
       offset: offset!,
       allowOutOfBounds,
       rect,
-    });
-    position = onPositionCalculated ? onPositionCalculated(position) : position;
+    })
+    position = onPositionCalculated ? onPositionCalculated(position) : position
 
     this.setState({
       position,
       validPosition: validatePosition(target),
-    });
+    })
   }
 
   private cannotSetPopup(
     popup: HTMLElement,
     target?: HTMLElement,
-    overflowScrollParent?: HTMLElement | false,
+    overflowScrollParent?: HTMLElement | false
   ) {
     /**
      * Check whether:
@@ -141,9 +141,8 @@ export class Popup extends React.Component<Props, State> {
       (document.body.contains(target) &&
         popup.offsetParent &&
         !popup.offsetParent.contains(target!)) ||
-      (overflowScrollParent &&
-        !overflowScrollParent.contains(popup.offsetParent))
-    );
+      (overflowScrollParent && !overflowScrollParent.contains(popup.offsetParent))
+    )
   }
 
   /**
@@ -151,68 +150,63 @@ export class Popup extends React.Component<Props, State> {
    * Checks whether it's possible to position popup along given target, and if it's not throws an error.
    */
   private initPopup(popup: HTMLElement) {
-    const { target } = this.props;
-    const overflowScrollParent = findOverflowScrollParent(popup);
+    const { target } = this.props
+    const overflowScrollParent = findOverflowScrollParent(popup)
 
     if (this.cannotSetPopup(popup, target, overflowScrollParent)) {
-      return;
+      return
     }
 
-    this.setState(
-      { popup, overflowScrollParent },
-      () => this.scheduledUpdatePosition(this.props),
-    );
+    this.setState({ popup, overflowScrollParent }, () => this.scheduledUpdatePosition(this.props))
   }
 
   private handleRef = (popup: HTMLDivElement) => {
     if (!popup) {
-      return;
+      return
     }
 
-    this.initPopup(popup);
-  };
+    this.initPopup(popup)
+  }
 
-  private scheduledUpdatePosition = rafSchedule((props: Props) =>
-    this.updatePosition(props),
-  );
+  private scheduledUpdatePosition = rafSchedule((props: Props) => this.updatePosition(props))
 
-  onResize = () => this.scheduledUpdatePosition(this.props);
+  onResize = () => this.scheduledUpdatePosition(this.props)
 
   UNSAFE_componentWillReceiveProps(newProps: Props) {
     // We are delaying `updatePosition` otherwise it happens before the children
     // get rendered and we end up with a wrong position
-    this.scheduledUpdatePosition(newProps);
+    this.scheduledUpdatePosition(newProps)
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.onResize);
+    window.addEventListener('resize', this.onResize)
 
-    const { stick } = this.props;
+    const { stick } = this.props
 
     if (stick) {
-      this.scrollElement = findOverflowScrollParent(this.props.target!);
+      this.scrollElement = findOverflowScrollParent(this.props.target!)
     } else {
-      this.scrollElement = this.props.scrollableElement;
+      this.scrollElement = this.props.scrollableElement
     }
     if (this.scrollElement) {
-      this.scrollElement.addEventListener('scroll', this.onResize);
+      this.scrollElement.addEventListener('scroll', this.onResize)
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('resize', this.onResize)
     if (this.scrollElement) {
-      this.scrollElement.removeEventListener('scroll', this.onResize);
+      this.scrollElement.removeEventListener('scroll', this.onResize)
     }
-    this.scheduledUpdatePosition.cancel();
+    this.scheduledUpdatePosition.cancel()
   }
 
   private renderPopup() {
-    const { position } = this.state;
-    const { shouldRenderPopup } = this.props;
+    const { position } = this.state
+    const { shouldRenderPopup } = this.props
 
     if (shouldRenderPopup && !shouldRenderPopup(position || {})) {
-      return null;
+      return null
     }
 
     return (
@@ -229,23 +223,23 @@ export class Popup extends React.Component<Props, State> {
       >
         {this.props.children}
       </div>
-    );
+    )
   }
 
   render() {
-    const { target, mountTo } = this.props;
-    const { validPosition } = this.state;
+    const { target, mountTo } = this.props
+    const { validPosition } = this.state
 
     if (!target || !validPosition) {
-      return null;
+      return null
     }
 
     if (mountTo) {
-      return createPortal(this.renderPopup(), mountTo);
+      return createPortal(this.renderPopup(), mountTo)
     }
 
     // Without mountTo property renders popup as is,
     // which means it will be cropped by "overflow: hidden" container.
-    return this.renderPopup();
+    return this.renderPopup()
   }
 }

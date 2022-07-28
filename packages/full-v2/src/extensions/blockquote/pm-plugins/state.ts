@@ -10,18 +10,17 @@ export interface BlockQuoteState {
 export const blockquotePluginKey = new PluginKey('blockQuotePlugin')
 
 export const getPluginState = (state: EditorState): BlockQuoteState =>
-  blockquotePluginKey.getState(state);
+  blockquotePluginKey.getState(state)
 
-export const setPluginState = (stateProps: Object) => (
-  state: EditorState,
-  dispatch: CommandDispatch,
-): boolean => {
-  const pluginState = getPluginState(state);
-  dispatch(
-    state.tr.setMeta(blockquotePluginKey, {
-      ...pluginState,
-      ...stateProps,
-    }),
-  );
-  return true;
-};
+export const setPluginState =
+  (stateProps: Object) =>
+  (state: EditorState, dispatch: CommandDispatch): boolean => {
+    const pluginState = getPluginState(state)
+    dispatch(
+      state.tr.setMeta(blockquotePluginKey, {
+        ...pluginState,
+        ...stateProps,
+      })
+    )
+    return true
+  }

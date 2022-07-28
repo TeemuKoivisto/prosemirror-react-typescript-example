@@ -1,7 +1,6 @@
 import { NodeViewProps } from '@react'
 
-export interface BlockQuoteOptions {
-}
+export interface BlockQuoteOptions {}
 export interface IViewProps {
   options?: BlockQuoteOptions
 }

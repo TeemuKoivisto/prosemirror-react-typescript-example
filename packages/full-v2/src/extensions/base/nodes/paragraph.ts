@@ -5,7 +5,7 @@ export const paragraph: NodeSpec = {
   group: 'block',
   selectable: false,
   // marks:
-    // 'strong code em link strike subsup textColor underline unsupportedMark unsupportedNodeAttribute',
+  // 'strong code em link strike subsup textColor underline unsupportedMark unsupportedNodeAttribute',
   parseDOM: [{ tag: 'p' }],
   toDOM() {
     return ['p', 0]

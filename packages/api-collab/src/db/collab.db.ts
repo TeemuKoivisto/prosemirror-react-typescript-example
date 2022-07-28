@@ -12,7 +12,6 @@ type EditedDoc = {
 }
 
 class CollabDB {
-
   editedDocs = new Map<string, EditedDoc>()
   FILE = './collab.db.json'
 
@@ -58,14 +57,14 @@ class CollabDB {
     if (!documentId) {
       Array.from(this.editedDocs.entries()).forEach(([docId, doc]) => {
         if (doc.users.includes(userId)) {
-          this.editedDocs.set(docId, { ...doc, users: doc.users.filter(id => id !== userId) })
+          this.editedDocs.set(docId, { ...doc, users: doc.users.filter((id) => id !== userId) })
         }
       })
       this.write()
     }
     const doc = documentId && this.editedDocs.get(documentId)
     if (doc) {
-      this.editedDocs.set(documentId, { ...doc, users: doc.users.filter(id => id !== userId) })
+      this.editedDocs.set(documentId, { ...doc, users: doc.users.filter((id) => id !== userId) })
       this.write()
     }
   }
@@ -83,7 +82,10 @@ class CollabDB {
   }
 
   async read() {
-    const exists = await fs.access(this.FILE).then(() => true).catch(() => false)
+    const exists = await fs
+      .access(this.FILE)
+      .then(() => true)
+      .catch(() => false)
     const data = exists ? await fs.readFile(this.FILE, 'utf-8') : undefined
     let parsed: StoredData
     try {
@@ -92,7 +94,7 @@ class CollabDB {
       console.error(err)
       exists && fs.unlink(this.FILE)
     }
-    parsed?.editedDocs?.forEach(mapValue => {
+    parsed?.editedDocs?.forEach((mapValue) => {
       this.editedDocs.set(mapValue[0], mapValue[1])
     })
   }

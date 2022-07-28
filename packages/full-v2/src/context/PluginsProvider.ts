@@ -5,7 +5,6 @@ interface PluginState {
 }
 
 export class PluginsProvider {
-
   dispatcher: EventDispatcher = new EventDispatcher()
 
   publish(pluginKey: PluginKey, nextPluginState: PluginState) {

@@ -7,19 +7,16 @@ import { baseKeymap } from 'prosemirror-commands'
 import { doc, pmBlockquote, paragraph, text } from '../../schema/nodes'
 import { em, strong } from '../../schema/marks'
 
-import {
-  createNewPmBlockQuote, splitBlock
-} from './commands/general'
+import { createNewPmBlockQuote, splitBlock } from './commands/general'
 
-import { basePluginFactory, basePluginKey } from './pm-plugins/main';
+import { basePluginFactory, basePluginKey } from './pm-plugins/main'
 
-import { EditorPlugin, PMPluginFactory } from '../../core/types';
+import { EditorPlugin, PMPluginFactory } from '../../core/types'
 // import { keymap } from '../../utils/keymap';
 
 export { basePluginKey } from './pm-plugins/main'
 export type { BaseState } from './pm-plugins/main'
-export interface BasePluginOptions {
-}
+export interface BasePluginOptions {}
 
 export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
   name: 'base',
@@ -30,20 +27,15 @@ export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
       { name: 'baseKeyMap', plugin: () => keymap(baseKeymap) },
       {
         name: 'otherKeyMap',
-        plugin: () => keymap({
-          'Ctrl-Alt-p': createNewPmBlockQuote,
-          'Ctrl-Alt-s': splitBlock,
-        })
+        plugin: () =>
+          keymap({
+            'Ctrl-Alt-p': createNewPmBlockQuote,
+            'Ctrl-Alt-s': splitBlock,
+          }),
       },
       {
         name: 'base',
-        plugin: ({
-          ctx,
-        }) =>
-          basePluginFactory(
-            ctx,
-            options,
-          ),
+        plugin: ({ ctx }) => basePluginFactory(ctx, options),
       },
     ]
 
@@ -55,12 +47,12 @@ export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
       { name: 'paragraph', node: paragraph },
       { name: 'pmBlockquote', node: pmBlockquote },
       { name: 'text', node: text },
-    ];
+    ]
   },
   marks() {
     return [
       { name: 'em', mark: em },
       { name: 'strong', mark: strong },
     ]
-  }
-});
+  },
+})

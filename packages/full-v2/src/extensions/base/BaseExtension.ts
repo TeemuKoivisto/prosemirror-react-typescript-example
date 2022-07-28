@@ -17,7 +17,6 @@ export const baseSchema: IExtensionSchema = {
   marks: { em, strong },
 }
 export class BaseExtension extends Extension<BaseExtensionProps> {
-
   get name() {
     return 'base'
   }

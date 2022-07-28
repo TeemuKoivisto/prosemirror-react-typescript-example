@@ -5,13 +5,13 @@ import { ServerStyleSheet } from 'styled-components'
 import { ServerRoutes } from '../../../client/routes'
 
 export const ssrService = {
-  render(url: string, bundle: boolean = true) {
+  render(url: string, bundle = true) {
     const sheet = new ServerStyleSheet()
 
-    const app = renderToString(sheet.collectStyles(<ServerRoutes url={url}/>))    
-  
+    const app = renderToString(sheet.collectStyles(<ServerRoutes url={url} />))
+
     const initialState = { ssr: true }
-  
+
     const html = `
       <!DOCTYPE html>
       <html lang="en">
@@ -32,5 +32,5 @@ export const ssrService = {
     `
     sheet.seal()
     return html
-  }
+  },
 }

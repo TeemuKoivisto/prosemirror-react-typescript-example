@@ -5,25 +5,24 @@ import { EditorState, Selection } from 'prosemirror-state'
 import { Command, JSONEditorState, parseRawValue } from '@core'
 
 export class EditorViewProvider {
-  
   _editorView?: EditorView
 
   init(view: EditorView) {
     this._editorView = view
   }
 
-  get editorView() : EditorView {
+  get editorView(): EditorView {
     if (!this._editorView) {
       throw Error('EditorViewProvider editorView accessed without editorView instance')
     }
     return this._editorView
   }
 
-  getMarks() : { [key: string]: MarkType } {
+  getMarks(): { [key: string]: MarkType } {
     return this.editorView.state.schema.marks
   }
 
-  getNodes() : { [key: string]: NodeType } {
+  getNodes(): { [key: string]: NodeType } {
     return this.editorView.state.schema.nodes
   }
 
@@ -47,7 +46,7 @@ export class EditorViewProvider {
       return false
     }
 
-    (this._editorView.dom as HTMLElement).blur()
+    ;(this._editorView.dom as HTMLElement).blur()
     return true
   }
 
@@ -56,24 +55,27 @@ export class EditorViewProvider {
     return { ...state, plugins: [] } as unknown as JSONEditorState
   }
 
-  replaceState(doc: {[key: string]: any}, selection?: {[key: string]: any}) {
+  replaceState(doc: { [key: string]: any }, selection?: { [key: string]: any }) {
     const rawValue = {
       doc,
-      selection: selection ?? { type: "text", anchor: 1, head: 1 }
+      selection: selection ?? { type: 'text', anchor: 1, head: 1 },
     }
-    const state = EditorState.fromJSON({
-      schema: this.editorView.state.schema,
-      plugins: this.editorView.state.plugins,
-    }, rawValue)
+    const state = EditorState.fromJSON(
+      {
+        schema: this.editorView.state.schema,
+        plugins: this.editorView.state.plugins,
+      },
+      rawValue
+    )
     this.editorView.updateState(state)
 
     // Fire an empty transaction to trigger PortalProvider to flush the created nodeViews
-    let tr = this.editorView.state.tr
+    const tr = this.editorView.state.tr
     this.editorView.dispatch(tr)
   }
 
   replaceDocument(
-    rawValue: {[key: string]: any},
+    rawValue: { [key: string]: any },
     options: {
       shouldScrollToBottom?: boolean
       shouldAddToHistory?: boolean
@@ -86,14 +88,9 @@ export class EditorViewProvider {
 
     const { state } = this.editorView
     const { schema } = state
-    const {
-      shouldScrollToBottom, shouldAddToHistory, triggerAfterTrEvents
-    } = options
+    const { shouldScrollToBottom, shouldAddToHistory, triggerAfterTrEvents } = options
 
-    const content = parseRawValue(
-      rawValue,
-      schema,
-    )
+    const content = parseRawValue(rawValue, schema)
 
     if (!content) {
       return false

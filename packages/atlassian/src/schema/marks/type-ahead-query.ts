@@ -1,6 +1,6 @@
-import { MarkSpec } from 'prosemirror-model';
-import { SEARCH_QUERY } from './groups';
-import { B400 } from '../../theme/colors';
+import { MarkSpec } from 'prosemirror-model'
+import { SEARCH_QUERY } from './groups'
+import { B400 } from '../../theme/colors'
 
 export const typeAheadQuery: MarkSpec = {
   inclusive: true,
@@ -14,9 +14,9 @@ export const typeAheadQuery: MarkSpec = {
         'data-trigger': node.attrs.trigger,
         style: `color: ${B400}`,
       },
-    ];
+    ]
   },
   attrs: {
     trigger: { default: '' },
   },
-};
+}

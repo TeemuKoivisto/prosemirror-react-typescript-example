@@ -4,8 +4,7 @@ import { createPortal } from 'react-dom'
 type Listener<T = any> = (data: T) => void
 
 export class PortalProvider {
-
-  shouldUpdatePortals: boolean = true
+  shouldUpdatePortals = true
   portals: Map<HTMLElement, React.ReactPortal> = new Map()
   pendingUpdatedProps: Map<HTMLElement, any> = new Map()
   nodeViewListeners: Map<HTMLElement, Set<Listener>> = new Map()
@@ -29,7 +28,7 @@ export class PortalProvider {
     Array.from(this.pendingUpdatedProps.entries()).map(([container, props]) => {
       const set = this.nodeViewListeners.get(container)
       if (set) {
-        set.forEach(cb => cb(props))
+        set.forEach((cb) => cb(props))
       }
       this.pendingUpdatedProps.delete(container)
     })

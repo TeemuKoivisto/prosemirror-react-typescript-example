@@ -1,37 +1,36 @@
-import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
+import { EditorState, Plugin, PluginKey } from 'prosemirror-state'
 
-import { blockQuoteNodeView } from '../nodeviews/BlockQuoteView';
-import { CommandDispatch } from '../../../types';
-import { findBlockQuote } from '../pm-utils/findBlockQuote';
+import { blockQuoteNodeView } from '../nodeviews/BlockQuoteView'
+import { CommandDispatch } from '../../../types'
+import { findBlockQuote } from '../pm-utils/findBlockQuote'
 
 import { PortalProviderAPI } from '../../../react-portals'
-import { EventDispatcher, Dispatch } from '../../../utils/event-dispatcher';
+import { EventDispatcher, Dispatch } from '../../../utils/event-dispatcher'
 
 import { BlockQuoteOptions } from '../'
 
 export interface BlockQuoteState {
   blockQuoteActive: boolean
   // blockQuoteDisabled: boolean
-};
+}
 
 export const blockquotePluginKey = new PluginKey('blockQuotePlugin')
 
 export const getPluginState = (state: EditorState): BlockQuoteState =>
-  blockquotePluginKey.getState(state);
+  blockquotePluginKey.getState(state)
 
-export const setPluginState = (stateProps: Object) => (
-  state: EditorState,
-  dispatch: CommandDispatch,
-): boolean => {
-  const pluginState = getPluginState(state);
-  dispatch(
-    state.tr.setMeta(blockquotePluginKey, {
-      ...pluginState,
-      ...stateProps,
-    }),
-  );
-  return true;
-};
+export const setPluginState =
+  (stateProps: Object) =>
+  (state: EditorState, dispatch: CommandDispatch): boolean => {
+    const pluginState = getPluginState(state)
+    dispatch(
+      state.tr.setMeta(blockquotePluginKey, {
+        ...pluginState,
+        ...stateProps,
+      })
+    )
+    return true
+  }
 
 // export type CodeBlockStateSubscriber = (state: BlockQuoteState) => any;
 
@@ -40,7 +39,7 @@ export function blockQuotePluginFactory(
   // providerFactory: ProviderFactory,
   portalProviderAPI: PortalProviderAPI,
   eventDispatcher: EventDispatcher,
-  options?: BlockQuoteOptions,
+  options?: BlockQuoteOptions
 ) {
   return new Plugin({
     state: {
@@ -48,14 +47,9 @@ export function blockQuotePluginFactory(
         return {
           blockQuoteActive: false,
           // blockQuoteDisabled: false,
-        };
+        }
       },
-      apply(
-        tr,
-        pluginState: BlockQuoteState,
-        _oldState,
-        newState,
-      ): BlockQuoteState {
+      apply(tr, pluginState: BlockQuoteState, _oldState, newState): BlockQuoteState {
         if (tr.docChanged || tr.selectionSet) {
           const blockQuoteActive = !!findBlockQuote(newState, newState.selection)
           // const blockQuoteDisabled = !(
@@ -63,20 +57,18 @@ export function blockQuotePluginFactory(
           //   isWrappingPossible(newState.schema.blockquote, newState)
           // )
 
-          if (
-            blockQuoteActive !== pluginState.blockQuoteActive
-          ) {
+          if (blockQuoteActive !== pluginState.blockQuoteActive) {
             const nextPluginState = {
               ...pluginState,
               blockQuoteActive,
               // blockQuoteDisabled,
-            };
-            dispatch(blockquotePluginKey, nextPluginState);
-            return nextPluginState;
+            }
+            dispatch(blockquotePluginKey, nextPluginState)
+            return nextPluginState
           }
         }
 
-        return pluginState;
+        return pluginState
       },
     },
     key: blockquotePluginKey,

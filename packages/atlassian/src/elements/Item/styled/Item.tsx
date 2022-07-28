@@ -1,59 +1,62 @@
-import styled, { css } from 'styled-components';
-import { N60A } from '../../../theme/colors';
-import { getThemeStyle, themeNamespace } from '../util/theme';
+import styled, { css } from 'styled-components'
+import { N60A } from '../../../theme/colors'
+import { getThemeStyle, themeNamespace } from '../util/theme'
 
-const getItemState = (stateName: string) => ({ theme }: { theme: any }) => {
-  const stateStyles = getThemeStyle(theme[themeNamespace], stateName);
-  return css`
-    background-color: ${stateStyles.background};
-    color: ${stateStyles.text};
-    fill: ${stateStyles.background};
-    text-decoration: none;
-
-    &:focus {
+const getItemState =
+  (stateName: string) =>
+  ({ theme }: { theme: any }) => {
+    const stateStyles = getThemeStyle(theme[themeNamespace], stateName)
+    return css`
+      background-color: ${stateStyles.background};
       color: ${stateStyles.text};
-    }
-  `;
-};
+      fill: ${stateStyles.background};
+      text-decoration: none;
 
-type GetPadding = { isCompact?: boolean, theme: any, description: string }
-const getPadding = ({ isCompact, theme, description } : GetPadding) => {
-  const paddingKey = isCompact ? 'compact' : 'default';
-  const { bottom = 0, left = 0, right = 0, top = 0 } = getThemeStyle(
-    theme[themeNamespace],
-    paddingKey,
-    'padding',
-  );
+      &:focus {
+        color: ${stateStyles.text};
+      }
+    `
+  }
 
-  let adjustedTop = typeof top === 'function' ? top() : top;
-  let adjustedBottom = typeof bottom === 'function' ? bottom() : bottom;
+type GetPadding = { isCompact?: boolean; theme: any; description: string }
+const getPadding = ({ isCompact, theme, description }: GetPadding) => {
+  const paddingKey = isCompact ? 'compact' : 'default'
+  const {
+    bottom = 0,
+    left = 0,
+    right = 0,
+    top = 0,
+  } = getThemeStyle(theme[themeNamespace], paddingKey, 'padding')
+
+  let adjustedTop = typeof top === 'function' ? top() : top
+  let adjustedBottom = typeof bottom === 'function' ? bottom() : bottom
 
   // Subtract the 1px padding-bottom added to the content and description elements
   // to maintain original height
-  adjustedTop = Math.max(description ? adjustedTop - 1 : adjustedTop, 0);
-  adjustedBottom = Math.max(adjustedBottom - 1, 0);
+  adjustedTop = Math.max(description ? adjustedTop - 1 : adjustedTop, 0)
+  adjustedBottom = Math.max(adjustedBottom - 1, 0)
 
   return css`
     padding: ${adjustedTop}px ${right}px ${adjustedBottom}px ${left}px;
-  `;
-};
+  `
+}
 
-const getHeightStyles = ({ isCompact, theme } : { isCompact?: boolean, theme: any }) => {
-  const heightKey = isCompact ? 'compact' : 'default';
-  const height = getThemeStyle(theme[themeNamespace], heightKey, 'height');
+const getHeightStyles = ({ isCompact, theme }: { isCompact?: boolean; theme: any }) => {
+  const heightKey = isCompact ? 'compact' : 'default'
+  const height = getThemeStyle(theme[themeNamespace], heightKey, 'height')
   return height
     ? css`
         height: ${height}px;
       `
-    : '';
-};
+    : ''
+}
 
-const getWidthStyles = ({ isCompact, theme } : { isCompact?: boolean, theme: any }) => {
-  const widthKey = isCompact ? 'compact' : 'default';
-  const width = getThemeStyle(theme[themeNamespace], widthKey, 'width');
+const getWidthStyles = ({ isCompact, theme }: { isCompact?: boolean; theme: any }) => {
+  const widthKey = isCompact ? 'compact' : 'default'
+  const width = getThemeStyle(theme[themeNamespace], widthKey, 'width')
 
   if (!width) {
-    return '';
+    return ''
   }
   return typeof width === 'number'
     ? css`
@@ -61,8 +64,8 @@ const getWidthStyles = ({ isCompact, theme } : { isCompact?: boolean, theme: any
       `
     : css`
         width: ${width};
-      `;
-};
+      `
+}
 
 // This function is responsible for drawing any focus styles for the element
 type InteractiveStyles = {
@@ -71,35 +74,27 @@ type InteractiveStyles = {
   isSelected?: boolean
   theme: any
 }
-const getInteractiveStyles = ({
-  theme,
-  isDisabled,
-  isDragging,
-  isSelected,
-} : InteractiveStyles) => {
+const getInteractiveStyles = ({ theme, isDisabled, isDragging, isSelected }: InteractiveStyles) => {
   if (isDragging) {
     return css`
-      ${getItemState(
-        'dragging',
-      )} box-shadow: 0 4px 8px -2px ${N60A},
+      ${getItemState('dragging')} box-shadow: 0 4px 8px -2px ${N60A},
         0 0 1px ${N60A};
-    `;
+    `
   }
 
   const standardFocus = css`
     &:focus {
-      box-shadow: 0 0 0 2px
-        ${getThemeStyle(theme[themeNamespace], 'outline', 'focus')} inset;
+      box-shadow: 0 0 0 2px ${getThemeStyle(theme[themeNamespace], 'outline', 'focus')} inset;
       text-decoration: none;
     }
-  `;
+  `
 
   if (isDisabled) {
     return css`
       cursor: not-allowed;
       ${getItemState('disabled')}
       ${standardFocus};
-    `;
+    `
   }
 
   if (isSelected) {
@@ -113,7 +108,7 @@ const getInteractiveStyles = ({
       }
 
       ${standardFocus};
-    `;
+    `
   }
 
   return css`
@@ -126,8 +121,8 @@ const getInteractiveStyles = ({
     }
 
     ${standardFocus};
-  `;
-};
+  `
+}
 
 // This is the main item style. It is defined as a basic style variable so it can
 // later be applied to different component types (span / a / custom link component)
@@ -139,7 +134,7 @@ interface ItemBaseProps {
   isSelected?: boolean
   description: string
 }
-export const ItemBase = ({ theme } : { theme: any }) => css<ItemBaseProps>`
+export const ItemBase = ({ theme }: { theme: any }) => css<ItemBaseProps>`
   && {
     align-items: center;
     border-radius: ${getThemeStyle(theme[themeNamespace], 'borderRadius')}px;
@@ -148,7 +143,7 @@ export const ItemBase = ({ theme } : { theme: any }) => css<ItemBaseProps>`
     display: ${({ isHidden }) => (isHidden ? 'none' : 'flex')};
     flex: none;
     ${getItemState(
-      'default',
+      'default'
     )} ${getPadding} ${getInteractiveStyles} ${getHeightStyles} ${getWidthStyles} &:focus {
       /* focus shadow drawn by getInteractiveStyles */
 
@@ -158,7 +153,7 @@ export const ItemBase = ({ theme } : { theme: any }) => css<ItemBaseProps>`
       position: relative;
     }
   }
-`;
+`
 
 // Given some optional link-related props, returns the relevant styled
 // component. For links, it styles the linkComponent if provided, otherwise
@@ -169,20 +164,20 @@ interface Props {
   href: string | null | undefined
   linkComponent?: () => JSX.Element
 }
-const styledRootElement = ({ href, linkComponent } : Props) => {
+const styledRootElement = ({ href, linkComponent }: Props) => {
   if (linkComponent) {
     return styled(linkComponent)`
       ${ItemBase};
-    `;
+    `
   }
   if (href) {
     return styled.a`
       ${ItemBase};
-    `;
+    `
   }
   return styled.span`
     ${ItemBase};
-  `;
-};
+  `
+}
 
-export default styledRootElement;
+export default styledRootElement

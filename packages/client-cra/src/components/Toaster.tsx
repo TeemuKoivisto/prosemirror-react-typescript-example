@@ -26,11 +26,13 @@ const Toast = memo((props: IToastProps) => {
   return (
     <ToastItem className={className} type={toast.type}>
       <ToastBody type={toast.type}>
-        <SvgWrapper className="type-icon">{ getTypeIcon(toast.type) }</SvgWrapper>
-        <p className="message">{ toast.message }</p>
-        <SvgAction className="close-icon"><FiX size={24} onClick={remove}/></SvgAction>
+        <SvgWrapper className="type-icon">{getTypeIcon(toast.type)}</SvgWrapper>
+        <p className="message">{toast.message}</p>
+        <SvgAction className="close-icon">
+          <FiX size={24} onClick={remove} />
+        </SvgAction>
       </ToastBody>
-      <Progress type={toast.type} duration={toast.duration} inProgress={inProgress}/>
+      <Progress type={toast.type} duration={toast.duration} inProgress={inProgress} />
     </ToastItem>
   )
 })
@@ -45,17 +47,18 @@ export const Toaster = inject((stores: Stores) => ({
   toasts: stores.toastStore.toasts,
   toasterLocation: stores.toastStore.toasterLocation,
   removeToast: stores.toastStore.removeToast,
-}))
-(observer((props: IProps) => {
-  const { className, toasts = [], toasterLocation, removeToast } = props
-  return (
-    <ToastsList className={`${className} ${toasterLocation}`}>
-      { toasts.map(t =>
-      <Toast key={t.id} toast={t} removeToast={removeToast!}/>
-      )}
-    </ToastsList>
-  )
-}))
+}))(
+  observer((props: IProps) => {
+    const { className, toasts = [], toasterLocation, removeToast } = props
+    return (
+      <ToastsList className={`${className} ${toasterLocation}`}>
+        {toasts.map((t) => (
+          <Toast key={t.id} toast={t} removeToast={removeToast!} />
+        ))}
+      </ToastsList>
+    )
+  })
+)
 
 function getTypeIcon(type: string, size: number = 24) {
   switch (type) {
@@ -171,10 +174,10 @@ const ToastBody = styled.div<ToastBodyProps>`
     margin-right: 3px;
   }
 `
-type ProgressProps = { type: string, inProgress: boolean, duration: number }
+type ProgressProps = { type: string; inProgress: boolean; duration: number }
 const Progress = styled.div<ProgressProps>`
   background: ${({ type }) => getTypeColor(type)};
   height: 4px;
-  width: ${({ inProgress }) => inProgress ? '0%' : '100%'};
+  width: ${({ inProgress }) => (inProgress ? '0%' : '100%')};
   transition: width ${({ duration }) => duration}ms linear 0ms;
 `

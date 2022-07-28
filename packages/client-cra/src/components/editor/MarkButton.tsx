@@ -11,26 +11,22 @@ interface IProps {
 function MarkButtonEl(props: IProps) {
   const { className, active, name, icon, onClick } = props
   return (
-    <Button
-      className={className}
-      active={active}
-      name={name}
-      onClick={onClick}
-    >
-      <SvgWrapper>
-        {icon}
-      </SvgWrapper>
+    <Button className={className} active={active} name={name} onClick={onClick}>
+      <SvgWrapper>{icon}</SvgWrapper>
     </Button>
   )
 }
 
-interface IButtonProps { active: boolean }
+interface IButtonProps {
+  active: boolean
+}
 const SvgWrapper = styled.span`
   display: flex;
 `
 const Button = styled.button`
-  background: ${(props: IButtonProps) => props.active ? '#f0f8ff' : 'transparent'};
-  border: ${(props: IButtonProps) => props.active ? '1px solid #5a6ecd' : '1px solid transparent'};
+  background: ${(props: IButtonProps) => (props.active ? '#f0f8ff' : 'transparent')};
+  border: ${(props: IButtonProps) =>
+    props.active ? '1px solid #5a6ecd' : '1px solid transparent'};
   cursor: pointer;
   display: flex;
   margin-right: 5px;

@@ -1,37 +1,37 @@
-import React from 'react';
-import styled from 'styled-components';
-import { EditorView } from 'prosemirror-view';
-import { ProviderFactory } from '../provider-factory';
+import React from 'react'
+import styled from 'styled-components'
+import { EditorView } from 'prosemirror-view'
+import { ProviderFactory } from '../provider-factory'
 
-import { EditorAppearance, UIComponentFactory } from '../types';
-import { EventDispatcher } from '../utils/event-dispatcher';
-import { EditorActions } from '../EditorActions';
+import { EditorAppearance, UIComponentFactory } from '../types'
+import { EventDispatcher } from '../utils/event-dispatcher'
+import { EditorActions } from '../EditorActions'
 
-import { whichTransitionEvent } from '../utils/magic-box';
+import { whichTransitionEvent } from '../utils/magic-box'
 
 const PluginsComponentsWrapper = styled.div`
   display: flex;
-`;
+`
 
 export interface Props {
-  items?: Array<UIComponentFactory>;
-  editorView?: EditorView;
-  editorActions?: EditorActions;
-  eventDispatcher?: EventDispatcher;
-  providerFactory: ProviderFactory;
-  appearance?: EditorAppearance;
-  popupsMountPoint?: HTMLElement | null;
-  popupsBoundariesElement?: HTMLElement;
-  popupsScrollableElement?: HTMLElement;
-  containerElement: HTMLElement | null;
-  disabled: boolean;
-  contentAreaRef: HTMLElement | null;
+  items?: Array<UIComponentFactory>
+  editorView?: EditorView
+  editorActions?: EditorActions
+  eventDispatcher?: EventDispatcher
+  providerFactory: ProviderFactory
+  appearance?: EditorAppearance
+  popupsMountPoint?: HTMLElement | null
+  popupsBoundariesElement?: HTMLElement
+  popupsScrollableElement?: HTMLElement
+  containerElement: HTMLElement | null
+  disabled: boolean
+  contentAreaRef: HTMLElement | null
 }
 
 export default class PluginSlot extends React.Component<Props, any> {
-  static displayName = 'PluginSlot';
+  static displayName = 'PluginSlot'
 
-  transitionEvent = whichTransitionEvent<'transitionend'>();
+  transitionEvent = whichTransitionEvent<'transitionend'>()
 
   shouldComponentUpdate(nextProps: Props) {
     const {
@@ -45,7 +45,7 @@ export default class PluginSlot extends React.Component<Props, any> {
       popupsScrollableElement,
       containerElement,
       disabled,
-    } = this.props;
+    } = this.props
 
     return !(
       nextProps.editorView === editorView &&
@@ -58,40 +58,37 @@ export default class PluginSlot extends React.Component<Props, any> {
       nextProps.popupsScrollableElement === popupsScrollableElement &&
       nextProps.containerElement === containerElement &&
       nextProps.disabled === disabled
-    );
+    )
   }
 
   componentDidMount() {
-    this.addModeChangeListener(this.props.contentAreaRef);
+    this.addModeChangeListener(this.props.contentAreaRef)
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: Props) {
     if (this.props.contentAreaRef !== nextProps.contentAreaRef) {
-      this.removeModeChangeListener(this.props.contentAreaRef);
-      this.addModeChangeListener(nextProps.contentAreaRef);
+      this.removeModeChangeListener(this.props.contentAreaRef)
+      this.addModeChangeListener(nextProps.contentAreaRef)
     }
   }
 
   componentWillUnmount() {
-    this.removeModeChangeListener(this.props.contentAreaRef);
+    this.removeModeChangeListener(this.props.contentAreaRef)
   }
 
   forceComponentUpdate = (event: TransitionEvent): void => {
     // Only trigger an update if the transition is on a property containing `width`
     // This will cater for media and the content area itself currently.
     if (event.propertyName.includes('width')) {
-      this.forceUpdate();
+      this.forceUpdate()
     }
-  };
+  }
 
   removeModeChangeListener = (contentAreaRef: HTMLElement | null) => {
     if (contentAreaRef && this.transitionEvent) {
-      contentAreaRef.removeEventListener(
-        this.transitionEvent,
-        this.forceComponentUpdate,
-      );
+      contentAreaRef.removeEventListener(this.transitionEvent, this.forceComponentUpdate)
     }
-  };
+  }
 
   addModeChangeListener = (contentAreaRef: HTMLElement | null) => {
     if (contentAreaRef && this.transitionEvent) {
@@ -99,12 +96,9 @@ export default class PluginSlot extends React.Component<Props, any> {
        * Update the plugin components once the transition
        * to full width / default mode completes
        */
-      contentAreaRef.addEventListener(
-        this.transitionEvent,
-        this.forceComponentUpdate,
-      );
+      contentAreaRef.addEventListener(this.transitionEvent, this.forceComponentUpdate)
     }
-  };
+  }
 
   render() {
     const {
@@ -119,16 +113,16 @@ export default class PluginSlot extends React.Component<Props, any> {
       popupsScrollableElement,
       containerElement,
       disabled,
-    } = this.props;
+    } = this.props
 
     if (!items || !editorView) {
-      return null;
+      return null
     }
 
     return (
       <PluginsComponentsWrapper>
         {items.map((component, key) => {
-          const props: any = { key };
+          const props: any = { key }
           const element = component({
             editorView: editorView as EditorView,
             editorActions: editorActions as EditorActions,
@@ -140,10 +134,10 @@ export default class PluginSlot extends React.Component<Props, any> {
             popupsScrollableElement,
             containerElement,
             disabled,
-          });
-          return element && React.cloneElement(element, props);
+          })
+          return element && React.cloneElement(element, props)
         })}
       </PluginsComponentsWrapper>
-    );
+    )
   }
 }

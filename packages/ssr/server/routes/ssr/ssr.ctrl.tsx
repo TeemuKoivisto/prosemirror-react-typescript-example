@@ -7,18 +7,16 @@ export const ssrReactApp = async (req: Request<{}>, res: Response, next: NextFun
     const html = ssrService.render(req.url)
 
     res.send(html)
-
   } catch (err) {
     next(err)
   }
 }
 
-export const ssrRawHtml  = async (req: Request<{}>, res: Response, next: NextFunction) => {
+export const ssrRawHtml = async (req: Request<{}>, res: Response, next: NextFunction) => {
   try {
     const html = ssrService.render('/', false)
 
     res.send(html)
-
   } catch (err) {
     next(err)
   }

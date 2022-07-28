@@ -14,10 +14,6 @@ export default {
       format: 'es',
     },
   ],
-  external: [
-    ...Object.keys(pkg.dependencies || {}),
-  ],
-  plugins: [
-    typescript(),
-  ],
+  external: [...Object.keys(pkg.dependencies || {})],
+  plugins: [typescript()],
 }

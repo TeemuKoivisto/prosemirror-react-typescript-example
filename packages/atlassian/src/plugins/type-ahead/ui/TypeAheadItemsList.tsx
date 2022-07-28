@@ -1,16 +1,16 @@
-import React from 'react';
+import React from 'react'
 
-import styled, { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components'
 
-import Item, { ItemGroup, itemThemeNamespace } from '../../../elements/Item';
-import { borderRadius } from '../../../theme/constants';
-import * as colors from '../../../theme/colors';
+import Item, { ItemGroup, itemThemeNamespace } from '../../../elements/Item'
+import { borderRadius } from '../../../theme/constants'
+import * as colors from '../../../theme/colors'
 
-import { Shortcut } from '../../../ui/styles';
-import IconFallback from '../../quick-insert/assets/fallback';
-import { TypeAheadItem } from '../types';
+import { Shortcut } from '../../../ui/styles'
+import IconFallback from '../../quick-insert/assets/fallback'
+import { TypeAheadItem } from '../types'
 
-const hidden = { overflow: 'hidden' };
+const hidden = { overflow: 'hidden' }
 
 const itemTheme = {
   [itemThemeNamespace]: {
@@ -37,7 +37,7 @@ const itemTheme = {
       secondaryText: colors.N200,
     },
   },
-};
+}
 
 export const ItemIcon = styled.div`
   width: 40px;
@@ -55,7 +55,7 @@ export const ItemIcon = styled.div`
     width: 40px;
     height: 40px;
   }
-`;
+`
 
 const ItemBody = styled.div`
   display: flex;
@@ -63,7 +63,7 @@ const ItemBody = styled.div`
   flex-wrap: nowrap;
   justify-content: space-between;
   line-height: 1.4;
-`;
+`
 
 const ItemText = styled.div`
   white-space: initial;
@@ -72,43 +72,34 @@ const ItemText = styled.div`
     color: ${colors.N200};
     margin-top: 4px;
   }
-`;
+`
 
 const ItemAfter = styled.div`
   flex: 0 0 auto;
-`;
+`
 
 const fallbackIcon = (label: string) => {
-  return <IconFallback label={label} />;
-};
+  return <IconFallback label={label} />
+}
 
 export type TypeAheadItemsListProps = {
-  items?: Array<TypeAheadItem>;
-  currentIndex: number;
-  insertByIndex: (index: number) => void;
-  setCurrentIndex: (index: number) => void;
-};
+  items?: Array<TypeAheadItem>
+  currentIndex: number
+  insertByIndex: (index: number) => void
+  setCurrentIndex: (index: number) => void
+}
 
 export function scrollIntoViewIfNeeded(element: HTMLElement) {
-  const { offsetTop, offsetHeight, offsetParent } = element;
+  const { offsetTop, offsetHeight, offsetParent } = element
 
-  const {
-    offsetHeight: offsetParentHeight,
-    scrollTop,
-  } = offsetParent as HTMLElement;
+  const { offsetHeight: offsetParentHeight, scrollTop } = offsetParent as HTMLElement
 
   const direction =
-    offsetTop + offsetHeight > offsetParentHeight + scrollTop
-      ? 1
-      : scrollTop > offsetTop
-      ? -1
-      : 0;
+    offsetTop + offsetHeight > offsetParentHeight + scrollTop ? 1 : scrollTop > offsetTop ? -1 : 0
 
   if (direction !== 0 && offsetParent) {
     offsetParent.scrollTop =
-      direction === 1
-        ? offsetTop + offsetHeight - offsetParentHeight
-        : offsetTop;
+      direction === 1 ? offsetTop + offsetHeight - offsetParentHeight : offsetTop
   }
 }
 
@@ -119,7 +110,7 @@ export function TypeAheadItemsList({
   setCurrentIndex,
 }: TypeAheadItemsListProps) {
   if (!Array.isArray(items)) {
-    return null;
+    return null
   }
   return (
     <ThemeProvider theme={itemTheme}>
@@ -136,20 +127,19 @@ export function TypeAheadItemsList({
         ))}
       </ItemGroup>
     </ThemeProvider>
-  );
+  )
 }
 
 export type TypeAheadItemComponentProps = {
   // children: React.ReactNode
-  item: TypeAheadItem;
-  index: number;
-  currentIndex: number;
-  insertByIndex: (index: number) => void;
-  setCurrentIndex: (index: number) => void;
-};
+  item: TypeAheadItem
+  index: number
+  currentIndex: number
+  insertByIndex: (index: number) => void
+  setCurrentIndex: (index: number) => void
+}
 
 export class TypeAheadItemComponent extends React.Component<TypeAheadItemComponentProps> {
-  
   ref: React.RefObject<any>
 
   constructor(props: TypeAheadItemComponentProps) {
@@ -158,37 +148,37 @@ export class TypeAheadItemComponent extends React.Component<TypeAheadItemCompone
   }
 
   shouldComponentUpdate(nextProps: TypeAheadItemComponentProps) {
-    return this.isSelected(this.props) !== this.isSelected(nextProps);
+    return this.isSelected(this.props) !== this.isSelected(nextProps)
   }
 
   isSelected(props: TypeAheadItemComponentProps) {
-    return props.index === props.currentIndex;
+    return props.index === props.currentIndex
   }
 
   insertByIndex = () => {
-    this.props.insertByIndex(this.props.index);
-  };
+    this.props.insertByIndex(this.props.index)
+  }
 
   setCurrentIndex = () => {
     if (!this.isSelected(this.props)) {
-      this.props.setCurrentIndex(this.props.index);
+      this.props.setCurrentIndex(this.props.index)
     }
-  };
+  }
 
   handleRef = (ref: Item | null) => {
     // For some reason, this works quite well without this..
     // let hasRef = (ref: any): ref is { ref: HTMLElement } => ref && ref.ref;
     // this.setState({ ref: hasRef(ref) ? ref.ref : ref });
-  };
+  }
 
   componentDidUpdate() {
     if (this.props.index === this.props.currentIndex && this.ref && this.ref.current) {
-      scrollIntoViewIfNeeded(this.ref.current);
+      scrollIntoViewIfNeeded(this.ref.current)
     }
   }
 
   render() {
-    const { item } = this.props;
+    const { item } = this.props
     if (item.render) {
       return (
         <div
@@ -222,15 +212,11 @@ export class TypeAheadItemComponent extends React.Component<TypeAheadItemCompone
         <ItemBody>
           <ItemText>
             <div className="item-title">{item.title}</div>
-            {item.description && (
-              <div className="item-description">{item.description}</div>
-            )}
+            {item.description && <div className="item-description">{item.description}</div>}
           </ItemText>
-          <ItemAfter>
-            {item.keyshortcut && <Shortcut>{item.keyshortcut}</Shortcut>}
-          </ItemAfter>
+          <ItemAfter>{item.keyshortcut && <Shortcut>{item.keyshortcut}</Shortcut>}</ItemAfter>
         </ItemBody>
       </Item>
-    );
+    )
   }
 }

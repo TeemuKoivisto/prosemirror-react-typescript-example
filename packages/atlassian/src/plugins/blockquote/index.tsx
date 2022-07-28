@@ -2,25 +2,24 @@ import React from 'react'
 import { EditorState } from 'prosemirror-state'
 
 import { blockquote } from '../../schema/nodes'
-import { blockQuotePluginFactory, blockquotePluginKey } from './pm-plugins/main';
+import { blockQuotePluginFactory, blockquotePluginKey } from './pm-plugins/main'
 // import { getToolbarConfig } from './toolbar';
 import { keymapPlugin } from './pm-plugins/keymap'
-import * as keymaps from '../../keymaps';
+import * as keymaps from '../../keymaps'
 
 import { QuickInsertActionInsert } from '../../provider-factory/quick-insert-provider'
-import IconQuote from '../quick-insert/assets/code';
-import WithPluginState from '../../ui/hocs/WithPluginState';
+import IconQuote from '../quick-insert/assets/code'
+import WithPluginState from '../../ui/hocs/WithPluginState'
 
-import { EditorPlugin, PMPluginFactory } from '../../types';
+import { EditorPlugin, PMPluginFactory } from '../../types'
 
-export interface BlockQuoteOptions {
-}
+export interface BlockQuoteOptions {}
 
 export const blockQuotePlugin = (options: BlockQuoteOptions = {}): EditorPlugin => ({
   name: 'blockquote',
 
   nodes() {
-    return [{ name: 'blockquote', node: blockquote }];
+    return [{ name: 'blockquote', node: blockquote }]
   },
 
   pmPlugins() {
@@ -38,7 +37,7 @@ export const blockQuotePlugin = (options: BlockQuoteOptions = {}): EditorPlugin 
             // providerFactory,
             portalProviderAPI,
             eventDispatcher,
-            options,
+            options
           ),
       },
       { name: 'blockquoteKeyMap', plugin: () => keymapPlugin() },
@@ -93,13 +92,13 @@ export const blockQuotePlugin = (options: BlockQuoteOptions = {}): EditorPlugin 
           const tr = insert(
             state.schema.nodes.blockquote.createChecked(
               {},
-              state.schema.nodes.paragraph.createChecked(),
-            ),
-          );
+              state.schema.nodes.paragraph.createChecked()
+            )
+          )
           return tr
         },
       },
     ],
     // floatingToolbar: getToolbarConfig(options.allowCopyToClipboard),
   },
-});
+})

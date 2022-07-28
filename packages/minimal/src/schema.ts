@@ -3,7 +3,7 @@ import { Node as PMNode, Schema } from 'prosemirror-model'
 export const schema = new Schema({
   nodes: {
     doc: {
-      content: 'block+'
+      content: 'block+',
     },
     paragraph: {
       content: 'inline*',
@@ -24,7 +24,7 @@ export const schema = new Schema({
       },
       parseDOM: [{ tag: 'blockquote' }],
       toDOM(node: PMNode) {
-        return ['blockquote', node.attrs, 0];
+        return ['blockquote', node.attrs, 0]
       },
     },
     blockquote: {
@@ -34,11 +34,11 @@ export const schema = new Schema({
       selectable: false,
       parseDOM: [{ tag: 'blockquote' }],
       toDOM() {
-        return ['blockquote', 0];
+        return ['blockquote', 0]
       },
     },
     text: {
-      group: 'inline'
+      group: 'inline',
     },
-  }
+  },
 })

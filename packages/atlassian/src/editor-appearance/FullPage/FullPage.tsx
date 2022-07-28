@@ -4,7 +4,7 @@ import { EditorView } from 'prosemirror-view'
 
 import { EditorActions } from '../../EditorActions'
 import { EventDispatcher } from '../../utils/event-dispatcher'
-import { ProviderFactory } from '../../provider-factory';
+import { ProviderFactory } from '../../provider-factory'
 
 import PluginSlot from '../PluginSlot'
 import { Toolbar } from './Toolbar'
@@ -13,14 +13,14 @@ import { EditorAppearance, ToolbarUIComponentFactory, UIComponentFactory } from 
 
 interface IProps {
   className?: string
-  appearance?: EditorAppearance;
-  editorActions?: EditorActions;
-  editorDOMElement: JSX.Element;
-  editorView?: EditorView;
-  providerFactory: ProviderFactory;
-  eventDispatcher?: EventDispatcher;
-  contentComponents?: UIComponentFactory[];
-  primaryToolbarComponents?: ToolbarUIComponentFactory[];
+  appearance?: EditorAppearance
+  editorActions?: EditorActions
+  editorDOMElement: JSX.Element
+  editorView?: EditorView
+  providerFactory: ProviderFactory
+  eventDispatcher?: EventDispatcher
+  contentComponents?: UIComponentFactory[]
+  primaryToolbarComponents?: ToolbarUIComponentFactory[]
 }
 
 export function FullPage(props: IProps) {
@@ -29,7 +29,7 @@ export function FullPage(props: IProps) {
   const contentAreaRef = useRef(null)
   return (
     <Container className={`${className} popups-wrapper`}>
-      <Popups className="popups" ref={popupsRef}/>
+      <Popups className="popups" ref={popupsRef} />
       <Toolbar />
       <ContentArea ref={contentAreaRef}>
         <PluginSlot

@@ -1,7 +1,12 @@
 import { socketIO } from 'socket-io/socketIO'
 
 import {
-  EDocAction, IDBDocument, DocVisibility, IDocCreateAction, IDocDeleteAction, IDocVisibilityAction,
+  EDocAction,
+  IDBDocument,
+  DocVisibility,
+  IDocCreateAction,
+  IDocDeleteAction,
+  IDocVisibilityAction,
 } from '@example/types'
 
 export const documentIO = {
@@ -10,8 +15,8 @@ export const documentIO = {
       type: EDocAction.DOC_CREATE,
       payload: {
         doc,
-        userId
-      }
+        userId,
+      },
     }
     socketIO.emitToAll(action)
   },
@@ -20,8 +25,8 @@ export const documentIO = {
       type: EDocAction.DOC_DELETE,
       payload: {
         documentId,
-        userId
-      }
+        userId,
+      },
     }
     socketIO.emitToAll(action)
   },
@@ -31,9 +36,9 @@ export const documentIO = {
       payload: {
         documentId,
         visibility,
-        userId
-      }
+        userId,
+      },
     }
     socketIO.emitToAll(action)
-  }
+  },
 }

@@ -8,8 +8,7 @@ interface APIProps {
 }
 
 export class APIProvider {
-
-  API_URL: string = ''
+  API_URL = ''
   socket: Socket | null = null
 
   getAuthorization: () => string = () => ''
@@ -38,51 +37,67 @@ export class APIProvider {
     }
     return data
   }
-  
+
   get<T>(path: string, defaultError?: string): Promise<T> {
-    return this.wrappedFetch(path, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': this.getAuthorization(),
+    return this.wrappedFetch(
+      path,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: this.getAuthorization(),
+        },
       },
-    }, defaultError)
+      defaultError
+    )
   }
-  
+
   post<T>(path: string, payload: any, defaultError?: string): Promise<T> {
-    return this.wrappedFetch(path, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': this.getAuthorization(),
+    return this.wrappedFetch(
+      path,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: this.getAuthorization(),
+        },
+        body: JSON.stringify(payload),
       },
-      body: JSON.stringify(payload)
-    }, defaultError)
+      defaultError
+    )
   }
-  
+
   put<T>(path: string, payload: any, defaultError?: string): Promise<T> {
-    return this.wrappedFetch(path, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': this.getAuthorization(),
+    return this.wrappedFetch(
+      path,
+      {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: this.getAuthorization(),
+        },
+        body: JSON.stringify(payload),
       },
-      body: JSON.stringify(payload)
-    }, defaultError)
+      defaultError
+    )
   }
-  
+
   del<T>(path: string, defaultError?: string): Promise<T> {
-    return this.wrappedFetch(path, {
-      method: 'DELETE',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': this.getAuthorization(),
+    return this.wrappedFetch(
+      path,
+      {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: this.getAuthorization(),
+        },
       },
-    }, defaultError)
+      defaultError
+    )
   }
 
   emit<T>(path: string, action: EditorSocketAction) {

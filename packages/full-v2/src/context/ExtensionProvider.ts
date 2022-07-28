@@ -1,7 +1,6 @@
 import { Extension, createSchema, createPlugins } from '@extensions'
 
 export class ExtensionProvider {
-
   extensions: Set<Extension<any>> = new Set()
 
   register(extension: Extension<any>) {

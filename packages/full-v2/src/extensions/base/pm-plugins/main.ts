@@ -6,10 +6,7 @@ import { getActiveMarks } from '../pm-utils/getActive'
 
 import { BaseState, basePluginKey } from './state'
 
-export function basePluginFactory(
-  ctx: EditorContext,
-  options?: {},
-) {
+export function basePluginFactory(ctx: EditorContext, options?: {}) {
   const { pluginsProvider } = ctx
   return new Plugin({
     state: {
@@ -19,15 +16,12 @@ export function basePluginFactory(
           activeMarks: [],
         }
       },
-      apply(
-        tr,
-        pluginState: BaseState,
-        _oldState,
-        newState,
-      ): BaseState {
+      apply(tr, pluginState: BaseState, _oldState, newState): BaseState {
         if (tr.docChanged || tr.selectionSet) {
           const marks = getActiveMarks(newState)
-          const eqMarks = marks.every(m => pluginState.activeMarks.includes(m)) && marks.length === pluginState.activeMarks.length
+          const eqMarks =
+            marks.every((m) => pluginState.activeMarks.includes(m)) &&
+            marks.length === pluginState.activeMarks.length
           if (!eqMarks) {
             const nextPluginState = {
               ...pluginState,

@@ -8,10 +8,7 @@ import { findBlockQuote } from '../pm-utils/findBlockQuote'
 import { BlockQuoteExtensionProps } from '..'
 import { BlockQuoteState, blockquotePluginKey } from './state'
 
-export function blockQuotePluginFactory(
-  ctx: EditorContext,
-  props: BlockQuoteExtensionProps,
-) {
+export function blockQuotePluginFactory(ctx: EditorContext, props: BlockQuoteExtensionProps) {
   const { pluginsProvider } = ctx
   return new Plugin({
     state: {
@@ -21,12 +18,7 @@ export function blockQuotePluginFactory(
           // blockQuoteDisabled: false,
         }
       },
-      apply(
-        tr,
-        pluginState: BlockQuoteState,
-        _oldState,
-        newState,
-      ): BlockQuoteState {
+      apply(tr, pluginState: BlockQuoteState, _oldState, newState): BlockQuoteState {
         if (tr.docChanged || tr.selectionSet) {
           const blockQuoteActive = !!findBlockQuote(newState, newState.selection)
           // const blockQuoteDisabled = !(
@@ -34,9 +26,7 @@ export function blockQuotePluginFactory(
           //   isWrappingPossible(newState.schema.blockquote, newState)
           // )
 
-          if (
-            blockQuoteActive !== pluginState.blockQuoteActive
-          ) {
+          if (blockQuoteActive !== pluginState.blockQuoteActive) {
             const nextPluginState = {
               ...pluginState,
               blockQuoteActive,

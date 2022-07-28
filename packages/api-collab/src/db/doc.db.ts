@@ -7,7 +7,6 @@ interface StoredData {
 }
 
 class DocDB {
-
   docsMap: Map<string, IDBDocument> = new Map()
   FILE = './doc.db.json'
 
@@ -43,7 +42,10 @@ class DocDB {
   }
 
   async read() {
-    const exists = await fs.access(this.FILE).then(() => true).catch(() => false)
+    const exists = await fs
+      .access(this.FILE)
+      .then(() => true)
+      .catch(() => false)
     const data = exists ? await fs.readFile(this.FILE, 'utf-8') : undefined
     let parsed: StoredData
     try {
@@ -52,7 +54,7 @@ class DocDB {
       console.error(err)
       exists && fs.unlink(this.FILE)
     }
-    parsed?.docsMap?.forEach(mapValue => {
+    parsed?.docsMap?.forEach((mapValue) => {
       this.docsMap.set(mapValue[0], {
         id: mapValue[0],
         title: mapValue[1].title,
@@ -65,7 +67,7 @@ class DocDB {
 
   write() {
     const data: StoredData = {
-      docsMap: Array.from(this.docsMap.entries())
+      docsMap: Array.from(this.docsMap.entries()),
     }
     fs.writeFile(this.FILE, JSON.stringify(data))
   }

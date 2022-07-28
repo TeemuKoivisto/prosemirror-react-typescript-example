@@ -1,8 +1,6 @@
 import { stores } from './index'
 
-const {
-  REACT_APP_API_URL = 'http://localhost:3400'
-} = process.env
+const { REACT_APP_API_URL = 'http://localhost:3400' } = process.env
 
 async function wrappedFetch(path: string, options: RequestInit, defaultError = 'Request failed') {
   let resp
@@ -20,47 +18,63 @@ async function wrappedFetch(path: string, options: RequestInit, defaultError = '
 }
 
 export function get<T>(path: string, defaultError?: string): Promise<T> {
-  return wrappedFetch(path, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `User ${stores.authStore.user?.id}`,
+  return wrappedFetch(
+    path,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `User ${stores.authStore.user?.id}`,
+      },
     },
-  }, defaultError)
+    defaultError
+  )
 }
 
 export function post<T>(path: string, payload: any, defaultError?: string): Promise<T> {
-  return wrappedFetch(path, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `User ${stores.authStore.user?.id}`,
+  return wrappedFetch(
+    path,
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `User ${stores.authStore.user?.id}`,
+      },
+      body: JSON.stringify(payload),
     },
-    body: JSON.stringify(payload)
-  }, defaultError)
+    defaultError
+  )
 }
 
 export function put<T>(path: string, payload: any, defaultError?: string): Promise<T> {
-  return wrappedFetch(path, {
-    method: 'PUT',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `User ${stores.authStore.user?.id}`,
+  return wrappedFetch(
+    path,
+    {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `User ${stores.authStore.user?.id}`,
+      },
+      body: JSON.stringify(payload),
     },
-    body: JSON.stringify(payload)
-  }, defaultError)
+    defaultError
+  )
 }
 
 export function del<T>(path: string, defaultError?: string): Promise<T> {
-  return wrappedFetch(path, {
-    method: 'DELETE',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `User ${stores.authStore.user?.id}`,
+  return wrappedFetch(
+    path,
+    {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `User ${stores.authStore.user?.id}`,
+      },
     },
-  }, defaultError)
+    defaultError
+  )
 }

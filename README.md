@@ -27,13 +27,13 @@ Also during this time I have dabbled with SSR and Next.js so I added examples wh
 
 In my SSR examples I load the editor in both client and server but without actually rendering the editor doc HTML and hydrating the page from it. I just use `useEffect` to set the state before painting which should look perfectly the same as server-side rendering the page. You could probably hack something together that would do just that but I don't really have time for it.
 
-Also compared to the basic `example-app` server-side rendering the pages show an empty white frame before the actual app renders. Which to me is a bit weird (and also the `example-ssr-app` really messes up the loading of styles, haven't bothered to fix that). This is remedied with `example-nextjs-app` if you build the app with `yarn static` and then serve it: `yarn serve` (with however the atlassian editor still jumping around a little bit). Just something to keep in mind if you decide to use SSR. 
+Also compared to the basic `example-app` server-side rendering the pages show an empty white frame before the actual app renders. Which to me is a bit weird (and also the `example-ssr-app` really messes up the loading of styles, haven't bothered to fix that). This is remedied with `example-nextjs-app` if you build the app with `yarn static` and then serve it: `yarn serve` (with however the atlassian editor still jumping around a little bit). Just something to keep in mind if you decide to use SSR.
 
 ## Architecture
 
 I think the majority of the code is pretty self-explanatory in the `minimal` and `full` examples. For the `atlassian` editor you kinda have to delve deep yourself into the original editor to figure out why things are what they are.
 
-But the basic gist of it is, you need a custom interface (EditorPlugin) to add extra logic to the basic PM plugins (`./full/src/editor-plugins`). These are loaded alongside the EditorState and EditorView and include for example all the basic PM plugin logic (pluginKey, normal pmPlugins, nodeviews, typings) as well as possible API providers, extensions, portalProvider, toolbar components and so forth. However, since Atlassian editor uses a separate repository to store the editor schema I use also a separate folder for schema. This keeps things simpler but definitely not entirely modular. 
+But the basic gist of it is, you need a custom interface (EditorPlugin) to add extra logic to the basic PM plugins (`./full/src/editor-plugins`). These are loaded alongside the EditorState and EditorView and include for example all the basic PM plugin logic (pluginKey, normal pmPlugins, nodeviews, typings) as well as possible API providers, extensions, portalProvider, toolbar components and so forth. However, since Atlassian editor uses a separate repository to store the editor schema I use also a separate folder for schema. This keeps things simpler but definitely not entirely modular.
 
 React components can hook up to the editor state by using EditorContext for watching either plugin changes or executing commands with editorViewProvider. Incase you want to use nodeViews as React components they use portalProvider to render themselves as portals which are updated inside each `dispatchTransaction` call to flush the changes only once (instead of updating them in each `update` call in each ReactNodeView separately).
 
@@ -47,17 +47,17 @@ When compiling the editors you should not include React or styled-components as 
 
 ## Similar projects & resources
 
-* https://github.com/dminkovsky/use-prosemirror
-* https://github.com/hubgit/react-prosemirror
-* https://gist.github.com/manigandham/65543a0bc2bf7006a487
+- https://github.com/dminkovsky/use-prosemirror
+- https://github.com/hubgit/react-prosemirror
+- https://gist.github.com/manigandham/65543a0bc2bf7006a487
 
-* https://github.com/bangle-io/bangle.dev
-* https://github.com/remirror/remirror
-* https://github.com/ueberdosis/tiptap
-* https://github.com/nib-edit/Nib
+- https://github.com/bangle-io/bangle.dev
+- https://github.com/remirror/remirror
+- https://github.com/ueberdosis/tiptap
+- https://github.com/nib-edit/Nib
 
-* https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/
-* https://gitlab.com/mpapp-public/manuscripts-manuscript-editor
-* https://github.com/fiduswriter/fiduswriter
-* https://gitlab.coko.foundation/wax/wax-prosemirror
-* https://github.com/MO-Movia/licit
+- https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/
+- https://gitlab.com/mpapp-public/manuscripts-manuscript-editor
+- https://github.com/fiduswriter/fiduswriter
+- https://gitlab.coko.foundation/wax/wax-prosemirror
+- https://github.com/MO-Movia/licit

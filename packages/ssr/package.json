@@ -1,5 +1,5 @@
 {
-  "name":"@example/client-ssr",
+  "name": "@example/client-ssr",
   "version": "0.1.0",
   "homepage": "https://teemukoivisto.github.io/prosemirror-react-typescript-example/",
   "scripts": {

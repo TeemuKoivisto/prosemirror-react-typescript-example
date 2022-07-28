@@ -1,13 +1,10 @@
 import React, { forwardRef } from 'react'
 import styled from 'styled-components'
 
-interface IProps {
-}
+interface IProps {}
 
 export const BlockQuote = forwardRef((props: IProps, ref: any) => {
-  return (
-    <StyledBlockQuote ref={ref}/>
-  )
+  return <StyledBlockQuote ref={ref} />
 })
 
 export const StyledBlockQuote = styled.blockquote`

@@ -7,7 +7,7 @@ export interface IExtensionSchema {
   nodes?: { [key: string]: NodeSpec }
   marks?: { [key: string]: MarkSpec }
 }
-export type ExtensionPlugin = { name: string, plugin: () => Plugin }
+export type ExtensionPlugin = { name: string; plugin: () => Plugin }
 export interface IExtension<T> {
   readonly name: string
   readonly schema?: IExtensionSchema
@@ -21,7 +21,6 @@ export interface IExtensionClass<T> {
 }
 
 export class Extension<T> implements IExtension<T> {
-
   ctx: EditorContext
   props: T
 
@@ -36,11 +35,11 @@ export class Extension<T> implements IExtension<T> {
 
   // TODO ehh? used to subscribe to pluginsProvider but seemed a bit iffy
   // The problem is, the typing of static properties is driving me up the wall and it's quite flaky
-  static get pluginKey() : PluginKey | null {
+  static get pluginKey(): PluginKey | null {
     return null
   }
 
-  get plugins() : ExtensionPlugin[] {
+  get plugins(): ExtensionPlugin[] {
     return []
   }
 

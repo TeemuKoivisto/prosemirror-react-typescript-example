@@ -1,4 +1,4 @@
-import { ExtensionProvider} from './ExtensionProvider'
+import { ExtensionProvider } from './ExtensionProvider'
 import { EditorViewProvider } from './EditorViewProvider'
 import { PluginsProvider } from './PluginsProvider'
 import { PortalProvider } from '@react'
@@ -16,7 +16,7 @@ export interface EditorContext {
   viewProvider: EditorViewProvider
 }
 
-export const createDefaultProviders = () : EditorContext => {
+export const createDefaultProviders = (): EditorContext => {
   const analyticsProvider = new AnalyticsProvider()
   const apiProvider = new APIProvider()
   const extensionProvider = new ExtensionProvider()
@@ -31,6 +31,6 @@ export const createDefaultProviders = () : EditorContext => {
     pluginsProvider,
     portalProvider,
     viewProvider,
-    collabProvider
+    collabProvider,
   }
 }

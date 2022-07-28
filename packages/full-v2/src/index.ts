@@ -24,9 +24,6 @@ export {
   createDefaultSchema,
   createPlugins,
 } from '@extensions'
-export type {
-  BaseState,
-  BlockQuoteState,
-} from '@extensions'
+export type { BaseState, BlockQuoteState } from '@extensions'
 
 export { PortalRenderer } from '@react'

@@ -5,7 +5,12 @@ import { EditorState } from 'prosemirror-state'
 import { APIProvider } from '../APIProvider'
 import { EditorViewProvider } from '../EditorViewProvider'
 
-import { ISaveCollabStepsParams, ECollabAction, ICollabUsersChangedAction, ICollabEditAction } from '@example/types'
+import {
+  ISaveCollabStepsParams,
+  ECollabAction,
+  ICollabUsersChangedAction,
+  ICollabEditAction,
+} from '@example/types'
 
 import { replaceDocument, setCollab } from './replaceDocument'
 
@@ -15,13 +20,12 @@ interface Config {
 }
 
 export class CollabProvider {
-
-  isCollaborating: boolean = false
+  isCollaborating = false
   config?: Config
   debounceTimeoutId: number | null = null
   apiProvider: APIProvider
   editorViewProvider: EditorViewProvider
-  
+
   constructor(apiProvider: APIProvider, editorViewProvider: EditorViewProvider) {
     this.apiProvider = apiProvider
     this.editorViewProvider = editorViewProvider
@@ -135,9 +139,7 @@ export class CollabProvider {
   //   this.isSending = true;
   // }
 
-  sendCursorSelection() {
-
-  }
+  sendCursorSelection() {}
 
   onUsersChanged = (action: ICollabUsersChangedAction) => {
     // umm update users info?
@@ -152,10 +154,10 @@ export class CollabProvider {
     if (version !== expectedVersion) {
       throw Error(`Version ${version} received when expected: ${expectedVersion}`)
     }
-    let tr = receiveTransaction(
+    const tr = receiveTransaction(
       state,
-      steps.map(j => Step.fromJSON(state.schema, j)),
-      clientIDs,
+      steps.map((j) => Step.fromJSON(state.schema, j)),
+      clientIDs
     )
     editorView.dispatch(tr)
   }
@@ -164,7 +166,5 @@ export class CollabProvider {
     // receive cursors and whatnot? telepointers?? whatever they are..
   }
 
-  destroy() {
-    
-  }
+  destroy() {}
 }

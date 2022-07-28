@@ -16,7 +16,7 @@ const corsOptions: cors.CorsOptions = {
       callback(null, false)
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 }
 
 app.use(cors(corsOptions))
@@ -25,7 +25,9 @@ app.use(express.json())
 
 // By adding this route before morgan prevents it being logged which in production setting
 // is annoying and pollutes the logs with gazillion "GET /health" lines
-app.get('/health', (req: any, res: any) => { res.sendStatus(200) })
+app.get('/health', (req: any, res: any) => {
+  res.sendStatus(200)
+})
 
 app.use(morgan('short', { stream: logStream }))
 

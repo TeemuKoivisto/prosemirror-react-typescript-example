@@ -5,11 +5,9 @@ import { Editor, EditorViewProvider, JSONEditorState } from '@example/full'
 
 import { PageHeader } from '../components/PageHeader'
 
-interface IProps {
-}
+interface IProps {}
 
 class EditorStore {
-
   viewProvider?: EditorViewProvider
   currentEditorState?: JSONEditorState
   STORAGE_KEY = 'full-editor-state'

@@ -11,6 +11,6 @@ This project uses Yarn workspaces so you don't really have to install anything. 
 
 ## Commands
 
-* `yarn dev` starts a Nodemon process to restart the Node.js server on source file changes
-* `yarn watch` starts the Rollup compiler and watches changes to the source files
-* `yarn build` compiles the code as both CommonJS and ES module.
+- `yarn dev` starts a Nodemon process to restart the Node.js server on source file changes
+- `yarn watch` starts the Rollup compiler and watches changes to the source files
+- `yarn build` compiles the code as both CommonJS and ES module.

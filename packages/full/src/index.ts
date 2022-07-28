@@ -1,6 +1,6 @@
 export { Editor } from './Editor'
 export { EditorViewProvider } from './core/EditorViewProvider'
-export type { JSONEditorState } from './core/types/editor-view' 
+export type { JSONEditorState } from './core/types/editor-view'
 
 export { createDefaultSchema } from './create-defaults'
 

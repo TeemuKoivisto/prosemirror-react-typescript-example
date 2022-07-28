@@ -6,15 +6,12 @@ import { baseKeymap } from 'prosemirror-commands'
 
 import { doc, paragraph, text } from '../../schema/nodes'
 
-import {
-  createParagraphNear, splitBlock
-} from './commands/general'
+import { createParagraphNear, splitBlock } from './commands/general'
 
-import { EditorPlugin, PMPluginFactory } from '../../types';
+import { EditorPlugin, PMPluginFactory } from '../../types'
 // import { keymap } from '../../utils/keymap';
 
-export interface BasePluginOptions {
-}
+export interface BasePluginOptions {}
 
 export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
   name: 'base',
@@ -25,10 +22,11 @@ export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
       { name: 'baseKeyMap', plugin: () => keymap(baseKeymap) },
       {
         name: 'otherKeyMap',
-        plugin: () => keymap({
-          'Ctrl-Alt-p': createParagraphNear,
-          'Ctrl-Alt-s': splitBlock,
-        })
+        plugin: () =>
+          keymap({
+            'Ctrl-Alt-p': createParagraphNear,
+            'Ctrl-Alt-s': splitBlock,
+          }),
       },
     ]
 
@@ -39,6 +37,6 @@ export const basePlugin = (options?: BasePluginOptions): EditorPlugin => ({
       { name: 'doc', node: doc },
       { name: 'paragraph', node: paragraph },
       { name: 'text', node: text },
-    ];
+    ]
   },
-});
+})

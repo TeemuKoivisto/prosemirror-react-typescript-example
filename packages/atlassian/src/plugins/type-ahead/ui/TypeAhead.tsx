@@ -1,20 +1,20 @@
-import React from 'react';
+import React from 'react'
 
-import { EditorView } from 'prosemirror-view';
-import styled from 'styled-components';
+import { EditorView } from 'prosemirror-view'
+import styled from 'styled-components'
 
-import { Popup } from '../../../elements/Popup';
+import { Popup } from '../../../elements/Popup'
 // import { akEditorFloatingDialogZIndex } from '@atlaskit/editor-shared-styles';
 const akEditorFloatingDialogZIndex = 410
-import { borderRadius, gridSize } from '../../../theme/constants';
-import { N0, N60A, N50A } from '../../../theme/colors';
-import { divide } from '../../../theme/math';
+import { borderRadius, gridSize } from '../../../theme/constants'
+import { N0, N60A, N50A } from '../../../theme/colors'
+import { divide } from '../../../theme/math'
 
-import { selectByIndex } from '../commands/select-item';
-import { setCurrentIndex } from '../commands/set-current-index';
-import { TypeAheadItem } from '../types';
+import { selectByIndex } from '../commands/select-item'
+import { setCurrentIndex } from '../commands/set-current-index'
+import { TypeAheadItem } from '../types'
 
-import { TypeAheadItemsList } from './TypeAheadItemsList';
+import { TypeAheadItemsList } from './TypeAheadItemsList'
 
 export const TypeAheadContent = styled.div`
   background: ${N0};
@@ -26,67 +26,61 @@ export const TypeAheadContent = styled.div`
   overflow-y: auto;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   position: relative;
-`;
+`
 
 export type TypeAheadProps = {
-  active: boolean;
-  items?: Array<TypeAheadItem>;
-  isLoading?: boolean;
-  currentIndex: number;
-  editorView: EditorView;
-  anchorElement?: HTMLElement;
-  popupsMountPoint?: HTMLElement;
-  popupsBoundariesElement?: HTMLElement;
-  popupsScrollableElement?: HTMLElement;
-  highlight?: JSX.Element | null;
-};
+  active: boolean
+  items?: Array<TypeAheadItem>
+  isLoading?: boolean
+  currentIndex: number
+  editorView: EditorView
+  anchorElement?: HTMLElement
+  popupsMountPoint?: HTMLElement
+  popupsBoundariesElement?: HTMLElement
+  popupsScrollableElement?: HTMLElement
+  highlight?: JSX.Element | null
+}
 
 export class TypeAhead extends React.Component<TypeAheadProps> {
-  static displayName = 'TypeAhead';
+  static displayName = 'TypeAhead'
 
-  composing: boolean = false;
+  composing = false
 
   handleKeyPress = () => {
     // When user starts typing, they are not using their mouse
     // Marks as composing, to prevent false positive mouse events
-    this.composing = true;
-  };
+    this.composing = true
+  }
 
   handleMouseMove = () => {
     // User is actively moving mouse, hence can enable mouse events again
-    this.composing = false;
-  };
+    this.composing = false
+  }
 
   componentDidMount = () => {
-    window.addEventListener('keypress', this.handleKeyPress);
-    window.addEventListener('mousemove', this.handleMouseMove);
-  };
+    window.addEventListener('keypress', this.handleKeyPress)
+    window.addEventListener('mousemove', this.handleMouseMove)
+  }
 
   componentWillUnmount = () => {
-    window.removeEventListener('keypress', this.handleKeyPress);
-    window.removeEventListener('mousemove', this.handleMouseMove);
-  };
+    window.removeEventListener('keypress', this.handleKeyPress)
+    window.removeEventListener('mousemove', this.handleMouseMove)
+  }
 
   insertByIndex = (index: number) => {
-    selectByIndex(index)(
-      this.props.editorView.state,
-      this.props.editorView.dispatch,
-    );
-  };
+    selectByIndex(index)(this.props.editorView.state, this.props.editorView.dispatch)
+  }
 
   setCurrentIndex = (index: number) => {
     if (this.composing) {
       // User is typing, mouse events are false positives
-      return;
+      return
     }
 
     if (index !== this.props.currentIndex) {
-      setCurrentIndex(index)(
-        this.props.editorView.state,
-        this.props.editorView.dispatch,
-      );
+      setCurrentIndex(index)(this.props.editorView.state, this.props.editorView.dispatch)
     }
-  };
+  }
 
   render() {
     const {
@@ -99,12 +93,12 @@ export class TypeAhead extends React.Component<TypeAheadProps> {
       popupsBoundariesElement,
       popupsScrollableElement,
       highlight,
-    } = this.props;
+    } = this.props
 
     if (!active || !anchorElement || !items || !items.length) {
-      return null;
+      return null
     }
-    
+
     return (
       <Popup
         zIndex={akEditorFloatingDialogZIndex}
@@ -132,6 +126,6 @@ export class TypeAhead extends React.Component<TypeAheadProps> {
           )}
         </TypeAheadContent>
       </Popup>
-    );
+    )
   }
 }

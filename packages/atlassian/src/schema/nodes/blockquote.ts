@@ -1,15 +1,15 @@
-import { NodeSpec } from 'prosemirror-model';
-import { ParagraphDefinition as Paragraph } from './paragraph';
+import { NodeSpec } from 'prosemirror-model'
+import { ParagraphDefinition as Paragraph } from './paragraph'
 
 /**
  * @name blockquote_node
  */
 export interface BlockQuoteDefinition {
-  type: 'blockquote';
+  type: 'blockquote'
   /**
    * @minItems 1
    */
-  content: Array<Paragraph>;
+  content: Array<Paragraph>
 }
 
 export const blockquote: NodeSpec = {
@@ -19,6 +19,6 @@ export const blockquote: NodeSpec = {
   selectable: false,
   parseDOM: [{ tag: 'blockquote' }],
   toDOM() {
-    return ['blockquote', 0];
+    return ['blockquote', 0]
   },
 }

@@ -17,7 +17,7 @@ export function FrontPage(props: IProps) {
       <PageHeader />
       <CollabInfo />
       <DocumentBrowser />
-      <Editor/>
+      <Editor />
     </Container>
   )
 }

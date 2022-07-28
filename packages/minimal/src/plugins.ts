@@ -11,10 +11,12 @@ export const plugins = () => {
 
   plugins.push(history())
   plugins.push(keymap(baseKeymap))
-  plugins.push(keymap({
-    'Ctrl-Alt-b': createNewBlockQuote,
-    'Ctrl-Alt-p': createNewPmBlockQuote,
-  }))
+  plugins.push(
+    keymap({
+      'Ctrl-Alt-b': createNewBlockQuote,
+      'Ctrl-Alt-p': createNewPmBlockQuote,
+    })
+  )
 
   return plugins
 }

@@ -11,7 +11,6 @@ export type DocHistory = {
 }
 
 class HistoryDB {
-
   docHistories = new Map<string, DocHistory>()
   FILE = './history.db.json'
 
@@ -30,12 +29,15 @@ class HistoryDB {
     this.docHistories.delete(documentId)
   }
 
-  getHistory(documentId: string) : DocHistory | undefined {
+  getHistory(documentId: string): DocHistory | undefined {
     return this.docHistories.get(documentId)
   }
 
   async read() {
-    const exists = await fs.access(this.FILE).then(() => true).catch(() => false)
+    const exists = await fs
+      .access(this.FILE)
+      .then(() => true)
+      .catch(() => false)
     const data = exists ? await fs.readFile(this.FILE, 'utf-8') : undefined
     let parsed: StoredData
     try {
@@ -44,7 +46,7 @@ class HistoryDB {
       console.error(err)
       exists && fs.unlink(this.FILE)
     }
-    parsed?.docHistories?.forEach(mapValue => {
+    parsed?.docHistories?.forEach((mapValue) => {
       this.docHistories.set(mapValue[0], mapValue[1])
     })
   }

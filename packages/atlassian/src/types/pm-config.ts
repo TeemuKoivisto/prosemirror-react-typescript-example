@@ -1,17 +1,17 @@
-import { MarkSpec, NodeSpec } from 'prosemirror-model';
-import { NodeView } from 'prosemirror-view';
+import { MarkSpec, NodeSpec } from 'prosemirror-model'
+import { NodeView } from 'prosemirror-view'
 
 export interface NodeConfig {
-  name: string;
-  node: NodeSpec;
+  name: string
+  node: NodeSpec
 }
 
 export interface MarkConfig {
-  name: string;
-  mark: MarkSpec;
+  name: string
+  mark: MarkSpec
 }
 
 export interface NodeViewConfig {
-  name: string;
-  nodeView: NodeView;
+  name: string
+  nodeView: NodeView
 }

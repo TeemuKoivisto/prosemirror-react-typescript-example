@@ -28,7 +28,7 @@ export function NavBar(props: IProps) {
 
 const Container = styled.div`
   background: #551a8b;
-  box-shadow: 0 0 2px 2px rgba(0,0,0,0.18);
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.18);
   padding: 1rem;
 `
 const Nav = styled.nav`

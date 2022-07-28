@@ -1,23 +1,23 @@
-import { NodeSpec, DOMOutputSpec } from 'prosemirror-model';
-import { MarksObject, NoMark } from '../marks-obj';
-import { Inline } from '../inline-content';
+import { NodeSpec, DOMOutputSpec } from 'prosemirror-model'
+import { MarksObject, NoMark } from '../marks-obj'
+import { Inline } from '../inline-content'
 
 /**
  * @name paragraph_node
  */
 export interface ParagraphBaseDefinition {
-  type: 'paragraph';
+  type: 'paragraph'
   /**
    * @allowUnsupportedInline true
    */
-  content?: Array<Inline>;
-  marks?: Array<any>;
+  content?: Array<Inline>
+  marks?: Array<any>
 }
 
 /**
  * @name paragraph_with_no_marks_node
  */
-export type ParagraphDefinition = ParagraphBaseDefinition & NoMark;
+export type ParagraphDefinition = ParagraphBaseDefinition & NoMark
 
 /**
  * NOTE: Need this because TS is too smart and inline everything.
@@ -37,7 +37,7 @@ export const paragraph: NodeSpec = {
   group: 'block',
   selectable: false,
   // marks:
-    // 'strong code em link strike subsup textColor underline unsupportedMark unsupportedNodeAttribute',
+  // 'strong code em link strike subsup textColor underline unsupportedMark unsupportedNodeAttribute',
   parseDOM: [{ tag: 'p' }],
   toDOM() {
     return ['p', 0]

@@ -7,19 +7,15 @@ import dynamic from 'next/dynamic'
 import { Layout } from '../components/Layout'
 import { PageHeader } from '../components/PageHeader'
 
-interface IProps {
-}
+interface IProps {}
 
-const EditorWithNoSSR = dynamic(
-  () => import('@example/atlassian'),
-  { ssr: false }
-)
+const EditorWithNoSSR = dynamic(() => import('@example/atlassian'), { ssr: false })
 
 export default function AtlassianPage(props: IProps) {
   return (
     <Layout>
       <PageHeader>
-        <EditorWithNoSSR performanceTracking/>
+        <EditorWithNoSSR performanceTracking />
       </PageHeader>
     </Layout>
   )

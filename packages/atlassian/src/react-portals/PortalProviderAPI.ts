@@ -1,40 +1,36 @@
-import React from 'react';
+import React from 'react'
 import {
   createPortal,
   unstable_renderSubtreeIntoContainer,
   unmountComponentAtNode,
-} from 'react-dom';
-import { EventDispatcher } from '../utils/event-dispatcher';
+} from 'react-dom'
+import { EventDispatcher } from '../utils/event-dispatcher'
 
 type MountedPortal = {
-  children: () => React.ReactChild | null;
-  hasReactContext: boolean;
+  children: () => React.ReactChild | null
+  hasReactContext: boolean
 }
 
 export class PortalProviderAPI extends EventDispatcher {
-  portals: Map<HTMLElement, MountedPortal> = new Map();
-  context: any;
+  portals: Map<HTMLElement, MountedPortal> = new Map()
+  context: any
 
   constructor() {
-    super();
+    super()
   }
 
   setContext = (context: any) => {
-    this.context = context;
-  };
+    this.context = context
+  }
 
   render(
     children: () => React.ReactChild | JSX.Element | null,
     container: HTMLElement,
-    hasReactContext: boolean = false,
+    hasReactContext = false
   ) {
-    this.portals.set(container, { children, hasReactContext });
-    const wrappedChildren = children() as JSX.Element;
-    unstable_renderSubtreeIntoContainer(
-      this.context,
-      wrappedChildren,
-      container,
-    );
+    this.portals.set(container, { children, hasReactContext })
+    const wrappedChildren = children() as JSX.Element
+    unstable_renderSubtreeIntoContainer(this.context, wrappedChildren, container)
   }
 
   // TODO: until https://product-fabric.atlassian.net/browse/ED-5013
@@ -43,21 +39,17 @@ export class PortalProviderAPI extends EventDispatcher {
   forceUpdate() {
     this.portals.forEach((portal, container) => {
       if (!portal.hasReactContext) {
-        return;
+        return
       }
 
-      const wrappedChildren = (portal.children() as JSX.Element);
+      const wrappedChildren = portal.children() as JSX.Element
 
-      unstable_renderSubtreeIntoContainer(
-        this.context,
-        wrappedChildren,
-        container,
-      );
-    });
+      unstable_renderSubtreeIntoContainer(this.context, wrappedChildren, container)
+    })
   }
 
   remove(container: HTMLElement) {
-    this.portals.delete(container);
+    this.portals.delete(container)
 
     // There is a race condition that can happen caused by Prosemirror vs React,
     // where Prosemirror removes the container from the DOM before React gets
@@ -66,9 +58,11 @@ export class PortalProviderAPI extends EventDispatcher {
     // Both Prosemirror and React remove the elements asynchronously, and in edge
     // cases Prosemirror beats React
     try {
-      unmountComponentAtNode(container);
+      unmountComponentAtNode(container)
     } catch (error) {
-      console.warn('Race condition in PortalProviderAPI where PM removed DOM node before React unmounted it')
+      console.warn(
+        'Race condition in PortalProviderAPI where PM removed DOM node before React unmounted it'
+      )
     }
   }
 }

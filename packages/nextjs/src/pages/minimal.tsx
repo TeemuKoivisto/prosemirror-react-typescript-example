@@ -6,8 +6,7 @@ import { Editor } from '@example/minimal'
 import { Layout } from '../components/Layout'
 import { PageHeader } from '../components/PageHeader'
 
-interface IProps {
-}
+interface IProps {}
 
 export default function MinimalPage(props: IProps) {
   return (

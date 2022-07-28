@@ -8,10 +8,9 @@ import { keymapPlugin } from './pm-plugins/keymap'
 
 export interface BlockQuoteExtensionProps {}
 export const blockQuoteSchema: IExtensionSchema = {
-  nodes: { blockquote: blockquote }
+  nodes: { blockquote: blockquote },
 }
 export class BlockQuoteExtension extends Extension<BlockQuoteExtensionProps> {
-
   get name() {
     return 'blockquote' as const
   }

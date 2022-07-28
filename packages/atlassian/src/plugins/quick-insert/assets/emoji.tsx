@@ -1,5 +1,5 @@
-import React from 'react';
-import { IconProps } from '../types';
+import React from 'react'
+import { IconProps } from '../types'
 
 export default function IconEmoji({ label = '' }: IconProps) {
   return (
@@ -24,5 +24,5 @@ export default function IconEmoji({ label = '' }: IconProps) {
         />
       </g>
     </svg>
-  );
+  )
 }

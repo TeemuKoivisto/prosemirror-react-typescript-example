@@ -7,9 +7,7 @@ import { collabDb } from 'db/collab.db'
 import { CustomError } from 'common/error'
 
 import { IRequest } from 'types/request'
-import {
-  ISaveCollabStepsParams
-} from '@example/types'
+import { ISaveCollabStepsParams } from '@example/types'
 
 // function parseQueryParam(param: undefined | string | string[] | ParsedQs | ParsedQs[]) : string {
 //   if (typeof param === 'object') {
@@ -105,9 +103,9 @@ export const saveSteps = async (
     docCollabService.appendToHistory(documentId, result.steps, result.version)
     docCollabService.saveInstance(instance)
     const payload = {
-      steps: result.steps.map(s => s.toJSON()), // Interesting fact: clientID is discarded when toJSON'd
+      steps: result.steps.map((s) => s.toJSON()), // Interesting fact: clientID is discarded when toJSON'd
       version: result.version,
-      clientIDs: result.steps.map(() => clientID) // The clientID doesn't change for any of the steps so this is a bit silly
+      clientIDs: result.steps.map(() => clientID), // The clientID doesn't change for any of the steps so this is a bit silly
     }
     docCollabIO.emitEditDocument(documentId, payload)
     res.json(payload)

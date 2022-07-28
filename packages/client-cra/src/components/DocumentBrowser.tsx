@@ -44,74 +44,94 @@ const DocumentBrowserEl = inject((stores: Stores) => ({
   setCurrentDocument: stores.documentStore.setCurrentDocument,
   createNewDocument: stores.documentStore.createNewDocument,
   deleteDocument: stores.documentStore.deleteDocument,
-}))
-(observer((props: IProps) => {
-  const {
-    className, documents, currentDocument, unsyncedChanges, syncEnabled, collabEnabled,
-    canEditCurrentDocument,
-    toggleSyncing, toggleCollab, setCurrentDocument, createNewDocument, deleteDocument,
-  } = props
-  function handleSyncClick() {
-    if (syncEnabled && collabEnabled) toggleCollab!()
-    toggleSyncing!(currentDocument?.id || '')
-  }
-  function handleCollabClick() {
-    if (!syncEnabled) toggleSyncing!(currentDocument?.id || '')
-    toggleCollab!()
-  }
-  function onDocumentClick(id: string) {
-    setCurrentDocument!(id)
-  }
-  function onNewDocumentClick() {
-    createNewDocument!()
-  }
-  function onDeleteDocumentClick() {
-    if (currentDocument) {
-      deleteDocument!(currentDocument.id)
+}))(
+  observer((props: IProps) => {
+    const {
+      className,
+      documents,
+      currentDocument,
+      unsyncedChanges,
+      syncEnabled,
+      collabEnabled,
+      canEditCurrentDocument,
+      toggleSyncing,
+      toggleCollab,
+      setCurrentDocument,
+      createNewDocument,
+      deleteDocument,
+    } = props
+    function handleSyncClick() {
+      if (syncEnabled && collabEnabled) toggleCollab!()
+      toggleSyncing!(currentDocument?.id || '')
     }
-  }
-  return (
-    <div className={className}>
-      <ConnectionButton
-        btnColor={unsyncedChanges ? 'red' : 'white'}
-        title={`${unsyncedChanges ? 'Has' : 'No'} unsynced changes`}
-      >
-        { unsyncedChanges ? <FiWifiOff size={16}/> : <FiWifi size={16}/> }
-      </ConnectionButton>
-      <SyncButton
-        btnColor={syncEnabled ? 'blue' : 'gray'}
-        onClick={handleSyncClick}
-        title="Toggle syncing of documents"
-      >
-        { syncEnabled ? <FiCloud size={16}/> : <FiCloudOff size={16}/> }
-      </SyncButton>
-      <SyncButton
-        btnColor={collabEnabled ? 'blue' : !canEditCurrentDocument ? 'red' : 'gray'}
-        onClick={handleCollabClick}
-        title="Toggle collaborative editing"
-      >
-        { collabEnabled ? <FiUsers size={16}/> : canEditCurrentDocument ? <FiUser size={16}/> : <FiUserX size={16}/>}
-      </SyncButton>
-      <SquareButton color="primary-light" onClick={onNewDocumentClick}>
-        <FiPlus size={20}/>
-      </SquareButton>
-      <SquareButton color="danger-red" disabled={!currentDocument} onClick={onDeleteDocumentClick}>
-        <FiTrash size={20} />
-      </SquareButton>
-      <DocumentsList>
-        { documents!.map(d =>
-        <Doc
-          key={d.id}
-          selected={currentDocument?.id === d.id}
-          onClick={() => onDocumentClick(d.id)}
+    function handleCollabClick() {
+      if (!syncEnabled) toggleSyncing!(currentDocument?.id || '')
+      toggleCollab!()
+    }
+    function onDocumentClick(id: string) {
+      setCurrentDocument!(id)
+    }
+    function onNewDocumentClick() {
+      createNewDocument!()
+    }
+    function onDeleteDocumentClick() {
+      if (currentDocument) {
+        deleteDocument!(currentDocument.id)
+      }
+    }
+    return (
+      <div className={className}>
+        <ConnectionButton
+          btnColor={unsyncedChanges ? 'red' : 'white'}
+          title={`${unsyncedChanges ? 'Has' : 'No'} unsynced changes`}
         >
-          {d.title}
-        </Doc>  
-        )}
-      </DocumentsList>
-    </div>
-  )
-}))
+          {unsyncedChanges ? <FiWifiOff size={16} /> : <FiWifi size={16} />}
+        </ConnectionButton>
+        <SyncButton
+          btnColor={syncEnabled ? 'blue' : 'gray'}
+          onClick={handleSyncClick}
+          title="Toggle syncing of documents"
+        >
+          {syncEnabled ? <FiCloud size={16} /> : <FiCloudOff size={16} />}
+        </SyncButton>
+        <SyncButton
+          btnColor={collabEnabled ? 'blue' : !canEditCurrentDocument ? 'red' : 'gray'}
+          onClick={handleCollabClick}
+          title="Toggle collaborative editing"
+        >
+          {collabEnabled ? (
+            <FiUsers size={16} />
+          ) : canEditCurrentDocument ? (
+            <FiUser size={16} />
+          ) : (
+            <FiUserX size={16} />
+          )}
+        </SyncButton>
+        <SquareButton color="primary-light" onClick={onNewDocumentClick}>
+          <FiPlus size={20} />
+        </SquareButton>
+        <SquareButton
+          color="danger-red"
+          disabled={!currentDocument}
+          onClick={onDeleteDocumentClick}
+        >
+          <FiTrash size={20} />
+        </SquareButton>
+        <DocumentsList>
+          {documents!.map((d) => (
+            <Doc
+              key={d.id}
+              selected={currentDocument?.id === d.id}
+              onClick={() => onDocumentClick(d.id)}
+            >
+              {d.title}
+            </Doc>
+          ))}
+        </DocumentsList>
+      </div>
+    )
+  })
+)
 
 const Button = styled.button`
   border: 0;
@@ -159,8 +179,8 @@ const DocumentsList = styled.ul`
   }
 `
 const Doc = styled.li<{ selected?: boolean }>`
-  background: ${({ selected }) => selected ? '#eee' : '#eee'};
-  border: 1px solid ${({ selected }) => selected ? 'var(--color-text-dark)' : 'transparent'};
+  background: ${({ selected }) => (selected ? '#eee' : '#eee')};
+  border: 1px solid ${({ selected }) => (selected ? 'var(--color-text-dark)' : 'transparent')};
   border-radius: 2px;
   cursor: pointer;
   padding: 0.5rem;

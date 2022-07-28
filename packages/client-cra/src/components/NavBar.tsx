@@ -11,10 +11,18 @@ export function NavBar(props: IProps) {
   return (
     <Container className={className}>
       <Nav>
-        <Link to="/" className={({ isActive }) => isActive ? 'current' : ''}>Full</Link>
-        <Link to="/minimal" className={({ isActive }) => isActive ? 'current' : ''}>Minimal</Link>
-        <Link to="/atlassian" className={({ isActive }) => isActive ? 'current' : ''}>Atlassian</Link>
-        <Link to="/fullv1" className={({ isActive }) => isActive ? 'current' : ''}>Full v1</Link>
+        <Link to="/" className={({ isActive }) => (isActive ? 'current' : '')}>
+          Full
+        </Link>
+        <Link to="/minimal" className={({ isActive }) => (isActive ? 'current' : '')}>
+          Minimal
+        </Link>
+        <Link to="/atlassian" className={({ isActive }) => (isActive ? 'current' : '')}>
+          Atlassian
+        </Link>
+        <Link to="/fullv1" className={({ isActive }) => (isActive ? 'current' : '')}>
+          Full v1
+        </Link>
       </Nav>
     </Container>
   )
@@ -22,7 +30,7 @@ export function NavBar(props: IProps) {
 
 const Container = styled.div`
   background: var(--color-primary);
-  box-shadow: 0 0 2px 2px rgba(0,0,0,0.18);
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.18);
   padding: 1rem;
 `
 const Nav = styled.nav`

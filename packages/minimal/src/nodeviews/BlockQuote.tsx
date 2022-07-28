@@ -25,8 +25,8 @@ export class BlockQuote extends React.Component<{}, {}> {
 
   render() {
     // The styled components version is basically just a wrapper to do SCSS styling.
-    // Questionable if it's even needed for such simple styling and because you can't clearly see the 
-    // DOM structure from the code (hence making `& > ${Component}` selectors quite unintuitive) 
+    // Questionable if it's even needed for such simple styling and because you can't clearly see the
+    // DOM structure from the code (hence making `& > ${Component}` selectors quite unintuitive)
     return <blockquote ref={this.hole} className="blockquote"></blockquote>
   }
 }

@@ -1,33 +1,26 @@
-import { MarkSpec } from 'prosemirror-model';
-import { Plugin } from 'prosemirror-state';
-import {
-  EditorConfig,
-  EditorPlugin,
-  PluginsOptions,
-  PMPluginCreateConfig,
-} from '../types';
-import { sortByOrder } from './sort-by-order';
+import { MarkSpec } from 'prosemirror-model'
+import { Plugin } from 'prosemirror-state'
+import { EditorConfig, EditorPlugin, PluginsOptions, PMPluginCreateConfig } from '../types'
+import { sortByOrder } from './sort-by-order'
 
 export function sortByRank(a: { rank: number }, b: { rank: number }): number {
-  return a.rank - b.rank;
+  return a.rank - b.rank
 }
 
-export function fixExcludes(marks: {
-  [key: string]: MarkSpec;
-}): { [key: string]: MarkSpec } {
-  const markKeys = Object.keys(marks);
-  const markGroups = new Set(markKeys.map(mark => marks[mark].group));
+export function fixExcludes(marks: { [key: string]: MarkSpec }): { [key: string]: MarkSpec } {
+  const markKeys = Object.keys(marks)
+  const markGroups = new Set(markKeys.map((mark) => marks[mark].group))
 
-  markKeys.forEach(markKey => {
-    const mark = marks[markKey];
+  markKeys.forEach((markKey) => {
+    const mark = marks[markKey]
     if (mark.excludes) {
       mark.excludes = mark.excludes
         .split(' ')
-        .filter(group => markGroups.has(group))
-        .join(' ');
+        .filter((group) => markGroups.has(group))
+        .join(' ')
     }
-  });
-  return marks;
+  })
+  return marks
 }
 
 export function processPluginsList(plugins: EditorPlugin[]): EditorConfig {
@@ -36,16 +29,16 @@ export function processPluginsList(plugins: EditorPlugin[]): EditorConfig {
    */
   const pluginsOptions = plugins.reduce<PluginsOptions>((acc, plugin) => {
     if (plugin.pluginsOptions) {
-      Object.keys(plugin.pluginsOptions).forEach(pluginName => {
+      Object.keys(plugin.pluginsOptions).forEach((pluginName) => {
         if (!acc[pluginName]) {
-          acc[pluginName] = [];
+          acc[pluginName] = []
         }
-        acc[pluginName].push(plugin.pluginsOptions![pluginName]);
-      });
+        acc[pluginName].push(plugin.pluginsOptions![pluginName])
+      })
     }
 
-    return acc;
-  }, {});
+    return acc
+  }, {})
   /**
    * Process plugins
    */
@@ -53,33 +46,31 @@ export function processPluginsList(plugins: EditorPlugin[]): EditorConfig {
     (acc, plugin) => {
       if (plugin.pmPlugins) {
         acc.pmPlugins.push(
-          ...plugin.pmPlugins(
-            plugin.name ? pluginsOptions[plugin.name] : undefined,
-          ),
-        );
+          ...plugin.pmPlugins(plugin.name ? pluginsOptions[plugin.name] : undefined)
+        )
       }
 
       if (plugin.nodes) {
-        acc.nodes.push(...plugin.nodes());
+        acc.nodes.push(...plugin.nodes())
       }
 
       if (plugin.marks) {
-        acc.marks.push(...plugin.marks());
+        acc.marks.push(...plugin.marks())
       }
 
       if (plugin.contentComponent) {
-        acc.contentComponents.push(plugin.contentComponent);
+        acc.contentComponents.push(plugin.contentComponent)
       }
 
       if (plugin.primaryToolbarComponent) {
-        acc.primaryToolbarComponents.push(plugin.primaryToolbarComponent);
+        acc.primaryToolbarComponents.push(plugin.primaryToolbarComponent)
       }
 
       // if (plugin.secondaryToolbarComponent) {
       //   acc.secondaryToolbarComponents.push(plugin.secondaryToolbarComponent);
       // }
 
-      return acc;
+      return acc
     },
     {
       nodes: [],
@@ -87,12 +78,12 @@ export function processPluginsList(plugins: EditorPlugin[]): EditorConfig {
       pmPlugins: [],
       contentComponents: [],
       primaryToolbarComponents: [],
-    },
-  );
+    }
+  )
 }
 
 export function createPMPlugins(config: PMPluginCreateConfig): Plugin[] {
-  const { editorConfig, ...rest } = config;
+  const { editorConfig, ...rest } = config
   return editorConfig.pmPlugins
     .sort(sortByOrder('plugins'))
     .map(({ plugin }) => plugin(rest))

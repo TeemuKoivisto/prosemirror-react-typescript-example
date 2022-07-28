@@ -1,5 +1,5 @@
-import React from 'react';
-import { IconProps } from '../types';
+import React from 'react'
+import { IconProps } from '../types'
 
 export default function IconDivider({ label = '' }: IconProps) {
   return (
@@ -15,5 +15,5 @@ export default function IconDivider({ label = '' }: IconProps) {
         <rect fill="#C1C7D0" x={12} y={25} width={16} height={1} rx={0.5} />
       </g>
     </svg>
-  );
+  )
 }

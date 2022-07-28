@@ -15,13 +15,13 @@ export const findChangedNodesFromTransaction = (tr: Transaction): PMNode[] => {
     slice?: Slice
   })[]
 
-  steps.forEach(step => {
+  steps.forEach((step) => {
     const { to, from, slice } = step
     const size = slice && slice.content ? slice.content.size : 0
     for (let i = from; i <= to + size; i++) {
       if (i <= tr.doc.content.size) {
         const topLevelNode = tr.doc.resolve(i).node(1)
-        if (topLevelNode && !nodes.find(n => n === topLevelNode)) {
+        if (topLevelNode && !nodes.find((n) => n === topLevelNode)) {
           nodes.push(topLevelNode)
         }
       }
@@ -41,8 +41,7 @@ export const validNode = (node: PMNode): boolean => {
 }
 
 /** Validates prosemirror nodes, and returns true only if all nodes are valid */
-export const validateNodes = (nodes: PMNode[]): boolean =>
-  nodes.every(validNode)
+export const validateNodes = (nodes: PMNode[]): boolean => nodes.every(validNode)
 
 export const isNodeTypeParagraph = (node: PMNode | undefined | null): boolean =>
   Boolean(node && node.type && node.type.name === 'paragraph')
@@ -62,7 +61,7 @@ export const isNodeSelectedOrInRange = (
   anchorPosition: number,
   headPosition: number,
   nodePosition: number,
-  nodeSize: number,
+  nodeSize: number
 ): SelectedState | null => {
   const rangeStart = Math.min(anchorPosition, headPosition)
   const rangeEnd = Math.max(anchorPosition, headPosition)
@@ -88,10 +87,7 @@ export const isNodeSelectedOrInRange = (
  * @param state EditorState
  * @param fragment The fragment to be checked for
  */
-export const isSupportedInParent = (
-  state: EditorState,
-  fragment: Fragment,
-): boolean => {
+export const isSupportedInParent = (state: EditorState, fragment: Fragment): boolean => {
   const parent = state.selection.$from.node(-1)
   return parent && parent.type.validContent(fragment)
 }

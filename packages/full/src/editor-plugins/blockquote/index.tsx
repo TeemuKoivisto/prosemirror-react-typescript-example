@@ -9,8 +9,7 @@ import * as keymaps from '../../core/keymaps'
 import { NodeViewProps } from '../../react/ReactNodeView'
 import { EditorPlugin, PMPluginFactory } from '../../core/types'
 
-export interface BlockQuoteOptions {
-}
+export interface BlockQuoteOptions {}
 export interface IViewProps {
   options?: BlockQuoteOptions
 }
@@ -27,22 +26,15 @@ export const blockQuotePlugin = (options: BlockQuoteOptions = {}): EditorPlugin 
   },
 
   pmPlugins() {
-    const plugins: { name: string, plugin: PMPluginFactory }[] = [
+    const plugins: { name: string; plugin: PMPluginFactory }[] = [
       {
         name: 'blockquote',
-        plugin: ({
-          ctx,
-        }) =>
-          blockQuotePluginFactory(
-            ctx,
-            options,
-          ),
+        plugin: ({ ctx }) => blockQuotePluginFactory(ctx, options),
       },
       { name: 'blockquoteKeyMap', plugin: () => keymapPlugin() },
     ]
     return plugins
   },
 
-  pluginsOptions: {
-  },
+  pluginsOptions: {},
 })

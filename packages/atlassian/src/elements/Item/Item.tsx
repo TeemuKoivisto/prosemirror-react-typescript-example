@@ -1,14 +1,8 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React from 'react'
 
-import styledRootElement from './styled/Item';
-import {
-  Before,
-  After,
-  Content,
-  ContentWrapper,
-  Description,
-} from './styled/ItemParts';
+import styledRootElement from './styled/Item'
+import { Before, After, Content, ContentWrapper, Description } from './styled/ItemParts'
 
 interface DnDType {
   draggableProps: Object
@@ -85,15 +79,15 @@ export default class Item extends React.Component<Props> {
     isHidden: false,
     role: 'button',
     shouldAllowMultiline: false,
-  };
+  }
 
-  rootComponent: React.ComponentType<any>;
+  rootComponent: React.ComponentType<any>
 
   // eslint-disable-next-line react/sort-comp
-  ref: React.ElementRef<any> | null;
+  ref: React.ElementRef<any> | null
 
   constructor(props: Props) {
-    super(props);
+    super(props)
 
     // The type of element rendered at the root of render() can vary based on the `href`
     // and `linkComponent` props provided. We generate this component here to avoid re-
@@ -102,22 +96,22 @@ export default class Item extends React.Component<Props> {
     this.rootComponent = styledRootElement({
       href: this.href(),
       linkComponent: props.linkComponent,
-    });
+    })
     this.ref = React.createRef()
   }
 
   componentDidMount() {
     if (this.ref && this.props.autoFocus) {
       //@ts-ignore
-      this.ref!.focus();
+      this.ref!.focus()
     }
   }
 
   setRef = (ref: HTMLElement | null) => {
-    this.ref = ref;
-  };
+    this.ref = ref
+  }
 
-  href = () => (this.props.isDisabled ? null : this.props.href);
+  href = () => (this.props.isDisabled ? null : this.props.href)
 
   render() {
     const {
@@ -133,69 +127,69 @@ export default class Item extends React.Component<Props> {
       role,
       dnd,
       ...otherProps
-    } = this.props;
+    } = this.props
 
-    const { rootComponent: Root } = this;
-    const dragHandleProps = (dnd && dnd.dragHandleProps) || null;
+    const { rootComponent: Root } = this
+    const dragHandleProps = (dnd && dnd.dragHandleProps) || null
 
     const patchedEventHandlers = {
       onClick: (event: React.MouseEvent) => {
         // rbd will use event.preventDefault() to block clicks that are used
         // as a part of the drag and drop lifecycle.
         if (event.defaultPrevented) {
-          return;
+          return
         }
 
         if (!isDisabled && onClick) {
-          onClick(event);
+          onClick(event)
         }
       },
       onMouseDown: (event: React.MouseEvent) => {
         // rbd 11.x support
         if (dragHandleProps && dragHandleProps.onMouseDown) {
-          dragHandleProps.onMouseDown(event);
+          dragHandleProps.onMouseDown(event)
         }
         // We want to prevent the item from getting focus when clicked
-        event.preventDefault();
+        event.preventDefault()
       },
       onKeyDown: (event: React.KeyboardEvent) => {
         // swallowing keyboard events on the element while dragging
         // rbd should already be doing this - but we are being really clear here
         if (isDragging) {
-          return;
+          return
         }
 
         // rbd 11.x support
         if (dragHandleProps && dragHandleProps.onKeyDown) {
-          dragHandleProps.onKeyDown(event);
+          dragHandleProps.onKeyDown(event)
         }
 
         // if default is prevented - do not fire other handlers
         // this can happen if the event is used for drag and drop by rbd
         if (event.defaultPrevented) {
-          return;
+          return
         }
 
         // swallowing event if disabled
         if (isDisabled) {
-          return;
+          return
         }
 
         if (!onKeyDown) {
-          return;
+          return
         }
 
-        onKeyDown(event);
+        onKeyDown(event)
       },
-    };
+    }
 
     const patchedInnerRef = (ref: HTMLElement | null) => {
-      this.setRef(ref);
+      this.setRef(ref)
       // give rbd the inner ref too
       if (dnd && dnd.ref) {
-        dnd.ref(ref);
+        dnd.ref(ref)
       }
-    };
+    }
 
     return (
       <Root
@@ -218,26 +212,17 @@ export default class Item extends React.Component<Props> {
         {...patchedEventHandlers}
         {...otherProps}
       >
-        {!!this.props.elemBefore && (
-          <Before isCompact={isCompact}>{this.props.elemBefore}</Before>
-        )}
+        {!!this.props.elemBefore && <Before isCompact={isCompact}>{this.props.elemBefore}</Before>}
         <ContentWrapper>
-          <Content allowMultiline={this.props.shouldAllowMultiline}>
-            {this.props.children}
-          </Content>
+          <Content allowMultiline={this.props.shouldAllowMultiline}>{this.props.children}</Content>
           {!!this.props.description && (
-            <Description
-              isCompact={this.props.isCompact}
-              isDisabled={this.props.isDisabled}
-            >
+            <Description isCompact={this.props.isCompact} isDisabled={this.props.isDisabled}>
               {this.props.description}
             </Description>
           )}
         </ContentWrapper>
-        {!!this.props.elemAfter && (
-          <After isCompact={isCompact}>{this.props.elemAfter}</After>
-        )}
+        {!!this.props.elemAfter && <After isCompact={isCompact}>{this.props.elemAfter}</After>}
       </Root>
-    );
+    )
   }
 }
