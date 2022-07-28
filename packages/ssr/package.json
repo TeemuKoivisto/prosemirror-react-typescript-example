@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://teemukoivisto.github.io/prosemirror-react-typescript-example/",
   "scripts": {
-    "dev": "nodemon --watch server-dist server-dist/index.js",
+    "start": "nodemon --watch server-dist server-dist/index.js",
     "lint": "eslint ./server/**/* ./client/**/*",
     "lint:fix": "eslint ./server/**/* --fix",
     "build": "npm run build:server && npm run build:client",

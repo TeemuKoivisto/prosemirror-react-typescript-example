@@ -3,7 +3,7 @@ import { PortalProviderAPI } from './PortalProviderAPI'
 
 export type PortalProviderProps = {
   render: (portalProviderAPI: PortalProviderAPI) => React.ReactNode | JSX.Element | null
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export class PortalProvider extends React.Component<PortalProviderProps> {
