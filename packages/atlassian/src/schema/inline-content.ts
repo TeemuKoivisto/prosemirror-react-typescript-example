@@ -5,8 +5,7 @@ import { UnderlineDefinition as Underline } from './marks'
 /**
  * @name formatted_text_inline_node
  */
-export type InlineFormattedText = Text &
-  MarksObject<Underline> // Link | Em | Strong | Strike | SubSup | TextColor | Annotation
+export type InlineFormattedText = Text & MarksObject<Underline> // Link | Em | Strong | Strike | SubSup | TextColor | Annotation
 /**
  * @name link_text_inline_node
  */
