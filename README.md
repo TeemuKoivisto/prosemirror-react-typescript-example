@@ -47,15 +47,21 @@ When compiling the editors you should not include React or styled-components as 
 
 ## Similar projects & resources
 
+### Tools & examples
+
 - https://github.com/dminkovsky/use-prosemirror
 - https://github.com/hubgit/react-prosemirror
 - https://gist.github.com/manigandham/65543a0bc2bf7006a487
+
+### Frameworks
 
 - https://github.com/bangle-io/bangle.dev
 - https://github.com/Saul-Mirone/milkdown
 - https://github.com/nib-edit/Nib
 - https://github.com/remirror/remirror
 - https://github.com/ueberdosis/tiptap
+
+### Editors that use ProseMirror
 
 - https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/
 - https://github.com/curvenote/editor
@@ -64,6 +70,8 @@ When compiling the editors you should not include React or styled-components as 
 - https://gitlab.coko.foundation/wax/wax-prosemirror
 - https://github.com/appleple/smartblock
 - https://github.com/MO-Movia/licit
+
+### Collaborative editing
 
 - https://github.com/ProseMirror/prosemirror-collab
 - https://github.com/cozy/prosemirror-go
