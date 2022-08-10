@@ -227,7 +227,7 @@ export class ReactNodeView<P extends any = {}, A extends Attrs = {}> implements 
       decorations: readonly Decoration[],
       innerDecorations: DecorationSource
     ) =>
-      new ReactNodeView(
+      new this(
         node,
         view,
         getPos,

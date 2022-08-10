@@ -201,7 +201,7 @@ export class TypeAheadItemComponent extends React.Component<TypeAheadItemCompone
         elemBefore={
           <ItemIcon>
             {fallbackIcon(item.title)}
-            {/* this doesnt work anymore having migrated */}
+            {/* this doesnt work anymore after the pnpm migration & dependency updates, item.icon() is an unrecognized object */}
             {/* {item.icon ? item.icon() : fallbackIcon(item.title)} */}
           </ItemIcon>
         }
