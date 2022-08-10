@@ -2,7 +2,7 @@
 
 **UPDATE 22.7.2022**: Deprecated but still works (with all packages updated)! The atlassian editor is a cool insight into how they build their editor and one can learn a few things from it. However, there is a bit too much boilerplate here to really understand how to architect a ProseMirror editor combined with React so I rather advise people to use a framework to get started. I might at some point publish something out of this as separate packages but in much smaller scope.
 
-This repository shows three example editors: `atlassian`, `full` and `minimal` which are imported as their own modules in three separate example apps: `example-app`, `example-ssr-app` and `example-nextjs-app`. The previous linking mess is now managed through Yarn workspaces.
+This repository shows 4 example editors: `atlassian`, `full`, `full-v2` and `minimal`. Atlassian is the copied boilerplate to assemble a minimal working prototype. Minimal was the original boilerplate I used to integrate React, full was the second iteration and full-v2 as the third. However, even the third one would need a complete rewrite since I've learnt a few things how to organize things better. Anyway, there they are.
 
 ## How to install
 
@@ -13,7 +13,7 @@ You need `pnpm` >=7.
 
 ### Collab server
 
-Cool example how to use `prosemirror-collab`. There are some advantages over using it compared to Yjs, simplicity at the front. However, there is still a lot of work to create a fully-fledged websocket server to do that.
+Cool example how to use `prosemirror-collab`. There are some advantages over using it compared to Yjs, simplicity at the front. However, it's a _lot_ of work to implement your own websocket synchronization server. A lot of work. To make it distributed and ensure messages are not lost and whatnot. There are examples how to approach that though, some are linked at the end of this README.
 
 ## Background
 
@@ -52,12 +52,19 @@ When compiling the editors you should not include React or styled-components as 
 - https://gist.github.com/manigandham/65543a0bc2bf7006a487
 
 - https://github.com/bangle-io/bangle.dev
+- https://github.com/Saul-Mirone/milkdown
+- https://github.com/nib-edit/Nib
 - https://github.com/remirror/remirror
 - https://github.com/ueberdosis/tiptap
-- https://github.com/nib-edit/Nib
 
 - https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/
+- https://github.com/curvenote/editor
 - https://gitlab.com/mpapp-public/manuscripts-manuscript-editor
 - https://github.com/fiduswriter/fiduswriter
 - https://gitlab.coko.foundation/wax/wax-prosemirror
+- https://github.com/appleple/smartblock
 - https://github.com/MO-Movia/licit
+
+- https://github.com/ProseMirror/prosemirror-collab
+- https://github.com/cozy/prosemirror-go
+- https://tiptap.dev/hocuspocus
