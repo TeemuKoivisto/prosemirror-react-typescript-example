@@ -49,9 +49,9 @@ When compiling the editors you should not include React or styled-components as 
 
 ### Tools & examples
 
-- https://github.com/dminkovsky/use-prosemirror
-- https://github.com/hubgit/react-prosemirror
 - https://gist.github.com/manigandham/65543a0bc2bf7006a487
+- https://github.com/hubgit/react-prosemirror
+- https://github.com/dminkovsky/use-prosemirror
 
 ### Frameworks
 
@@ -64,15 +64,16 @@ When compiling the editors you should not include React or styled-components as 
 ### Editors that use ProseMirror
 
 - https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/master/editor/editor-core/
+- https://github.com/chanzuckerberg/czi-prosemirror
 - https://github.com/curvenote/editor
-- https://gitlab.com/mpapp-public/manuscripts-manuscript-editor
 - https://github.com/fiduswriter/fiduswriter
-- https://gitlab.coko.foundation/wax/wax-prosemirror
-- https://github.com/appleple/smartblock
 - https://github.com/MO-Movia/licit
+- https://gitlab.com/mpapp-public/manuscripts-manuscript-editor
+- https://github.com/appleple/smartblock
+- https://gitlab.coko.foundation/wax/wax-prosemirror
 
 ### Collaborative editing
 
+- https://tiptap.dev/hocuspocus
 - https://github.com/ProseMirror/prosemirror-collab
 - https://github.com/cozy/prosemirror-go
-- https://tiptap.dev/hocuspocus
